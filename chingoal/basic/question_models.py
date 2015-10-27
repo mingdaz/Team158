@@ -4,7 +4,7 @@ from django.db import models
 class Word_Translation(models.Model):
 	question = models.CharField(max_length=200)
 	answer = models.CharField(max_length=200)
-	explanation = model.CharField(max_length=200)
+	explanation = models.CharField(max_length=200)
 	def __unicode__(self):
 		return self.text
 
@@ -15,7 +15,7 @@ class Multiple_Choice(models.Model):
 	c = models.CharField(max_length=200)
 	d = models.CharField(max_length=200)
 	answer = models.CharField(max_length=200)
-	explanation = model.CharField(max_length=200)
+	explanation = models.CharField(max_length=200)
 	def __unicode__(self):
 		return self.text
 
