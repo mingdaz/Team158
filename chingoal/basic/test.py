@@ -43,7 +43,6 @@ def test_edit_question(request):
 	context = {}
 	return render(request, 'chingoal/chingoal-post-question.html', context)
 
-
 def test_delete_question(request):
 	context = {}
 	return render(request, 'chingoal/chingoal-post-question.html', context)
