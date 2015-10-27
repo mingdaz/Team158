@@ -13,7 +13,6 @@ class Learner(models.Model):
     lesson_plan = models.IntegerField(default = 1)  # MAX = 5
     follows = models.ManyToManyField(user)
     photo = models.ImageField(upload_to = 'user_photo', blank = True)
-    is_teacher = models.BooleanField(default = False) # read only
 
     def __unicode__(self):
         return 'Learner' + self.user.username
@@ -22,8 +21,7 @@ class Learner(models.Model):
 class Teacher(models.Model):
     user = models.OneToOneField(User, unique = True)
     bio = models.CharField(max_length = 420)
-    photo = models.ImageField(upload_to = 'user_photo', blank = True)    
-    is_teacher = models.BooleanField(default = True) # read only
+    photo = models.ImageField(upload_to = 'user_photo', blank = True)
 
     def __unicode__(self):
         return 'Teacher' + self.user.username
