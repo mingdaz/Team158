@@ -25,3 +25,4 @@ class Teacher(models.Model):
 
     def __unicode__(self):
         return 'Teacher' + self.user.username
+

@@ -29,3 +29,5 @@ class ItemUpdateView(UpdateView):
         item = Item.objects.get(id=self.item_id)
         return HttpResponse(render_to_string('basic/item_edit_form_success.htm', {'item': item}))
 
+
+def 
