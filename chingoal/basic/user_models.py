@@ -6,7 +6,7 @@ class Learner(models.Model):
     user = models.OneToOneField(User, unique = True)  
     TITLE_CHOICES = (('A', 'Primary School'), ('B', 'Middle School'), \
         ('C', 'High School'), ('D', 'College'))  
-    title = models.CharField(max_length = 20, defalut = 'A', choices = TITLE_CHOICES)
+    title = models.CharField(max_length = 20, default = TITLE_CHOICES[0][0], choices = TITLE_CHOICES)
     progress_level = models.IntegerField(default = 1)
     progress_lesson = models.IntegerField(default = 1)
     user_vm = models.IntegerField(default = 0)
