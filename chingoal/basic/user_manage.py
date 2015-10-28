@@ -22,6 +22,28 @@ def home(request):
     return render(request, 'home.html', context)
 
 def register(request):
+    context = {}
+    if request.method == 'GET':
+        context['register_form'] = RegistrationForm()
+        return render(request, 'register.html', context)
+    
+    register_form = RegistrationForm(request.POST, request.FILES)
+    context['register_form'] = register_form
+
+    if not register_form.is_valid():
+        return render(request, 'register.html', context)
+
+    new_user = User.objects.create_user(username=register_form.cleaned_data['username'],
+                                    password=register_form.cleaned_data['password1'],
+                                    email=register_form.cleaned_data['email'])
+    new_user.save()
+    identity = register_form.cleaned_data['identity']
+
+    if identity == 0:
+        new_learner = Learner.objects.create(user=new_user)
+        new_learner.save()
+    elif identity == 1:
+        new_teacher = Teacher.objects.create(user=new_user)
     return redirect('/')
 
 @login_required
