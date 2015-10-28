@@ -1,0 +1,31 @@
+from django.shortcuts import render
+
+from django.core.urlresolvers import reverse
+
+from django.contrib.auth.decorators import login_required
+
+from django.http import HttpResponse, Http404
+
+from basic.user_models import *
+
+from grumblr.forms import *
+
+
+@login_required
+@transaction.atomic
+def compose_message(request):
+    return render(request, 'discussion_board.html', {})
+
+
+@login_required
+@transaction.atomic
+def reply_message(request):
+    return render(request, 'discussion_board.html', {})
+
+
+@login_required
+@transaction.atomic
+def delete_message(request):
+    return render(request, 'discussion_board.html', {})
+
+
