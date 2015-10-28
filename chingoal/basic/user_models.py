@@ -11,7 +11,7 @@ class Learner(models.Model):
     progress_lesson = models.IntegerField(default = 1)
     user_vm = models.IntegerField(default = 0)
     lesson_plan = models.IntegerField(default = 1)  # MAX = 5
-    follows = models.ManyToManyField(user)
+    follows = models.ManyToManyField(User)
     photo = models.ImageField(upload_to = 'user_photo', blank = True)
 
     def __unicode__(self):
