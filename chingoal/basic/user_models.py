@@ -20,7 +20,7 @@ class Learner(models.Model):
 
 class Teacher(models.Model):
     user = models.OneToOneField(User, unique = True)
-    bio = models.CharField(max_length = 420)
+    bio = models.CharField(max_length = 420, default='Please introduce yourself')
     photo = models.ImageField(upload_to = 'user_photo', blank = True)
 
     def __unicode__(self):
