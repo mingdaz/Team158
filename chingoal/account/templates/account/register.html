@@ -236,7 +236,7 @@
                         <h3 class="panel-title">Sign Up</h3>
                     </div>
                     <div class="panel-body">
-                        <form role="form">
+                        <form role="form" action="{% url 'register' %}" method="post">
                             <fieldset>
                                 <div class="form-group">
                                     <label>Indentification Choose</label>
@@ -264,8 +264,9 @@
                                         <input name="remember" type="checkbox" value="Agreement">Agreement Items
                                     </label>
                                 </div>
+                                {% csrf_token %}
                                 <!-- Change this to a button or input when using this as a form -->
-                                <a href="home.html" class="btn btn-lg btn-success btn-block">Create account</a>
+                                <button class="btn btn-lg btn-success btn-block" type="submit">Create account</a>
                             </fieldset>
                         </form>
                     </div>
