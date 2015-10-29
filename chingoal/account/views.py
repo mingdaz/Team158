@@ -30,7 +30,7 @@ def register(request):
                                     password=register_form.cleaned_data['password1'],
                                     email=register_form.cleaned_data['email'])
     new_user.save()
-    identity = register_form.cleaned_data['identity']
+    identity = 0
 
     if identity == 0:
         new_learner = Learner.objects.create(user=new_user)

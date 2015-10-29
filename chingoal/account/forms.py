@@ -3,14 +3,12 @@ from django import forms
 from django.contrib.auth.models import User
 
 class RegistrationForm(forms.Form):
-    username = forms.CharField(max_length = 30)
+    username = forms.CharField(max_length = 30, widget = forms.TextInput(attrs={'class':'form-control'}))
     password1 = forms.CharField(max_length = 200, label = 'Password',
-        widget = forms.PasswordInput())
+                                widget = forms.PasswordInput(attrs={'class':'form-control'}))
     password2 = forms.CharField(max_length = 200, label = 'Confirm Password',
-        widget = forms.PasswordInput())
-    email = forms.EmailField()
-    identity = forms.IntegerField() # 0 For student 1 For teacher
-
+        widget = forms.PasswordInput(attrs={'class':'form-control'}))
+    email = forms.EmailField(widget = forms.EmailInput(attrs={'class':'form-control'}))
 
     def clean(self):
         cleaned_data = super(RegistrationForm, self).clean()
@@ -31,11 +29,6 @@ class RegistrationForm(forms.Form):
         if User.objects.filter(email__exact = email):
             raise forms.ValidationError('Email address is registered!')
         return email
-
-    def clean_identity(self):
-        identity = self.cleaned_data.get('identity')
-        if identity != 0 and identity != 1:
-            raise forms.ValidationError('Identity can only be teacher or student!')
 
 
 
