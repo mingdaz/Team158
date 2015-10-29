@@ -2,8 +2,6 @@ from django import forms
 
 from django.contrib.auth.models import User
 
-from message_models, post_models, question_models, user_models import *
-
 class RegistrationForm(forms.Form):
     username = forms.CharField(max_length = 30)
     password1 = forms.CharField(max_length = 200, label = 'Password',
@@ -36,7 +34,7 @@ class RegistrationForm(forms.Form):
 
     def clean_identity(self):
         identity = self.cleaned_data.get('identity')
-        if identity != 0 && identity != 1:
+        if identity != 0 and identity != 1:
             raise forms.ValidationError('Identity can only be teacher or student!')
 
 
