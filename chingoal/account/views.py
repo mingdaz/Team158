@@ -30,7 +30,10 @@ def register(request):
                                     password=register_form.cleaned_data['password1'],
                                     email=register_form.cleaned_data['email'])
     new_user.save()
-    identity = 0
+    if request.POST['optionsRadiosInline'] == 'option1':
+        identity = 0
+    elif request.POST['optionsRadiosInline'] == 'option2':
+        identity = 1
 
     if identity == 0:
         new_learner = Learner.objects.create(user=new_user)
