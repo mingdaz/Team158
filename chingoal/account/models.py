@@ -19,6 +19,12 @@ class Learner(models.Model):
     def __unicode__(self):
         return 'Learner' + self.user.username
 
+class History(models.Model):
+    user = models.ForeignKey(User, related_name="history")
+    timestamp = models.DateTimeField(auto_now_add=True)
+    content = models.CharField(max_length = 100)
+    def __unicode__(self):
+        return self.content
 
 class Teacher(models.Model):
     user = models.OneToOneField(User, unique = True, related_name="teacher")
