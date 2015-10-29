@@ -42,10 +42,19 @@ class RegistrationForm(forms.Form):
 
 
 class EditProfileForm(forms.Form):
-    username = forms.CharField(max_length = 30)
+    username = forms.CharField(max_length = 30, required = False, widget = forms.TextInput(attrs={'placeholder': 'optional'}))
+    bio = forms.CharField(max_length = 420, label = 'Short bio', required = False, widget=forms.Textarea(attrs={'placeholder': 'optional'}))
+    photo = forms.ImageField(label = 'Upload a photo', required = False)
+    password1 = forms.CharField(max_length = 40, label = 'Old password', widget = forms.PasswordInput(attrs={'required': True, 'placeholder': 'required'}))
+    password2 = forms.CharField(max_length = 40, label = 'New password', required = False, widget = forms.PasswordInput(attrs={'placeholder': 'optional'}))
+    password3 = forms.CharField(max_length = 40, label = 'Confirm password', required = False, widget = forms.PasswordInput(attrs={'placeholder': 'optional'}))
     
     def clean(self):
         cleaned_data = super(EditProfileForm, self).clean()
+        password3 = cleaned_data.get('password3')
+        password2 = cleaned_data.get('password2')
+        if password2 != password3:
+            raise forms.ValidationError('New passwords did not match.')
         return cleaned_data
 
     def clean_username(self):
