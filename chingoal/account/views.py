@@ -30,7 +30,10 @@ def register(request):
                                     password=register_form.cleaned_data['password1'],
                                     email=register_form.cleaned_data['email'])
     new_user.save()
-    identity = 0
+    if request.POST['optionsRadiosInline'] == 'option1':
+        identity = 0
+    elif request.POST['optionsRadiosInline'] == 'option2':
+        identity = 1
 
     if identity == 0:
         new_learner = Learner.objects.create(user=new_user)
@@ -47,7 +50,7 @@ def register(request):
 @login_required
 def edit_profile(request):
     if request.method == 'GET':
-        return render(request, 'edit_profile.html', {'editForm': EditProfileForm()})
+        return render(request, 'account/edit_profile.html', {'editForm': EditProfileForm()})
 
     edit_form = EditProfileForm(request.POST, request.FILES)
     errors = []
@@ -56,10 +59,10 @@ def edit_profile(request):
         errors.append('Old password is incorrect.')
     
     if errors:
-        return render(request, 'edit_profile.html', {'errors':errors, 'editForm': edit_form})
+        return render(request, 'account/edit_profile.html', {'errors':errors, 'editForm': edit_form})
 
     if not edit_form.is_valid():
-        return render(request, 'edit_profile.html',{'editForm': edit_form})
+        return render(request, 'account/edit_profile.html',{'editForm': edit_form})
     
     if edit_form.cleaned_data['password2']:
         request.user.set_password(edit_form.cleaned_data['password2'])
@@ -85,7 +88,7 @@ def edit_profile(request):
         request.user.teacher.save()
 
     errors.append('Changes are saved successfully. Please login again.')
-    return render(request, 'edit_profile.html', {'errors':errors, 'editForm': EditProfileForm()})
+    return render(request, 'account/edit_profile.html', {'errors':errors, 'editForm': EditProfileForm()})
 
 @login_required
 def view_profile(request, uname):
