@@ -44,6 +44,11 @@ def register(request):
         new_learner.save()
     elif identity == 1:
         new_teacher = Teacher.objects.create(user=new_user)
+        new_teacher.save()
+    
+    new_user = authenticate(username=register_form.cleaned_data['username'], \
+                                password=register_form.cleaned_data['password1'])
+    login(request, new_user)
     return redirect('/')
 
 @login_required

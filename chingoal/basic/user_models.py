@@ -12,6 +12,7 @@ class Learner(models.Model):
     user_vm = models.IntegerField(default = 0)
     lesson_plan = models.IntegerField(default = 1)  # MAX = 5
     follows = models.ManyToManyField(User)
+    bio = models.CharField(max_length = 420, default='Please introduce yourself')
     photo = models.ImageField(upload_to = 'user_photo', blank = True)
 
     def __unicode__(self):
