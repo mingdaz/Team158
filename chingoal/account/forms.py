@@ -3,12 +3,12 @@ from django import forms
 from django.contrib.auth.models import User
 
 class RegistrationForm(forms.Form):
-    username = forms.CharField(max_length = 30, widget = forms.TextInput(attrs={'class':'form-control'}))
+    username = forms.CharField(max_length = 30, widget = forms.TextInput(attrs={'class':'form-control','placeholder':'Username','autofocus':'true'}))
     password1 = forms.CharField(max_length = 200, label = 'Password',
-                                widget = forms.PasswordInput(attrs={'class':'form-control'}))
+                                widget = forms.PasswordInput(attrs={'class':'form-control','placeholder':'Password'}))
     password2 = forms.CharField(max_length = 200, label = 'Confirm Password',
-        widget = forms.PasswordInput(attrs={'class':'form-control'}))
-    email = forms.EmailField(widget = forms.EmailInput(attrs={'class':'form-control'}))
+        widget = forms.PasswordInput(attrs={'class':'form-control','placeholder':'Confirm password'}))
+    email = forms.EmailField(widget = forms.EmailInput(attrs={'class':'form-control','placeholder':'E-mail'}))
 
     def clean(self):
         cleaned_data = super(RegistrationForm, self).clean()
