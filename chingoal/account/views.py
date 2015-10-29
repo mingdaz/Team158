@@ -13,10 +13,6 @@ import json
 
 from models import *
 
-@login_required
-def home(request):
-    context = {}
-    return render(request, 'home.html', context)
 
 def register(request):
     context = {}
@@ -93,8 +89,11 @@ def edit_profile(request):
 
 @login_required
 def view_profile(request, uname):
-    context = {}
-    return render(request, 'home.html', context)
+    cur_user = User.objects.get(username__exact = uname)
+    if Learner.objects.filter()
+    
+    follower = request.user.profile.follower.filter(username__exact = cur_user.username)
+    return render(request, 'profile.html', {'posters' : posters, 'user' : cur_user, 'user_profile' : user_profile, 'follower' : follower})
 
 def reset_password(request):
     context = {}
