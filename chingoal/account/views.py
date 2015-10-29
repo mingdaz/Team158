@@ -13,17 +13,22 @@ import json
 
 from models import *
 
+@login_required
+def home(request):
+    context = {}
+    return render(request, 'home.html', context)
+
 def register(request):
     context = {}
     if request.method == 'GET':
         context['register_form'] = RegistrationForm()
-        return render(request, 'account/register.html', context)
+        return render(request, 'register.html', context)
     
     register_form = RegistrationForm(request.POST, request.FILES)
     context['register_form'] = register_form
 
     if not register_form.is_valid():
-        return render(request, 'account/register.html', context)
+        return render(request, 'register.html', context)
 
     new_user = User.objects.create_user(username=register_form.cleaned_data['username'],
                                     password=register_form.cleaned_data['password1'],
@@ -36,21 +41,64 @@ def register(request):
         new_learner.save()
     elif identity == 1:
         new_teacher = Teacher.objects.create(user=new_user)
+        new_teacher.save()
+    
+    new_user = authenticate(username=register_form.cleaned_data['username'], \
+                                password=register_form.cleaned_data['password1'])
+    login(request, new_user)
     return redirect('/')
 
 @login_required
 def edit_profile(request):
-    context = {}
-    return render(request, 'home/home.html', context)
+    if request.method == 'GET':
+        return render(request, 'edit_profile.html', {'editForm': EditProfileForm()})
+
+    edit_form = EditProfileForm(request.POST, request.FILES)
+    errors = []
+
+    if not request.user.check_password(request.POST['password1']):
+        errors.append('Old password is incorrect.')
+    
+    if errors:
+        return render(request, 'edit_profile.html', {'errors':errors, 'editForm': edit_form})
+
+    if not edit_form.is_valid():
+        return render(request, 'edit_profile.html',{'editForm': edit_form})
+    
+    if edit_form.cleaned_data['password2']:
+        request.user.set_password(edit_form.cleaned_data['password2'])
+
+    if edit_form.cleaned_data['photo']:
+        new_photo = edit_form.cleaned_data['photo']
+        if Learner.objects.filter(user = request.user):
+            request.user.learner.photo = new_photo
+        elif Teacher.objects.filter(user = request.user):
+            request.user.teacher.photo = new_photo
+
+    if edit_form.cleaned_data['bio']:
+        new_bio = edit_form.cleaned_data['bio']
+        if Learner.objects.filter(user = request.user):
+            request.user.learner.bio = new_bio
+        elif Teacher.objects.filter(user = request.user):
+            request.user.teacher.bio = new_bio
+
+    request.user.save()
+    if Learner.objects.filter(user = request.user):
+        request.user.learner.save()
+    elif Teacher.objects.filter(user = request.user):
+        request.user.teacher.save()
+
+    errors.append('Changes are saved successfully. Please login again.')
+    return render(request, 'edit_profile.html', {'errors':errors, 'editForm': EditProfileForm()})
 
 @login_required
 def view_profile(request, uname):
     context = {}
-    return render(request, 'home/home.html', context)
+    return render(request, 'home.html', context)
 
 def reset_password(request):
     context = {}
-    return render(request, 'account/resetPassword.html', context)
+    return render(request, 'resetPassword.html', context)
 
 def new_password(request,token):
     return redirect('/')
@@ -58,7 +106,7 @@ def new_password(request,token):
 @login_required
 def edit_schedule(request):
     context = {}
-    return render(request, 'home/home.html', context)
+    return render(request, 'home.html', context)
 
 @login_required
 def add_follower(request, uname):
