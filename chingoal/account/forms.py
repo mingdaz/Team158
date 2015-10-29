@@ -33,12 +33,12 @@ class RegistrationForm(forms.Form):
 
 
 class EditProfileForm(forms.Form):
-    username = forms.CharField(max_length = 30, required = False, widget = forms.TextInput(attrs={'placeholder': 'optional'}))
+    username = forms.CharField(max_length = 30, required = False, widget = forms.TextInput(attrs={'class':'form-control', 'readonly': 'True'}))
     bio = forms.CharField(max_length = 420, label = 'Short bio', required = False, widget=forms.Textarea(attrs={'placeholder': 'optional'}))
     photo = forms.ImageField(label = 'Upload a photo', required = False)
-    password1 = forms.CharField(max_length = 40, label = 'Old password', widget = forms.PasswordInput(attrs={'required': True, 'placeholder': 'required'}))
-    password2 = forms.CharField(max_length = 40, label = 'New password', required = False, widget = forms.PasswordInput(attrs={'placeholder': 'optional'}))
-    password3 = forms.CharField(max_length = 40, label = 'Confirm password', required = False, widget = forms.PasswordInput(attrs={'placeholder': 'optional'}))
+    password1 = forms.CharField(max_length = 40, label = 'Old password', widget = forms.PasswordInput(attrs={'class':'form-control','required': True, 'placeholder': 'required'}))
+    password2 = forms.CharField(max_length = 40, label = 'New password', required = False, widget = forms.PasswordInput(attrs={'class':'form-control','placeholder': 'optional'}))
+    password3 = forms.CharField(max_length = 40, label = 'Confirm password', required = False, widget = forms.PasswordInput(attrs={'class':'form-control','placeholder': 'optional'}))
     
     def clean(self):
         cleaned_data = super(EditProfileForm, self).clean()
