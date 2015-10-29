@@ -253,7 +253,7 @@
                                 </div>
                                 {% for field in register_form.visible_fields %}
                                 <div class="form-group">
-                                    <td>{{field.label_tag}}</td>
+                                    <!-- <td>{{field.label_tag}}</td> -->
                                     <td>{{field}}</td>
                                     {% for error in field.errors %}
                                     <td id="error">{{error}} </td>
