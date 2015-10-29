@@ -12,19 +12,19 @@ from django.http import HttpResponse, JsonResponse
 import json
 
 from models import *
-
+from forms import *
 
 def register(request):
     context = {}
     if request.method == 'GET':
         context['register_form'] = RegistrationForm()
-        return render(request, 'register.html', context)
+        return render(request, 'account/register.html', context)
     
     register_form = RegistrationForm(request.POST, request.FILES)
     context['register_form'] = register_form
 
     if not register_form.is_valid():
-        return render(request, 'register.html', context)
+        return render(request, 'account/register.html', context)
 
     new_user = User.objects.create_user(username=register_form.cleaned_data['username'],
                                     password=register_form.cleaned_data['password1'],
@@ -90,7 +90,8 @@ def edit_profile(request):
 @login_required
 def view_profile(request, uname):
     cur_user = User.objects.get(username__exact = uname)
-    if Learner.objects.filter()
+    if Learner.objects.filter():
+        pass
     
     follower = request.user.profile.follower.filter(username__exact = cur_user.username)
     return render(request, 'profile.html', {'posters' : posters, 'user' : cur_user, 'user_profile' : user_profile, 'follower' : follower})
