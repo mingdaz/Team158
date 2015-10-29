@@ -1,8 +1,8 @@
-
 from django.conf.urls import include, url
+from forms import MyAuthenticationForm
 
 urlpatterns = [
-    url(r'^login$', 'django.contrib.auth.views.login', {'template_name':'account/login.html'},name='login'),
+    url(r'^login$', 'django.contrib.auth.views.login', {'template_name':'account/login.html','authentication_form':MyAuthenticationForm},name='login'),
     url(r'^logout$', 'django.contrib.auth.views.logout_then_login', name = 'logout'),
     url(r'^register$', 'account.views.register', name = 'register'),
     url(r'^edit-profile$', 'account.views.edit_profile', name= 'editProfile'),
