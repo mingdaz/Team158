@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Learner(models.Model):
-    user = models.OneToOneField(User, unique = True)  
+    user = models.OneToOneField(User, unique = True, related_name="learner")
     TITLE_CHOICES = (('A', 'Primary School'), ('B', 'Middle School'), \
         ('C', 'High School'), ('D', 'College'))  
     title = models.CharField(max_length = 20, default = TITLE_CHOICES[0][0], choices = TITLE_CHOICES)
@@ -20,7 +20,7 @@ class Learner(models.Model):
 
 
 class Teacher(models.Model):
-    user = models.OneToOneField(User, unique = True)
+    user = models.OneToOneField(User, unique = True, related_name="teacher")
     bio = models.CharField(max_length = 420, default='Please introduce yourself')
     photo = models.ImageField(upload_to = 'user_photo', blank = True)
 
