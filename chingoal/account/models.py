@@ -14,7 +14,8 @@ class Learner(models.Model):
     follows = models.ManyToManyField(User,related_name = "learner_follows")
     bio = models.CharField(max_length = 420, default='Please introduce yourself')
     photo = models.ImageField(upload_to = 'user_photo', blank = True)
-
+    unlock = models.IntegerField(default = 0)
+    
     def __unicode__(self):
         return 'Learner' + self.user.username
 
