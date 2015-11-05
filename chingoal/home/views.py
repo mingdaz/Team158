@@ -19,11 +19,16 @@ from account.forms import *
 def home(request):
     context = {}
     cur_user = request.user
-    context['scheduleForm'] = EditScheduleForm()
+    
+    context['username'] = cur_user.username
     if Learner.objects.filter(user = request.user):
-        learner = Learner.objects.filter(user = cur_user)
+        learner = Learner.objects.get(user = cur_user)
         context['cur_user'] = learner
+        context['scheduleForm'] = EditScheduleForm(initial={'progress_level':learner.progress_level,'progress_lesson':learner.progress_lesson})
+    
     if Teacher.objects.filter(user = request.user):
-        teacher = Teacher.objects.filter(user = cur_user)
+        teacher = Teacher.objects.get(user = cur_user)
         context['cur_user'] = teacher
+
+
     return render(request, 'home.html', context)
