@@ -5,10 +5,14 @@ from django.contrib.auth.models import User
 class Learner(models.Model):
     user = models.OneToOneField(User, unique = True, related_name="learner_user")
     TITLE_CHOICES = (('A', 'Primary School'), ('B', 'Middle School'), \
-        ('C', 'High School'), ('D', 'College'))  
+        ('C', 'High School'), ('D', 'College'))
+    LEVELS = (('0','Zero level'),('1','One level'),('2','Two levels'),('3','Three levels'),('4','Four levels'),('5','Five levels'))
+              
+    LESSONS = (('1','One lesson'),('2','Two lessons'),('3','Three lessons'),('4','Four lessons'),('5','Five lessons'))
+                   
     title = models.CharField(max_length = 20, default = TITLE_CHOICES[0][0], choices = TITLE_CHOICES)
-    progress_level = models.IntegerField(default = 1)
-    progress_lesson = models.IntegerField(default = 1)
+    progress_level = models.CharField(max_length = 20, default = LEVELS[0][0], choices=LEVELS)
+    progress_lesson = models.CharField(max_length = 20, default = LESSONS[0][0], choices=LESSONS)
     user_vm = models.IntegerField(default = 0)
     lesson_plan = models.IntegerField(default = 1)  # MAX = 5
     follows = models.ManyToManyField(User,related_name = "learner_follows")

@@ -126,8 +126,20 @@ def new_password(request,token):
 
 @login_required
 def edit_schedule(request):
-    context = {}
-    return render(request, 'home.html', context)
+    if request.method == 'GET':
+        return HttpResponse("Please add something by POST method.")
+    
+    scheduleForm = EditScheduleForm(request.POST)
+
+    if scheduleForm.cleaned_data['progress_level']:
+        progress_level = scheduleForm.cleaned_data['progress_level']
+        request.user.learner_user.progress_level = progress_level
+
+    if scheduleForm.cleaned_data['progress_lesson']:
+        progress_level = scheduleForm.cleaned_data['progress_lesson']
+        request.user.learner_user.progress_lesson = progress_lesson
+
+    return redirect('/')
 
 @login_required
 def add_follower(request, uname):
