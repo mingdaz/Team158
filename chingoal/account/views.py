@@ -96,23 +96,23 @@ def view_profile(request, uname):
     cur_user = User.objects.get(username__exact = uname)
     context['username'] = uname
     if Learner.objects.filter(user = cur_user):
-        learner = Learner.objects.filter(user = cur_user)
+        learner = Learner.objects.get(user = cur_user)
         context['cur_user'] = learner
         if learner.learner_follows.filter(username__exact = uname):
             context['isFollowing'] = 'yes'
         else:
             context['isFollowing'] = 'no'
-        context['history'] = History.objects.filter(user = cur_user)
+        context['history'] = History.objects.get(user = cur_user)
         context['isLearner'] = 'yes'
 
     elif Teacher.objects.filter(user=cur_user):
-        teacher = Teacher.objects.filter(user = cur_user)
+        teacher = Teacher.objects.get(user = cur_user)
         context['cur_user'] = teacher
         if teacher.teacher_follows.filter(username__exact = uname):
             context['isFollowing'] = 'yes'
         else:
             context['isFollowing'] = 'no'
-        context['history'] = History.objects.filter(user = cur_user)
+        context['history'] = History.objects.get(user = cur_user)
         context['isLearner'] = 'no'
 
     return render(request, 'account/view_profile.html', context)
@@ -128,17 +128,20 @@ def new_password(request,token):
 def edit_schedule(request):
     if request.method == 'GET':
         return HttpResponse("Please add something by POST method.")
-    
+
     scheduleForm = EditScheduleForm(request.POST)
+
+    if scheduleForm.is_valid():
+        pass
 
     if scheduleForm.cleaned_data['progress_level']:
         progress_level = scheduleForm.cleaned_data['progress_level']
         request.user.learner_user.progress_level = progress_level
 
     if scheduleForm.cleaned_data['progress_lesson']:
-        progress_level = scheduleForm.cleaned_data['progress_lesson']
+        progress_lesson = scheduleForm.cleaned_data['progress_lesson']
         request.user.learner_user.progress_lesson = progress_lesson
-
+    request.user.learner_user.save()
     return redirect('/')
 
 @login_required
