@@ -331,20 +331,20 @@
                             <div class="row">
                                 <div class="col-xs-6 col-md-3 col-md-offset-4">
                                     <a href="#" class="thumbnail">
-                                        <img src="../image/people1.jpeg" alt="no image" width="300px" style=" height:100px;width:350px;">
+                                        <img src="{{cur_user.photo.url}}" alt="no image" width="300px" style=" height:100px;width:350px;">
                                     </a>
                                 </div>
 
                             </div>
                             <div class=" row col-xs-6 col-md-3 col-md-offset-3">
-                            <span>Username:Tom</span><br/>
-                            <span>Title:Pupil</span>
+                            <span>Username:{{username}}</span><br/>
+                            <span>Title:{{cur_user.title}}</span>
+                            <span>Bio:{{cur_user.bio}}</span>
                             </div>
                         </div>
                         <!-- /.panel-body -->
                     </div>
                     <!-- /.panel-default -->
-
                     <div class="panel panel-default">
                         <div class="panel-heading">
                            Achievement
@@ -353,7 +353,8 @@
                         <div class="panel-body">
                             <div class=" col-md-offset-2">
                             <span>User Level:</span>
-                            <p>{{ cur_user.progress_level }}</p>
+                            <p>{{ cur_user.level_plan }}</p>
+                            <p>{{ cur_user.lesson_plan }}</p>
 <!-- 
                             <p class="fa fa-star"></p>
                             <p class="fa fa-star"></p>
@@ -363,7 +364,7 @@
  -->
                             </div>
                             <div class=" col-md-offset-2">
-                                <span>Schedule:<p>{{ cur_user.progress_lesson }}</p> Per Day</span>
+                                <span>Schedule:<p>{{ cur_user.progress_lesson }}</p><p>{{ cur_user.progress_level }}</p> Per Day</span>
                             </div>
                                                      
                                 
