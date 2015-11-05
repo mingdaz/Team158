@@ -11,11 +11,19 @@ from django.http import HttpResponse, JsonResponse
 
 import json
 
-from models import *
-
+from account.models import *
+from account.forms import *
 
 # Create your views here.
 @login_required
 def home(request):
     context = {}
+    cur_user = request.user
+    context['scheduleForm'] = EditScheduleForm()
+    if Learner.objects.filter(user = request.user):
+        learner = Learner.objects.filter(user = cur_user)
+        context['cur_user'] = learner
+    if Teacher.objects.filter(user = request.user):
+        teacher = Teacher.objects.filter(user = cur_user)
+        context['cur_user'] = teacher
     return render(request, 'home.html', context)

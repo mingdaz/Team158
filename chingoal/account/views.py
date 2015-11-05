@@ -92,12 +92,30 @@ def edit_profile(request):
 
 @login_required
 def view_profile(request, uname):
+    context = {}
     cur_user = User.objects.get(username__exact = uname)
-    if Learner.objects.filter():
-        pass
-    
-    follower = request.user.profile.follower.filter(username__exact = cur_user.username)
-    return render(request, 'profile.html', {'posters' : posters, 'user' : cur_user, 'user_profile' : user_profile, 'follower' : follower})
+    context['username'] = uname
+    if Learner.objects.filter(user = cur_user):
+        learner = Learner.objects.get(user = cur_user)
+        context['cur_user'] = learner
+        if learner.learner_follows.filter(username__exact = uname):
+            context['isFollowing'] = 'yes'
+        else:
+            context['isFollowing'] = 'no'
+        context['history'] = History.objects.get(user = cur_user)
+        context['isLearner'] = 'yes'
+
+    elif Teacher.objects.filter(user=cur_user):
+        teacher = Teacher.objects.get(user = cur_user)
+        context['cur_user'] = teacher
+        if teacher.teacher_follows.filter(username__exact = uname):
+            context['isFollowing'] = 'yes'
+        else:
+            context['isFollowing'] = 'no'
+        context['history'] = History.objects.get(user = cur_user)
+        context['isLearner'] = 'no'
+
+    return render(request, 'account/view_profile.html', context)
 
 def reset_password(request):
     context = {}
@@ -108,8 +126,23 @@ def new_password(request,token):
 
 @login_required
 def edit_schedule(request):
-    context = {}
-    return render(request, 'home.html', context)
+    if request.method == 'GET':
+        return HttpResponse("Please add something by POST method.")
+
+    scheduleForm = EditScheduleForm(request.POST)
+
+    if scheduleForm.is_valid():
+        pass
+
+    if scheduleForm.cleaned_data['progress_level']:
+        progress_level = scheduleForm.cleaned_data['progress_level']
+        request.user.learner_user.progress_level = progress_level
+
+    if scheduleForm.cleaned_data['progress_lesson']:
+        progress_lesson = scheduleForm.cleaned_data['progress_lesson']
+        request.user.learner_user.progress_lesson = progress_lesson
+    request.user.learner_user.save()
+    return redirect('/')
 
 @login_required
 def add_follower(request, uname):
