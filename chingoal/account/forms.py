@@ -60,11 +60,27 @@ class EditProfileForm(forms.Form):
 
 
 class EditScheduleForm(forms.Form):
-    progress_level = forms.IntegerField()
-    progress_lesson = forms.IntegerField()
+    LEVELS = (
+        ('0','Zero level'),
+        ('1','One level'),
+        ('2','Two levels'),
+        ('3','Three levels'),
+        ('4','Four levels'),
+        ('5','Five levels'),
+    )
+    LESSONS = (
+        ('1','One lesson'),
+        ('2','Two lessons'),
+        ('3','Three lessons'),
+        ('4','Four lessons'),
+        ('5','Five lessons'),
+    )
+    progress_level = forms.ChoiceField(choices=LEVELS, label="Levels per day", widget=forms.Select())
+    progress_lesson = forms.ChoiceField(choices=LESSONS, label="Lessons per day", widget=forms.Select())
 
     def clean(self):
         cleaned_data = super(EditScheduleForm, self).clean()
+        return cleaned_data
 
     ## TODO clean_process_level clean_process_lesson
 
