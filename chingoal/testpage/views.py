@@ -23,6 +23,11 @@ def get_test(request):
 	context = {}
 	return render(request, 'testpage/chingoal-test.html', context)
 
+def get_learn(request):
+	context = {}
+	return render(request, 'testpage/chingoal-test.html', context)
+
+
 def get_result(request):
 	context = {}
 	return render(request, 'testpage/chingoal-test.html', context)

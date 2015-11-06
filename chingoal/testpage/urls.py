@@ -3,7 +3,8 @@ from django.conf.urls import include, url
 
 urlpatterns = [
     url(r'^get-test$','testpage.views.get_test',name ='gettest' ),
-    url(r'^get-resul$','testpage.views.get_result',name ='getresult' ),
+    url(r'^get-learn$','testpage.views.get_learn',name ='getlearn' ),
+    url(r'^get-result$','testpage.views.get_result',name ='getresult' ),
     url(r'^test-create$','testpage.views.test_create',name ='testcreate' ),
     url(r'^test-add-question$','testpage.views.test_add_question',name ='testaddquestion' ),
     url(r'^test-save-question$','testpage.views.test_save_question',name ='testsavequestion' ),
