@@ -126,11 +126,43 @@
              <div class="row">
                     <div class="panel panel-default bg-light-gray">
                         <div class="panel-body col-md-offset-1">
+                             {% if cur_user.unlock > 0 %}<button type="button" class="btn btn-default btn-lg btn-circle">
+                            <span class="fa fa-unlock"></span>
+                            {% else %}<button type="button" id="myButton1" value="1" class="btn btn-default btn-lg btn-circle" onClick="unlock('myButton1',{{cur_user.unlock}})">
+                            <span class="fa fa-lock"></span>
+                            {% endif %} Session 1</button>
+                            
+                            {% if cur_user.unlock > 1 %}<button type="button" class="btn btn-danger btn-lg btn-circle">
+                            <span class="fa fa-unlock"></span>
+                            {% else %}<button type="button" id="myButton2" value="2" class="btn btn-danger btn-lg btn-circle" onClick="unlock('myButton2',{{cur_user.unlock}})">
+                            <span class="fa fa-lock"></span>
+                            {% endif %} Session 2</button>
+                            
+                            {% if cur_user.unlock > 2 %}<button type="button" class="btn btn-info btn-lg btn-circle">
+                            <span class="fa fa-unlock"></span>
+                            {% else %}<button type="button" id="myButton3" value="3" class="btn btn-info btn-lg btn-circle" onClick="unlock('myButton3',{{cur_user.unlock}})">
+                            <span class="fa fa-lock"></span>
+                            {% endif %} Session 3</button>
+                            
+                            {% if cur_user.unlock > 3 %}<button type="button" class="btn btn-warning btn-lg btn-circle">
+                            <span class="fa fa-unlock"></span>
+                            {% else %}<button type="button" id="myButton4" value="4" class="btn btn-warning btn-lg btn-circle" onClick="unlock('myButton4',{{cur_user.unlock}})">
+                            <span class="fa fa-lock"></span>
+                            {% endif %} Session 4</button>
+                            
+                            {% if cur_user.unlock > 4 %}<button type="button" class="btn btn-success btn-lg btn-circle">
+                            <span class="fa fa-unlock"></span>
+                            {% else %}<button type="button" id="myButton5" value="5" class="btn btn-success btn-lg btn-circle" onClick="unlock('myButton5',{{cur_user.unlock}})">
+                            <span class="fa fa-lock"></span>
+                            {% endif %} Session 5</button>
+
+
+<!-- 
                             <button type="button" class="btn btn-default btn-lg btn-circle" data-toggle="modal" data-target="#myModal"><span class="fa fa-lock"></span> Lesson 1</button>
                             <button type="button" class="btn btn-danger btn-lg btn-circle" data-toggle="modal" data-target="#myModal"><span class="fa fa-lock"></span> Lesson 2</button>
                             <button type="button" class="btn btn-info btn-lg btn-circle" data-toggle="modal" data-target="#myModal"><span class="fa fa-lock"></span> Lesson 3</button>
                             <button type="button" class="btn btn-warning btn-lg btn-circle" data-toggle="modal" data-target="#myModal"><span class="fa fa-lock"></span> Lesson 4</button>
-                            <button type="button" class="btn btn-success btn-lg btn-circle" data-toggle="modal" data-target="#myModal"><span class="fa fa-lock"></span> Lesson 5</button>
+                            <button type="button" class="btn btn-success btn-lg btn-circle" data-toggle="modal" data-target="#myModal"><span class="fa fa-lock"></span> Lesson 5</button> -->
                         </div>
                        
                     </div> 
@@ -171,3 +203,9 @@
 
 {% block origin-script %}
 {% endblock %}
+
+
+    {% block script-content %}
+    {% load static %}
+    <script src="{% static "js/store.js"%}"></script>
+    {% endblock %}
