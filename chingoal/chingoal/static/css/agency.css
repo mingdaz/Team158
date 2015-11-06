@@ -266,7 +266,7 @@ fieldset[disabled] .btn-xs.active {
   }
 }
 header {
-  background-image: url('../static/img/header-bg-1.jpg');
+  background-image: url('/static/img/header-bg-1.jpg');
   background-repeat: none;
   background-attachment: scroll;
   background-position: center center;

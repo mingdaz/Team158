@@ -17,7 +17,7 @@ from account.forms import *
 # Create your views here.
 def homepage(request):
     context = {}
-    return render(request, 'new/home.html', context)
+    return render(request, 'home.html', context)
 
 @login_required
 def home(request):
@@ -35,4 +35,4 @@ def home(request):
         context['cur_user'] = teacher
 
 
-    return render(request, 'new/dashboard.html', context)
+    return render(request, 'dashboard.html', context)
