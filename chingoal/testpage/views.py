@@ -21,90 +21,90 @@ from django.core import serializers
 
 def get_test(request):
 	context = {}
-	return render(request, 'testpage/chingoal-test.html', context)
+	return render(request, 'testpage/learn.html', context)
 
 def get_learn(request):
 	context = {}
-	return render(request, 'testpage/chingoal-test.html', context)
+	return render(request, 'testpage/learn.html', context)
 
 
 def get_result(request):
 	context = {}
-	return render(request, 'testpage/chingoal-test.html', context)
+	return render(request, 'testpage/learn.html', context)
 
 def test_create(request):
 	context = {}
-	return render(request, 'testpage/chingoal-post-question.html', context)
+	return render(request, 'testpage/post_question', context)
 
 def test_add_question(request):
 	context = {}
-	return render(request, 'testpage/chingoal-post-question.html', context)
+	return render(request, 'testpage/post_question', context)
 
 def test_save_question(request):
 	context = {}
-	return render(request, 'testpage/chingoal-post-question.html', context)
+	return render(request, 'testpage/post_question', context)
 
 def test_edit_question(request):
 	context = {}
-	return render(request, 'testpage/chingoal-post-question.html', context)
+	return render(request, 'testpage/post_question', context)
 
 def test_delete_question(request):
 	context = {}
-	return render(request, 'testpage/chingoal-post-question.html', context)
+	return render(request, 'testpage/post_question', context)
 
 def test_post(request):
 	context = {}
-	return render(request, 'testpage/chingoal-post-question.html', context)
+	return render(request, 'testpage/post_question', context)
 
 def get_learning(request):
 	context = {}
-	return render(request, 'testpage/chingoal-learn.html', context)
+	return render(request, 'testpage/learn.html', context)
 
 def get_learning(request):
 	context = {}
-	return render(request, 'testpage/chingoal-learn.html', context)
+	return render(request, 'testpage/learn.html', context)
 
 def get_learningResult(request):
 	context = {}
-	return render(request, 'testpage/chingoal-learn.html', context)
+	return render(request, 'testpage/learn.html', context)
 
 def skip_question(request):
 	context = {}
-	return render(request, 'testpage/chingoal-learn.html', context)
+	return render(request, 'testpage/learn.html', context)
 
 def exit_learning(request):
 	context = {}
-	return render(request, 'testpage/chingoal-learn.html', context)
+	return render(request, 'testpage/learn.html', context)
 
 def show_tips(request):
 	context = {}
-	return render(request, 'testpage/chingoal-learn.html', context)
+	return render(request, 'testpage/learn.html', context)
 
 def get_discussion(request):
 	context = {}
-	return render(request, 'testpage/chingoal-learn.html', context)
+	return render(request, 'testpage/learn.html', context)
 
 def create_learning(request):
 	context = {}
-	return render(request, 'testpage/chingoal-learn.html', context)
+	return render(request, 'testpage/learn.html', context)
 
 def learning_add_question(request):
 	context = {}
-	return render(request, 'testpage/chingoal-learn.html', context)
+	return render(request, 'testpage/learn.html', context)
 
 def learning_save_question(request):
 	context = {}
-	return render(request, 'testpage/chingoal-learn.html', context)
+	return render(request, 'testpage/learn.html', context)
 
 def learning_edit_question(request):
 	context = {}
-	return render(request, 'testpage/chingoal-learn.html', context)
+	return render(request, 'testpage/learn.html', context)
 
 def learning_delete_question(request):
 	context = {}
-	return render(request, 'testpage/chingoal-learn.html', context)
+	return render(request, 'testpage/learn.html', context)
 
 def learning_post(request):
 	context = {}
-	return render(request, 'testpage/chingoal-learn.html', context)
+	return render(request, 'testpage/learn.html', context)
 
