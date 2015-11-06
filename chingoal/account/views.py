@@ -106,24 +106,25 @@ def view_profile(request, uname):
     context = {}
     cur_user = User.objects.get(username__exact = uname)
     context['username'] = uname
+    context['cur_username'] = request.user.username
     if Learner.objects.filter(user = cur_user):
         learner = Learner.objects.get(user = cur_user)
         context['cur_user'] = learner
-        if learner.learner_follows.filter(username__exact = uname):
+        if learner.follows.filter(username__exact = uname):
             context['isFollowing'] = 'yes'
         else:
             context['isFollowing'] = 'no'
-        context['history'] = History.objects.get(user = cur_user)
+        context['history'] = History.objects.filter(user = cur_user)
         context['isLearner'] = 'yes'
 
     elif Teacher.objects.filter(user=cur_user):
         teacher = Teacher.objects.get(user = cur_user)
         context['cur_user'] = teacher
-        if teacher.teacher_follows.filter(username__exact = uname):
+        if teacher.follows.filter(username__exact = uname):
             context['isFollowing'] = 'yes'
         else:
             context['isFollowing'] = 'no'
-        context['history'] = History.objects.get(user = cur_user)
+        context['history'] = History.objects.filter(user = cur_user)
         context['isLearner'] = 'no'
 
     return render(request, 'account/view_profile.html', context)
@@ -156,11 +157,20 @@ def edit_schedule(request):
     return redirect('/')
 
 @login_required
-def add_follower(request, uname):
+def follow(request, uname, isFollowing, isLearner):
+    followee = User.objects.get(username__exact = uname)
+    if isLearner == 'yes':
+        follower = request.user.learner
+    else:
+        follower = request.user.teacher
 
+    if isFollowing == 'yes':
+        if follower.follows.filter(username__exact = followee.username):
+            follower.follows.remove(followee)
+            follower.save()
+    else:
+        if not follower.follows.filter(username__exact = followee.username):
+            follower.follows.add(followee)
+            follower.save()
     return redirect(reverse('viewProfile', kwargs = {'uname':uname}))
 
-@login_required
-def remove_follower(request, uname):
-
-    return redirect(reverse('viewProfile', kwargs = {'uname':uname}))

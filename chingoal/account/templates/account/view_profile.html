@@ -224,7 +224,7 @@
             </ul>
             <!-- /.navbar-top-links -->
         </nav>
-    {% endblock %}
+    {% endblock narbar-content %}
     {% block main-content %}
     <div class="container">
         <div class="row">
@@ -232,19 +232,22 @@
                 <div class="login-panel panel panel-default"> 
                     <div class="panel-heading">
                         <h3 class="panel-title">Weclome to {{ username }}</h3>
-                        	<a href="{% url 'follow' cur_user.id %}">
+                        {% if cur_username != username %}
+                        	<a href="{% url 'follow' username isFollowing isLearner%}">
     						<button type="button" class="btn btn-primary btn-xs follower"> 
                             <span class="glyphicon glyphicon-plus"> </span> 
+
                             {% if isFollowing == 'yes' %} Unfollow {% else %} Follow {% endif %} </button>
+
                             </a>
-                        <img src="{% url 'getAvatar' cur_user.id %}" alt="no image" onclick="location.href='{% url 'otherProfile' cur_user.id %}'"> 
-                        <p> 
-                        	{% if isLearner == 'yes'% }
-                        	{{ cur_user.title}}<br/>
-                        	{{ cur_user.lesson_plan}}<br/>
                             {% endif %}
-                            {{ cur_user.bio}}<br/>
-                        </p>
+                        <img src="{{ cur_user.photo.url }}" alt="no image"> 
+                        {% if isLearner == 'yes' %}
+                        	    {{ cur_user.title}}<br/>
+                        	    {{ cur_user.lesson_plan}}<br/>                            
+                            
+                        {% endif %}
+                        <p>{{ cur_user.bio}}</p>
                     </div>
                     <div class="panel-body">
                        
@@ -253,4 +256,4 @@
             </div>
         </div>
     </div>
-    {% endblock %}
+    {% endblock main-content %}
