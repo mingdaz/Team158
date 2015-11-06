@@ -1,8 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 
-from models import *
+from account.models import *
 # Create your views here.
 @login_required
 def home(request):
@@ -15,23 +15,14 @@ def home(request):
 def buy_title(request, title):
     request.user.learner_user.title = title
     request.user.learner_user.save()
-    return redirect('/')
+    return render(request,'store/store.html',context)
 
 @login_required
 def unlock_learning(request, lesson):
-    if lesson == "One lesson":
-        unlock = 1
-    elif lesson == "Two lessons":
-        unlock = 2
-    elif lesson == "Three lessons":
-        unlock = 3
-    elif lesson == "Four lessons":
-        unlock = 4
-    elif lesson == "Five lessons":
-        unlock = 5
-    request.user.learner_user.unlock = unlock
+    print lesson
+    request.user.learner_user.unlock = lesson
     request.user.learner_user.save()
-    return redirect('/')
+    return redirect('/store')
 
 @login_required
 def earn_money(request):
