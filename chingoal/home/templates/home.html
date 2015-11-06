@@ -337,9 +337,8 @@
 
                             </div>
                             <div class=" row col-xs-6 col-md-3 col-md-offset-3">
-                            <span>Username:{{username}}</span><br/>
+                            Username:<a href="{% url 'viewProfile' username %}"<span>{{username}}</span></a><br/>
                             <span>Title:{{cur_user.title}}</span>
-                            <span>Bio:{{cur_user.bio}}</span>
                             </div>
                         </div>
                         <!-- /.panel-body -->
