@@ -29,13 +29,13 @@ def register(request):
     context = {}
     if request.method == 'GET':
         context['register_form'] = RegistrationForm()
-        return render(request, 'account/register.html', context)
+        return render(request, 'account/new/register.html', context)
     
     register_form = RegistrationForm(request.POST, request.FILES)
     context['register_form'] = register_form
 
     if not register_form.is_valid():
-        return render(request, 'account/register.html', context)
+        return render(request, 'account/new/register.html', context)
 
     new_user = User.objects.create_user(username=register_form.cleaned_data['username'],
                                     password=register_form.cleaned_data['password1'],
@@ -56,7 +56,7 @@ def register(request):
     new_user = authenticate(username=register_form.cleaned_data['username'], \
                                 password=register_form.cleaned_data['password1'])
     login(request, new_user)
-    return redirect('/')
+    return redirect('/home')
 
 @login_required
 def edit_profile(request):
