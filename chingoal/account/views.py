@@ -14,6 +14,17 @@ import json
 from models import *
 from forms import *
 
+
+def reset_confirm(request, uidb64=None, token=None):
+    return password_reset_confirm(request, template_name='account/reset_confirm.html',
+        uidb64=uidb64, token=token, post_reset_redirect=reverse('home'))
+
+def reset(request):
+    return password_reset(request, template_name='account/reset.html',
+        email_template_name='account/reset_email.html',
+        subject_template_name='account/reset_subject.txt',
+        post_reset_redirect=reverse('home'))
+
 def register(request):
     context = {}
     if request.method == 'GET':
