@@ -34,19 +34,19 @@
                         <a href="#page-top"></a>
                     </li>
                     <li>
+                        <a class="page-scroll" href="{% url 'dashboard'%}">Home</a>
+                    </li>
+                    <li>
                         <a class="page-scroll" href="#">Lessons</a>
                     </li>
                     <li>
                         <a class="page-scroll" href="#discussions">Discussion</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#portfolio">Store</a>
+                        <a class="page-scroll" >Store</a>
                     </li>
-                    <!-- <li>
-                        <a class="page-scroll" href="#account">Account</a>
-                    </li> -->
                     <li>
-                        <a class="page-scroll" href="#team">About Us</a>
+                        <a class="page-scroll" href="{% url 'logout' %}">Log out</a>
                     </li>
                 </ul>
             </div>
@@ -72,14 +72,14 @@
             <div class="row bg-light-gray">
                 <div class="col-sm-4">
                     <div class="team-member">
-                        <img src="img/team/1.jpg" class="img-responsive img-circle title_img" alt="">
+                        <img src="{% static "img/team/1.jpg"%}" class="img-responsive img-circle title_img" alt="" onClick="buyTitle(0,'{{cur_user.title}}')">
                         <h4 class="header1">Pupil</h4>
                         <p class="text-muted">$3</p>                       
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div class="team-member">
-                        <img src="img/team/2.jpg" class="img-responsive img-circle title_img" alt="">
+                        <img src="{% static "img/team/2.jpg"%}" class="img-responsive img-circle title_img" alt="" onClick="buyTitle(1,'{{cur_user.title}}')">
                         <h4 class="header1">Freshman</h4>
                         <p class="text-muted">$5</p>
                         
@@ -87,7 +87,7 @@
                 </div>
                 <div class="col-sm-4">
                     <div class="team-member">
-                        <img src="img/team/3.jpg" class="img-responsive img-circle title_img" alt="">
+                        <img src="{% static "img/team/3.jpg"%}" class="img-responsive img-circle title_img" alt="" onClick="buyTitle(2,'{{cur_user.title}}')">
                         <h4 class="header1">Sophomore</h4>
                         <p class="text-muted">$8</p>
                     </div>
@@ -97,7 +97,7 @@
              <div class="row bg-light-gray">
                 <div class="col-sm-4">
                     <div class="team-member">
-                        <img src="img/team/1.jpg" class="img-responsive img-circle title_img" alt="">
+                        <img src="{% static "img/team/1.jpg"%}" class="img-responsive img-circle title_img" alt="" onClick="buyTitle(3,'{{cur_user.title}}')">
                         <h4 class="header1">Junior</h4>
                         <p class="text-muted">$10</p>
                         
@@ -105,7 +105,7 @@
                 </div>
                 <div class="col-sm-4">
                     <div class="team-member">
-                        <img src="img/team/2.jpg" class="img-responsive img-circle title_img" alt="">
+                        <img src="{% static "img/team/2.jpg"%}" class="img-responsive img-circle title_img" alt="" onClick="buyTitle(4,'{{cur_user.title}}')">
                         <h4 class="header1">Senior</h4>
                         <p class="text-muted">$15</p>
      
@@ -113,7 +113,7 @@
                 </div>
                 <div class="col-sm-4">
                     <div class="team-member">
-                        <img src="img/team/3.jpg" class="img-responsive img-circle title_img" alt="">
+                        <img src="{% static "img/team/3.jpg"%}" class="img-responsive img-circle title_img" alt="" onClick="buyTitle(5,'{{cur_user.title}}')">
                         <h4 class="header1">Graduate</h4>
                         <p class="text-muted">$20</p>
                     </div>
@@ -127,12 +127,44 @@
              <div class="row">
                     <div class="panel panel-default bg-light-gray">
                         <div class="panel-body col-md-offset-1">
-                            <button type="button" class="btn btn-default btn-lg btn-circle" data-toggle="modal" data-target="#myModal"><span class="fa fa-lock"></span> Lesson 1</button>
+
+                            {% if cur_user.unlock > 0 %}<button type="button" class="btn btn-default btn-lg btn-circle">
+                            <span class="fa fa-unlock"></span>
+                            {% else %}<button type="button" id="myButton1" value="1" class="btn btn-default btn-lg btn-circle" onClick="unlock('myButton1',{{cur_user.unlock}})">
+                            <span class="fa fa-lock"></span>
+                            {% endif %} Session 1</button>
+                            
+                            {% if cur_user.unlock > 1 %}<button type="button" class="btn btn-danger btn-lg btn-circle">
+                            <span class="fa fa-unlock"></span>
+                            {% else %}<button type="button" id="myButton2" value="2" class="btn btn-danger btn-lg btn-circle" onClick="unlock('myButton2',{{cur_user.unlock}})">
+                            <span class="fa fa-lock"></span>
+                            {% endif %} Session 2</button>
+                            
+                            {% if cur_user.unlock > 2 %}<button type="button" class="btn btn-info btn-lg btn-circle">
+                            <span class="fa fa-unlock"></span>
+                            {% else %}<button type="button" id="myButton3" value="3" class="btn btn-info btn-lg btn-circle" onClick="unlock('myButton3',{{cur_user.unlock}})">
+                            <span class="fa fa-lock"></span>
+                            {% endif %} Session 3</button>
+                            
+                            {% if cur_user.unlock > 3 %}<button type="button" class="btn btn-warning btn-lg btn-circle">
+                            <span class="fa fa-unlock"></span>
+                            {% else %}<button type="button" id="myButton4" value="4" class="btn btn-warning btn-lg btn-circle" onClick="unlock('myButton4',{{cur_user.unlock}})">
+                            <span class="fa fa-lock"></span>
+                            {% endif %} Session 4</button>
+                            
+                            {% if cur_user.unlock > 4 %}<button type="button" class="btn btn-success btn-lg btn-circle">
+                            <span class="fa fa-unlock"></span>
+                            {% else %}<button type="button" id="myButton5" value="5" class="btn btn-success btn-lg btn-circle" onClick="unlock('myButton5',{{cur_user.unlock}})">
+                            <span class="fa fa-lock"></span>
+                            {% endif %} Session 5</button>
+
+
+                           <!--  <button type="button" class="btn btn-default btn-lg btn-circle" data-toggle="modal" data-target="#myModal"><span class="fa fa-lock"></span> Lesson 1</button>
                             <button type="button" class="btn btn-danger btn-lg btn-circle" data-toggle="modal" data-target="#myModal"><span class="fa fa-lock"></span> Lesson 2</button>
                             <button type="button" class="btn btn-info btn-lg btn-circle" data-toggle="modal" data-target="#myModal"><span class="fa fa-lock"></span> Lesson 3</button>
                             <button type="button" class="btn btn-warning btn-lg btn-circle" data-toggle="modal" data-target="#myModal"><span class="fa fa-lock"></span> Lesson 4</button>
                             <button type="button" class="btn btn-success btn-lg btn-circle" data-toggle="modal" data-target="#myModal"><span class="fa fa-lock"></span> Lesson 5</button>
-                        </div>
+ -->                        </div>
                        
                     </div> 
                    
