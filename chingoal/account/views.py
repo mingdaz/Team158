@@ -56,7 +56,7 @@ def register(request):
     new_user = authenticate(username=register_form.cleaned_data['username'], \
                                 password=register_form.cleaned_data['password1'])
     login(request, new_user)
-    return redirect('/home')
+    return redirect('/')
 
 @login_required
 def edit_profile(request):
@@ -112,6 +112,8 @@ def view_profile(request, uname):
         context['cur_user'] = learner
         if learner.follows.filter(username__exact = uname):
             context['isFollowing'] = 'yes'
+            followers = Learner.objects.filter(user__in=request.user.learner_user.follows.all()).reverse()
+            context['followers'] = followers
         else:
             context['isFollowing'] = 'no'
         context['history'] = History.objects.filter(user = cur_user)
@@ -122,6 +124,8 @@ def view_profile(request, uname):
         context['cur_user'] = teacher
         if teacher.follows.filter(username__exact = uname):
             context['isFollowing'] = 'yes'
+            followers = Teacher.objects.filter(user__in=request.user.teacher.follows.all()).reverse()
+            context['followers'] = followers
         else:
             context['isFollowing'] = 'no'
         context['history'] = History.objects.filter(user = cur_user)
@@ -160,7 +164,7 @@ def edit_schedule(request):
 def follow(request, uname, isFollowing, isLearner):
     followee = User.objects.get(username__exact = uname)
     if isLearner == 'yes':
-        follower = request.user.learner
+        follower = request.user.learner_user
     else:
         follower = request.user.teacher
 
@@ -174,3 +178,22 @@ def follow(request, uname, isFollowing, isLearner):
             follower.save()
     return redirect(reverse('viewProfile', kwargs = {'uname':uname}))
 
+@login_required
+def post_question(request):
+    errors = None
+    if not 'text' in request.POST or not request.POST['text']:
+        errors = 'You must enter something.'
+    else:
+        if len(request.POST['text']) > 42:
+            errors = 'You post message need to 42 characters or less.'
+            context = {'posts': Grumblr.objects.all().order_by('-time')}
+            context['add_post_errors'] = errors
+            return render(request, 'grumblr/global_stream.html', context)
+        else:
+            new_post = Grumblr(user=request.user, content=request.POST['text'])
+            new_post.save()
+    newUser = UserProfile.objects.get(user=request.user)
+    context = {'posts': Grumblr.objects.all().order_by('-time')}
+    context['add_post_errors'] = errors
+    context['newUser'] = newUser
+    return render(request, 'grumblr/global_stream.html', context)
