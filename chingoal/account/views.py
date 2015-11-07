@@ -69,15 +69,14 @@ def edit_profile(request):
 
     edit_form = EditProfileForm(request.POST, request.FILES)
     errors = []
-    success = 'no'
     if not request.user.check_password(request.POST['password1']):
         errors.append('Old password is incorrect.')
     
     if errors:
-        return render(request, 'account/edit_profile.html', {'errors':errors, 'msg':success,'editForm': edit_form})
+        return render(request, 'account/edit_profile.html', {'errors':errors, 'msg':'no','editForm': edit_form})
 
     if not edit_form.is_valid():
-        return render(request, 'account/edit_profile.html',{'editForm': edit_form})
+        return render(request, 'account/edit_profile.html',{'editForm': edit_form, 'msg':'no'})
     
     if edit_form.cleaned_data['password2']:
         request.user.set_password(edit_form.cleaned_data['password2'])
@@ -101,8 +100,7 @@ def edit_profile(request):
         request.user.learner_user.save()
     elif Teacher.objects.filter(user = request.user):
         request.user.teacher.save()
-    success = 'yes'
-    return render(request, 'account/edit_profile.html', {'errors':errors, 'msg':success,'editForm': EditProfileForm()})
+    return render(request, 'account/edit_profile.html', {'errors':errors, 'msg':'yes','editForm': EditProfileForm()})
 
 @login_required
 def view_profile(request, uname):
