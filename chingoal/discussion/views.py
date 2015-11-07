@@ -29,7 +29,7 @@ def delete_post(request):
 
 @login_required
 def discussion_home(request):
-    return render(request, 'discussion/discussion_board.html', {})
+    return render(request, 'discussion/discussion_board.html', {'username' : request.user.username})
 
 
 @login_required
@@ -59,6 +59,7 @@ def post_post(request):
 
     return render(request, 'grumblr/post.json', \
         {'post': new_post}, content_type='application/json')
+
 
 @login_required
 @transaction.atomic
