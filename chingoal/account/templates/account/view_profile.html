@@ -7,7 +7,7 @@
 
     {% block head %}
     {% load static %}
-    <link href="css/custom_view_profile.css" rel="stylesheet">
+    <link href="{% static "css/custom_view_profile.css"%}" rel="stylesheet">
     {% endblock %}
     {% block head-origin %}
     {% endblock %}
@@ -63,7 +63,7 @@
                 <!-- http://lorempixel.com/850/280/people/9/ -->
             </div>
             <div class="useravatar">
-                <img alt="" src="static/img/boy.jpg">
+                <img alt="" src="{% static "img/boy.jpg"%}">
                 
             </div>
             <div class="follower">
@@ -142,7 +142,7 @@
                     <ul class="timeline">
                         <li>
                             <div class="timeline-image">
-                                <img class="img-circle img-responsive" src="img/about/1.jpg" alt="">
+                                <img class="img-circle img-responsive" src="{% static "img/about/1.jpg"%}" alt="">
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
@@ -157,7 +157,7 @@
                         </li>
                         <li class="timeline-inverted">
                             <div class="timeline-image">
-                                <img class="img-circle img-responsive" src="img/about/2.jpg" alt="">
+                                <img class="img-circle img-responsive" src="{% static "img/about/2.jpg"%}" alt="">
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
