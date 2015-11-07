@@ -2,7 +2,7 @@
 
 
     {% block title-content %}
-    <title>Chingoal_Store</title>
+    <title>Chingoal_profile</title>
   {% endblock %}
 
     {% block head %}
@@ -66,7 +66,7 @@
         </div>
         <!-- /.container-fluid -->
     </nav>
-
+	<a name="page-top" style="color:white">top</a>
     <div style=" margin-top:100px;">
         <div class="card hovercard" >
             <div class="card-background" style="height: 160px">
@@ -74,7 +74,7 @@
                 <!-- http://lorempixel.com/850/280/people/9/ -->
             </div>
             <div class="useravatar">
-                <img alt="" src="{% static "img/boy.jpg"%}">
+                <img alt="" src="{{cur_user.photo.url}}">
                 
             </div>
             <div class="follower">
@@ -100,7 +100,7 @@
             </div>
             <div class="btn-group" role="group">
                 <a href="#tab3"><button type="button" id="following" class="btn btn-default tab-timeline" ><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                    <span class="hidden-xs">Following</span>
+                    <span class="hidden-xs">Friends</span>
                 </button></a>
             </div>
         </div>
@@ -124,9 +124,6 @@
                                 {% endif %} 
                             </span>
                         </div>
-                        <div class="panel-footer ">
-                            <a href="{% url 'editProfile' %}">Edit your profile</a>
-                        </div>
                     </div>
                   </div>   
     		</div>
@@ -134,17 +131,16 @@
   
     <div class="rightRoll">
      <div class="message_box">
+     <img src="{% static "img/bg2.jpg"%}" style="height:80px; width:350px;" alt=""><a href="#page-top" class="go-top"><span class="glyphicon glyphicon-arrow-up"></span>Back to top</a>
     	<p class=" text-center">Leave your message:</p>
 			<form method="POST" action="{% url 'post' %}">
         		<span>
-        			<textarea id="textarea1" name="text" placeholder="leave your message here..."></textarea>
-        		</span><br/>
+        			<textarea id="textarea1" name="text" placeholder="leave your message here...(42 characters or less)"></textarea>
+        		</span>
                     <input class="button1" type="submit" value="Leave Message" >
-                    <br/>
-                    <br/>
-        		<span class="hint">(42 characters or less)</span> 
+					
             {% csrf_token %}
-      		</form>
+      		</form>        
         </div>
       </div>
      <a name="tab3" style="color:white">tab3</a>
@@ -178,7 +174,7 @@
         </div>
     </div>    
     <a name="tab2" style="color:white">tab2</a>
-    <div class="set-bottom">
+<div class="set-bottom">
     		 <div class="row"> 
                 <div class="col-lg-6">
                     <ul class="timeline">
