@@ -46,7 +46,7 @@
                         <a class="page-scroll" href="#account">Account</a>
                     </li> -->
                     <li>
-                        <a class="page-scroll" href="#team">About Us</a>
+                        <a class="page-scroll" href="{% url 'login' %}">About Us</a>
                     </li>
                 </ul>
             </div>
@@ -91,13 +91,16 @@
                                     <!-- {{ form.password.label_tag }} -->
                                         {{ form.password}}
                                 </div>
-                                <div class="checkbox">
+                                <div class="checkbox login-style">
                                     <label>
                                         <input name="remember" type="checkbox" value="Remember Me">Remember Me
                                     </label>
-                                    <label style="margin-left:120px;">
-                                        <a href="{% url 'register' %}">SignUp</a>
+                                    <label>
+                                        <a href="{% url 'resetPassword' %}">Forget Password?</a>
                                     </label>
+                                    <label >
+                                        <a href="{% url 'register' %}">SignUp</a>
+                                    </label>                         
                                 </div>
                                 {% csrf_token %}
                                 <!-- Change this to a button or input when using this as a form -->
