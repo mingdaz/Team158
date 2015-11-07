@@ -166,12 +166,19 @@ body
 	margin-left:50px;
 	}
 .message_box{
-	right:50px; 
-	width:400px; 
-	height:270px; 
+	right:40px; 
+	width:350px; 
+	height:330px; 
 	border-radius:15px;
 	display:block;
 	position:fixed; 
-	top:345px; 
+	top:315px; 
 	background:url(/static/img/bg1.jpg)
 	}
+.go-top {
+	color:grey;
+	float:right;
+}
+.text-center {
+	margin-bottom:-20px;
+}
