@@ -160,7 +160,7 @@ body
 	display:block;
 	position:fixed; 
 	top:345px; 
-	background:url(../static/img/bg1.jpg)
+	background:url(/static/img/bg1.jpg)
 }
 .div2{
 	border:1px solid red;
