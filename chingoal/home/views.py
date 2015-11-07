@@ -34,5 +34,4 @@ def home(request):
         teacher = Teacher.objects.get(user = cur_user)
         context['cur_user'] = teacher
 
-
     return render(request, 'dashboard.html', context)
