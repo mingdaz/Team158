@@ -132,15 +132,16 @@ body
 	float:right;
 	margin:10px 25px 10px 0px;
 	position:relative;
-	left:20px;
+	top:10px;
+	left:-100px;
 	font-size:15px;
 	font-weight:bold;
 	}
 .hint{
 	position:relative;
 	width:150px;
-	left:270px;
-	top:-50px;
+	left:260px;
+	top:-40px;
 	font-size:12px;
 	color:rgba(134,134,134,1.00);
 	}
@@ -148,20 +149,29 @@ body
 	positive:relative;
 	top:-30px;
 	left:30px;
-	border:1px red solid;
 	padding:0px;
 	}
 .rightRoll{ 
 	z-index:9999;
 	right:50px; 
 	width:400px; 
-	height:250px; 
+	height:300px; 
+	border-radius:15px;
+	display:block;
+	position:fixed; 
+	top:345px;
+}
+.div2{
+	border:1px solid black;
+	margin-left:50px;
+	}
+.message_box{
+	right:50px; 
+	width:400px; 
+	height:270px; 
 	border-radius:15px;
 	display:block;
 	position:fixed; 
 	top:345px; 
 	background:url(/static/img/bg1.jpg)
-}
-.div2{
-	border:1px solid red;
 	}
