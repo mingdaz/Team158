@@ -36,24 +36,19 @@
                         <a href="#page-top"></a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#portfolio">Lessons</a>
+                        <a class="page-scroll" href="#">Lessons</a>
                     </li>
                     <li>
                         <a class="page-scroll" href="{% url 'discussion_home' %}">Discussion</a>
                     </li>
-<!--                     <li>
-                        <a class="page-scroll" href="{% url 'store' %}">Store</a>
-                        
-                        <ul> 
-<li><a href="{% url 'logout' %}">Logout</a></li> 
-<li><a href="{% url 'editProfile' %}">Edit profile</a></li> 
-</ul> 
-                    </li>    -->                 
-                     <li class="dropdown">
+                    <li>
+                        <a class="page-scroll" href="{% url 'store' %}">Store</a>                       
+                    </li>                    
+                    
+                    <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    <img src="{{cur_user.photo.url}}" class="img-responsive img-circle"  alt="" id="header_profile_picture">
-<!--                         <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
- -->                    </a>
+                             <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
                     <ul class="dropdown-menu dropdown-user">
                         <li><a href="{% url 'viewProfile' username %}"><i class="fa fa-user fa-fw"></i> User Profile</a>
                         </li>
@@ -64,7 +59,7 @@
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
-                </li>   
+                    </li>   
                    
                 </ul>
             </div>
