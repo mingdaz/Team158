@@ -1,371 +1,136 @@
 {% extends "base.html" %}
-    {% block wrapper-content %}
 
-    <div id="wrapper">
 
-        <!-- Navigation -->
-        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+    {% block title-content %}
+    <title>Chingoal_DiscussionBoard</title>
+    {% endblock %}
+
+    {% block head %}
+    {% load static %}
+    <link href="css/custom_discussion_board.css" rel="stylesheet">    {% endblock %}
+    {% block head-origin %}
+    {% endblock %}
+
+    {% block main-content %}
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="home.html">Chingoal</a>
+                <a class="navbar-brand page-scroll" href="#page-top">Chingoal</a>
             </div>
-            <!-- /.navbar-header -->
 
-            <ul class="nav navbar-top-links navbar-right">
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-envelope fa-fw"></i>  <i class="fa fa-caret-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-messages">
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <strong>John Smith</strong>
-                                    <span class="pull-right text-muted">
-                                        <em>Yesterday</em>
-                                    </span>
-                                </div>
-                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <strong>John Smith</strong>
-                                    <span class="pull-right text-muted">
-                                        <em>Yesterday</em>
-                                    </span>
-                                </div>
-                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <strong>John Smith</strong>
-                                    <span class="pull-right text-muted">
-                                        <em>Yesterday</em>
-                                    </span>
-                                </div>
-                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a class="text-center" href="#">
-                                <strong>Read All Messages</strong>
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-                        </li>
-                    </ul>
-                    <!-- /.dropdown-messages -->
-                </li>
-                <!-- /.dropdown -->
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-tasks fa-fw"></i>  <i class="fa fa-caret-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-tasks">
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <p>
-                                        <strong>Task 1</strong>
-                                        <span class="pull-right text-muted">40% Complete</span>
-                                    </p>
-                                    <div class="progress progress-striped active">
-                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                                            <span class="sr-only">40% Complete (success)</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <p>
-                                        <strong>Task 2</strong>
-                                        <span class="pull-right text-muted">20% Complete</span>
-                                    </p>
-                                    <div class="progress progress-striped active">
-                                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                                            <span class="sr-only">20% Complete</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <p>
-                                        <strong>Task 3</strong>
-                                        <span class="pull-right text-muted">60% Complete</span>
-                                    </p>
-                                    <div class="progress progress-striped active">
-                                        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
-                                            <span class="sr-only">60% Complete (warning)</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <p>
-                                        <strong>Task 4</strong>
-                                        <span class="pull-right text-muted">80% Complete</span>
-                                    </p>
-                                    <div class="progress progress-striped active">
-                                        <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-                                            <span class="sr-only">80% Complete (danger)</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a class="text-center" href="#">
-                                <strong>See All Tasks</strong>
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-                        </li>
-                    </ul>
-                    <!-- /.dropdown-tasks -->
-                </li>
-                <!-- /.dropdown -->
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-alerts">
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <i class="fa fa-comment fa-fw"></i> New Comment
-                                    <span class="pull-right text-muted small">4 minutes ago</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <i class="fa fa-twitter fa-fw"></i> 3 New Followers
-                                    <span class="pull-right text-muted small">12 minutes ago</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <i class="fa fa-envelope fa-fw"></i> Message Sent
-                                    <span class="pull-right text-muted small">4 minutes ago</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <i class="fa fa-tasks fa-fw"></i> New Task
-                                    <span class="pull-right text-muted small">4 minutes ago</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <i class="fa fa-upload fa-fw"></i> Server Rebooted
-                                    <span class="pull-right text-muted small">4 minutes ago</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a class="text-center" href="#">
-                                <strong>See All Alerts</strong>
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-                        </li>
-                    </ul>
-                    <!-- /.dropdown-alerts -->
-                </li>
-                <!-- /.dropdown -->
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-user">
-                        <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
-                        </li>
-                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
-                        </li>
-                    </ul>
-                    <!-- /.dropdown-user -->
-                </li>
-                <!-- /.dropdown -->
-            </ul>
-            <!-- /.navbar-top-links -->
-
-            <div class="navbar-default sidebar" role="navigation">
-                <div class="sidebar-nav navbar-collapse">
-                    <ul class="nav" id="side-menu">
-                        <li class="sidebar-search">
-                            <div class="input-group custom-search-form">
-                                <input type="text" class="form-control" placeholder="Search...">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button">
-                                        <i class="fa fa-search"></i>
-                                    </button>
-                                </span>
-                            </div>
-                            <!-- /input-group -->
-                        </li>
-                        <li>
-                            <a href="home.html"><i class="glyphicon glyphicon-home"></i> Dashboard</a>
-                        </li>
-                        <li>
-                            <a href="discussion_board.html"><i class="fa fa-group"></i> Discussion</a>
-                        </li>
-                        <li>
-                            <a href="store.html"><i class="fa fa-shopping-cart"></i> Store</a>
-                        </li>
-                    </ul>
-                </div>
-                <!-- /.sidebar-collapse -->
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="hidden">
+                        <a href="#page-top"></a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#">Lessons</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#portfolio">Discussion</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#about">Store</a>
+                    </li>                    
+                    <li>
+                        <a class="page-scroll" href="#contact">About Us</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll">
+                            <img src="static/img/profile.jpg" class="img-responsive img-circle"  alt="" id="header_profile_picture">
+                        </a>
+                    </li>
+                </ul>
             </div>
-            <!-- /.navbar-static-side -->
-        </nav>
-
-        <!-- Page Content -->
-        <div id="page-wrapper">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <h1 class="page-header">Discussion Board</h1>                        
-                    </div>                    
-                </div>
-                
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="panel panel-info">
-                        <div class="panel-heading"><a href="discussion_board.html">Return</a></div>
-                        <div class="panel-body">
-                            <h5>Post Information Post Information Post Information Post Information 
-                                Post Information Post Information Post Information Post Information Post Information </h5>
-                            <div class="panel-group" id="accordion">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" 
-                                                href="#collapseOne" aria-expanded="true" class>Reply</a></h4>  
-                                        <!-- <div class="col-md-8">
-                                                                                  
-                                        </div>
-                                        <div class="col-md-2 col-md-2-offset-10">Views 13</div> -->
-                                    </div>
-                                    <div id="collapseOne" class="panel-collapse collapse in" aria-expanded="true">
-                                        <div class="panel-body">  
-                                            <div class="col-md-2">
-                                                <img src="../image/profile.jpg" style="width:50px; height:50px">
-                                            </div>
-                                            <div class="col-md-7 col-md-7-offset-2">Reply information Reply information Reply information 
-                                                Reply information Reply information Reply information Reply information </div>
-                                            <div class="col-md-1 col-md-1-offset-8">Views 13</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" 
-                                                href="#collapseTwo" aria-expanded="false" class="collapsed">Reply 2</a></h4>
-                                    </div>
-                                    <div id="collapseTwo" class="panel-collapse collapse" aria-expanded="false" style="height: 0px">
-                                        <div class="panel-body">  
-                                            <div class="col-md-2">
-                                                <img src="../image/profile.jpg" style="width:50px; height:50px">
-                                            </div>
-                                            <div class="col-md-7 col-md-7-offset-2">Post information Post information Post information 
-                                                Post information Post information Post information Post information </div>
-                                            <div class="col-md-1 col-md-1-offset-8">Views 13</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" 
-                                                href="#collapseThree" aria-expanded="false" class="collapsed">Reply 3</a></h4>
-                                    </div>
-                                    <div id="collapseThree" class="panel-collapse collapse" aria-expanded="false" style="height: 0px">
-                                        <div class="panel-body">  
-                                            <div class="col-md-2">
-                                                <img src="../image/profile.jpg" style="width:50px; height:50px">
-                                            </div>
-                                            <div class="col-md-7 col-md-7-offset-2">Post information Post information Post information 
-                                                Post information Post information Post information Post information </div>
-                                            <div class="col-md-1 col-md-1-offset-8">Views 13</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                
-                                    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">New Reply</button>
-                                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"  style="  display: none;">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                                    <h4 class="modal-title" id="myModalLabel">New Reply</h4>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form role="form">
-                                                        <div class="form-group">
-                                                            <!-- <label>Text area</label> -->
-                                                            <textarea class="form-control" rows="5"></textarea>
-                                                        </div>
-                                                        <button type="submit" class="btn btn-default">Submit Button</button>
-                                                        <button type="reset" class="btn btn-default">Reset Button</button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
-
-
-                
-            </div>
-            <!-- /.container-fluid -->
+            <!-- /.navbar-collapse -->
         </div>
-        <!-- /#page-wrapper -->
+        <!-- /.container-fluid -->
+    </nav>
 
-    </div>
-    <!-- /#wrapper -->
 
-     {% endblock %}
+    <!-- Portfolio Grid Section -->
+    <section id="portfolio" class="bg-light-gray">        
+        <div class="row">
+            <div class="col-lg-1"></div>
+            <div class="col-lg-10">
+                <table class="table table-hover">
+                <thead>
+                    <tr>
+                    <td>#</td>
+                    <td>Post Title</td>
+                    <td>Author</td>
+                    <td># Replies</td>
+                    </tr>
+                </thead>
+                <tr>
+                    <td>1</td>
+                    <td>How to Solve This Problem?</td>
+                    <td>User 1</td>
+                    <td>3</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>How does this happen?</td>
+                    <td>User 1</td>
+                    <td>3</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>How to explain this?</td>
+                    <td>User 3</td>
+                    <td>3</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>How to Solve This Problem?</td>
+                    <td>User 4</td>
+                    <td>3</td>
+                </tr>
+                </table>
+            </div>
+            <div class="col-lg-1"></div>            
+        </div>
+    </section>
+
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <span class="copyright">Copyright &copy; Your Website 2014</span>
+                </div>
+                <div class="col-md-4">
+                    <ul class="list-inline social-buttons">
+                        <li><a href="#"><i class="fa fa-twitter"></i></a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-facebook"></i></a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-linkedin"></i></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <ul class="list-inline quicklinks">
+                        <li><a href="#">Privacy Policy</a>
+                        </li>
+                        <li><a href="#">Terms of Use</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+ {% endblock %}
+
+    {% block origin-script %}
+    {% endblock %}
+
