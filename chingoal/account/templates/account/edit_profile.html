@@ -89,9 +89,8 @@
                         {% endfor %}
                         {% if msg == 'yes' %}
                            <p class="bg-success err-msg"><span class="glyphicon glyphicon-ok-sign"></span>Changes have been saved ~</p>
-                           <img src="{% static "img/success.jpg"%}" alt="" style="width:200px;height:200px;">
-                        {% else %}
-                        <img src="{% static "img/fail.jpg"%}" alt="" style="width:200px;height:200px;">
+                           <img src="{% static "img/success.jpg"%}" alt="" style="width:200px;height:200px;">                        {% elif msg == 'no' %}
+                           <img src="{% static "img/fail.jpg"%}" alt="" style="width:200px;height:200px;">
                         {% endif %}
              
             </div>
