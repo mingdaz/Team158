@@ -14,4 +14,7 @@ urlpatterns = [
     url(r'^edit-schedule$', 'account.views.edit_schedule', name= 'editSchedule'),
     url(r'^follow/(?P<uname>\w+)/(?P<isFollowing>\w+)/(?P<isLearner>\w+)$', 'account.views.follow', name = 'follow'),
     url(r'^post-question$', 'account.views.post_question',name='post'),
+    url(r'^reset/confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$',
+            'account.views.reset_confirm', name='reset_confirm'),
+    url(r'^reset/$', 'account.views.reset', name='reset'),
 ]
