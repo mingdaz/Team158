@@ -17,7 +17,7 @@ class Learner(models.Model):
     lesson_plan = models.IntegerField(default = 1)  # MAX = 5
     follows = models.ManyToManyField(User,related_name = "learner_follows")
     bio = models.CharField(max_length = 420, default='Please introduce yourself')
-    photo = models.ImageField(upload_to = 'portrait', blank = True, default = '/portrait/1438711509100.jpg')
+    photo = models.ImageField(upload_to = 'portrait', blank = True, default = '/user_photo/portrait/default.jpg')
     unlock = models.IntegerField(default = 0)
     
     def __unicode__(self):
