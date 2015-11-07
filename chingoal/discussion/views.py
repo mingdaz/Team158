@@ -6,6 +6,8 @@ from django.contrib.auth.decorators import login_required
 
 from django.http import HttpResponse, Http404
 
+from django.db import transaction
+
 
 @login_required
 # @transaction.atomic
@@ -60,7 +62,8 @@ def post_post(request):
 
 @login_required
 @transaction.atomic
-form = ReplyForm(request.POST)
+def post_reply(request):
+    form = ReplyForm(request.POST)
     if not form.is_valid():
         print 'form not valid!'
         # return render(request, 'grumblr/reply.json', {}, content_type='application/json')
