@@ -9,6 +9,7 @@ def home(request):
     context = {}
     cur_user = request.user.learner_user
     context['cur_user'] = cur_user
+    context['username'] = request.user.username
     return render(request,'store/store.html',context)
 
 @login_required
