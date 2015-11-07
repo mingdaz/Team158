@@ -46,7 +46,7 @@
                         <a class="page-scroll" href="#account">Account</a>
                     </li> -->
                     <li>
-                        <a class="page-scroll" href="{% url 'login' %}">Login</a>
+                        <a class="page-scroll" href="#About">About Us</a>
                     </li>
                 </ul>
             </div>
@@ -87,6 +87,9 @@
                                 <div class="checkbox">
                                     <label>
                                         <input name="remember" type="checkbox" value="Agreement">Agreement Items
+                                    </label>
+                                    <label>
+                                        <a href="{% url 'login' %}">Login</a>
                                     </label>
                                 </div>
                                 {% csrf_token %}
