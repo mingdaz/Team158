@@ -3,7 +3,7 @@ from forms import MyAuthenticationForm
 
 urlpatterns = [
 
-    # url(r'^$', 'home.views.home'),
+    url(r'^$', 'home.views.home', name='home'),
     url(r'^login$', 'django.contrib.auth.views.login', {'template_name':'account/login.html','authentication_form':MyAuthenticationForm},name='login'),
     url(r'^logout$', 'django.contrib.auth.views.logout_then_login', name = 'logout'),
     url(r'^register$', 'account.views.register', name = 'register'),
@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^new-password/(?P<token>.*)$', 'account.views.new_password', name = 'newPassword'),
     url(r'^edit-schedule$', 'account.views.edit_schedule', name= 'editSchedule'),
     url(r'^follow/(?P<uname>\w+)/(?P<isFollowing>\w+)/(?P<isLearner>\w+)$', 'account.views.follow', name = 'follow'),
+    url(r'^post-question$', 'account.views.post_question',name='post'),
 ]

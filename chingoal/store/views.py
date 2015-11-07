@@ -12,18 +12,19 @@ def home(request):
     return render(request,'store/store.html',context)
 
 @login_required
-def buy_title(request, title):
-    request.user.learner_user.title = title
-    request.user.learner_user.save()
-    return render(request,'store/store.html',context)
-
-@login_required
-def unlock_learning(request, lesson):
-    print lesson
-    request.user.learner_user.unlock = lesson
-    request.user.learner_user.save()
+def buy_title(request, title, cost):
+    learner = request.user.learner_user
+    money = learner.user_vm
+    learner.title = title
+    learner.user_vm = money - int(cost)
+    learner.save()
     return redirect('/store')
 
 @login_required
-def earn_money(request):
-    return HttpResponse('success')
+def unlock_learning(request, lesson):
+    learner = request.user.learner_user
+    money = learner.user_vm
+    learner.unlock = lesson
+    learner.user_vm = money - 5
+    learner.save()
+    return redirect('/store')
