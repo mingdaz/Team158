@@ -33,13 +33,13 @@
                         <a href="#page-top"></a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#">Lessons</a>
+                        <a class="page-scroll" href="{% url 'dashboard' %}">Lessons</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#portfolio">Discussion</a>
+                        <a class="page-scroll" href="#">Discussion</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#about">Store</a>
+                        <a class="page-scroll" href="{% url 'store' %}">Store</a>
                     </li>                    
                     <li>
                         <a class="page-scroll" href="#contact">About Us</a>
@@ -69,7 +69,7 @@
 
         <div class="row">
             <div class="col-lg-1"></div>
-            <div class="col-lg-10">
+            <div class="col-lg-10" id="post_table">
                 <table class="table table-hover">
                 <thead>
                     <tr>
@@ -79,6 +79,7 @@
                     <td># Replies</td>
                     </tr>
                 </thead>
+                
                 <tr>
                     <td>1</td>
                     <td>How to Solve This Problem?</td>
