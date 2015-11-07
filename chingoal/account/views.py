@@ -8,7 +8,7 @@ from django.contrib.auth import login, authenticate
 from django.core.urlresolvers import reverse
 from django.core.mail import send_mail
 from django.http import HttpResponse, JsonResponse
-from django.contrib.auth.views import password_reset, password_reset_confirm
+from django.contrib.auth.views import password_reset, password_reset_confirm,password_change_done
 import json
 
 from models import *
@@ -25,8 +25,8 @@ def reset(request):
         subject_template_name='account/reset_subject.txt',
         post_reset_redirect=reverse('home'))
 
-def reset(request):
-    return password_change_done(request, template_name='account/password_change_done.html')
+# def reset(request):
+#     return password_change_done(request, template_name='account/password_change_done.html')
 
 
 def register(request):
