@@ -10,7 +10,7 @@
     <link href="{% static "css/custom_dashboard.css"%}" rel="stylesheet">
     {% endblock %}
     {% block head-origin %}
-    <!-- <link href="{% static "newhtml/css/agency.css"%}" rel="stylesheet"> -->
+    <!-- <link href="{% static "css/agency.css"%}" rel="stylesheet"> -->
     {% endblock %}
 
     {% block main-content %}
@@ -125,7 +125,7 @@
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-6 portfolio-item">
-                    {% if cur_user.current_level >= 0 %}
+                    {% if cur_user.current_level >= 1 %}
                     <a href="#portfolioModal1" class="portfolio-link" data-toggle="modal">
                         <div class="portfolio-hover">
                             <div class="portfolio-hover-content">
@@ -148,7 +148,7 @@
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-6 portfolio-item">
-                    {% if cur_user.current_level >= 0 %}
+                    {% if cur_user.current_level >= 2 %}
                     <a href="#portfolioModal1" class="portfolio-link" data-toggle="modal">
                         <div class="portfolio-hover">
                             <div class="portfolio-hover-content">
@@ -171,7 +171,7 @@
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-6 portfolio-item">
-                    {% if cur_user.current_level >= 0 %}
+                    {% if cur_user.current_level >= 3 %}
                     <a href="#portfolioModal1" class="portfolio-link" data-toggle="modal">
                         <div class="portfolio-hover">
                             <div class="portfolio-hover-content">
@@ -195,7 +195,7 @@
                 </div>
                 <div class="col-md-4 col-sm-6 portfolio-item">
                     <a href="#portfolioModal5" class="portfolio-link" data-toggle="modal">
-                   {% if cur_user.current_level >= 0 %}
+                   {% if cur_user.current_level >= 4 %}
                     <a href="#portfolioModal1" class="portfolio-link" data-toggle="modal">
                         <div class="portfolio-hover">
                             <div class="portfolio-hover-content">
@@ -218,7 +218,7 @@
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-6 portfolio-item">
-                    {% if cur_user.current_level >= 0 %}
+                    {% if cur_user.current_level >= 5 %}
                     <a href="#portfolioModal1" class="portfolio-link" data-toggle="modal">
                         <div class="portfolio-hover">
                             <div class="portfolio-hover-content">
@@ -290,38 +290,149 @@
                     <div class="col-lg-8 col-lg-offset-2">
                         <div class="modal-body">
                             <!-- Project Details Go Here -->
-                            <h2>Edit Profile</h2>
-                            
-                        {% for field in editForm.visible_fields %}
-                        {% for error in field.errors %}
-                        <p class="bg-danger err-msg"><span class="glyphicon glyphicon-exclamation-sign"></span> {{error}}</p>
-                        {% endfor %}
-                        {% endfor %}
-                        {% for error in editForm.non_field_errors %}
-                            <p class="bg-danger err-msg"><span class="glyphicon glyphicon-exclamation-sign"></span> {{error}}</p>
-                        {% endfor %}
-                        {% for error in errors %}
-                            <p class="bg-danger err-msg"><span class="glyphicon glyphicon-exclamation-sign"></span> {{error}}</p>
-                        {% endfor %}
-                        {% if msg %}
-                           <p class="bg-success err-msg"><span class="glyphicon glyphicon-ok-sign"></span>{{ msg }}</p>
-                        {% endif %}  
-                            
-                         <form role="form" method="POST" enctype="multipart/form-data" action="{% url 'editProfile' %}">  
-                            <fieldset>
-                                {% for field in editForm.visible_fields %}
-                                    <div class="form-group">
-                                        <span>
-                                          {{ field.label }}
-                                          {{ field }}
-                                        </span>
-                                    </div>
-                                {% endfor %}
-                                <button type="button" class="btn btn-primary" data-dismiss="modal">Submit</button>
-                            </fieldset>
-                             {% csrf_token %}
-                        </form>
-                            
+                             <div class="row">
+                <div class="col-md-4 col-sm-6 portfolio-item">
+                    {% if cur_user.current_level > 0 or cur_user.current_lesson >= 1 %}
+                    <a href="{% url 'getlearn' 0 1 %}" class="portfolio-link" data-toggle="modal">
+                        <div class="portfolio-hover">
+                            <div class="portfolio-hover-content">
+                                <i class="fa fa-plus fa-3x"></i>
+                            </div>
+                        </div>
+                    {% else %}
+                    <a class="portfolio-link">
+                        <div class="portfolio-hover">
+                            <div class="portfolio-hover-content">
+                                <i class="fa fa-lock fa-3x"></i>
+                            </div>
+                        </div>
+                    {% endif %}
+                        <img src="{% static "img/portfolio/roundicons.png"%}" class="img-responsive" alt="">
+                    </a>
+                    <div class="portfolio-caption">
+                        <h4>Lesson 1</h4>
+                        <p class="text-muted">Lesson1 Introduction</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 portfolio-item">
+                    {% if cur_user.current_level > 0 or cur_user.current_lesson >= 2 %}
+                    <a href="" class="portfolio-link" data-toggle="modal">
+                        <div class="portfolio-hover">
+                            <div class="portfolio-hover-content">
+                                <i class="fa fa-plus fa-3x"></i>
+                            </div>
+                        </div>
+                    {% else %}
+                    <a class="portfolio-link">
+                        <div class="portfolio-hover">
+                            <div class="portfolio-hover-content">
+                                <i class="fa fa-lock fa-3x"></i>
+                            </div>
+                        </div>
+                    {% endif %}
+                        <img src="{% static "img/portfolio/startup-framework.png"%}" class="img-responsive" alt="">
+                    </a>
+                    <div class="portfolio-caption">
+                        <h4>Lesson 2</h4>
+                        <p class="text-muted">Lesson2 Introduction</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 portfolio-item">
+                    {% if cur_user.current_level > 0 or cur_user.current_lesson >= 3 %}
+                    <a href="" class="portfolio-link" data-toggle="modal">
+                        <div class="portfolio-hover">
+                            <div class="portfolio-hover-content">
+                                <i class="fa fa-plus fa-3x"></i>
+                            </div>
+                        </div>
+                    {% else %}
+                    <a class="portfolio-link">
+                        <div class="portfolio-hover">
+                            <div class="portfolio-hover-content">
+                                <i class="fa fa-lock fa-3x"></i>
+                            </div>
+                        </div>
+                    {% endif %}
+                        <img src="{% static "img/portfolio/treehouse.png"%}" class="img-responsive" alt="">
+                    </a>
+                    <div class="portfolio-caption">
+                        <h4>Lesson 3</h4>
+                        <p class="text-muted">Lesson3 Introduction</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 portfolio-item">
+                    {% if cur_user.current_level > 0 or cur_user.current_lesson >= 4 %}
+                    <a href="" class="portfolio-link" data-toggle="modal">
+                        <div class="portfolio-hover">
+                            <div class="portfolio-hover-content">
+                                <i class="fa fa-plus fa-3x"></i>
+                            </div>
+                        </div>
+                    {% else %}
+                    <a class="portfolio-link">
+                        <div class="portfolio-hover">
+                            <div class="portfolio-hover-content">
+                                <i class="fa fa-lock fa-3x"></i>
+                            </div>
+                        </div>
+                    {% endif %}
+                        <img src="{% static "img/portfolio/golden.png"%}" class="img-responsive" alt="">
+                    </a>
+                    <div class="portfolio-caption">
+                        <h4>Lesson 4</h4>
+                        <p class="text-muted">Website Design</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 portfolio-item">
+                    <a href="" class="portfolio-link" data-toggle="modal">
+                   {% if cur_user.current_level > 0 or cur_user.current_lesson >= 5 %}
+                    <a href="#portfolioModal1" class="portfolio-link" data-toggle="modal">
+                        <div class="portfolio-hover">
+                            <div class="portfolio-hover-content">
+                                <i class="fa fa-plus fa-3x"></i>
+                            </div>
+                        </div>
+                    {% else %}
+                    <a class="portfolio-link">
+                        <div class="portfolio-hover">
+                            <div class="portfolio-hover-content">
+                                <i class="fa fa-lock fa-3x"></i>
+                            </div>
+                        </div>
+                    {% endif %}
+                        <img src="{% static "img/portfolio/escape.png"%}" class="img-responsive" alt="">
+                    </a>
+                    <div class="portfolio-caption">
+                        <h4>Lesson 5</h4>
+                        <p class="text-muted">Website Design</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 portfolio-item">
+                    {% if cur_user.current_level > 0 or cur_user.current_lesson >= 6 %}
+                    <a href="" class="portfolio-link" data-toggle="modal">
+                        <div class="portfolio-hover">
+                            <div class="portfolio-hover-content">
+                                <i class="fa fa-plus fa-3x"></i>
+                            </div>
+                        </div>
+                    {% else %}
+                    <a class="portfolio-link">
+                        <div class="portfolio-hover">
+                            <div class="portfolio-hover-content">
+                                <i class="fa fa-lock fa-3x"></i>
+                            </div>
+                        </div>
+                    {% endif %}
+                        <img src="{% static "img/portfolio/dreams.png"%}" class="img-responsive" alt="">
+                    </a>
+                    <div class="portfolio-caption">
+                        <h4>Lesson 6</h4>
+                        <p class="text-muted">Website Design</p>
+                    </div>
+                </div>
+            </div>
+
+                            <!--  -->
                         </div>
                     </div>
                 </div>
