@@ -41,19 +41,31 @@
                     <li>
                         <a class="page-scroll" href="#services">Discussion</a>
                     </li>
-                    <li>
+<!--                     <li>
                         <a class="page-scroll" href="{% url 'store' %}">Store</a>
                         
                         <ul> 
 <li><a href="{% url 'logout' %}">Logout</a></li> 
 <li><a href="{% url 'editProfile' %}">Edit profile</a></li> 
 </ul> 
-                    </li>                    
-                    
-                    <li>
-                    <a href="#" class="page-scroll"><img src="{% static "img/profile.jpg"%}" class="img-responsive img-circle"  alt="" id="header_profile_picture"></a> 
-
-					</li> 
+                    </li>    -->                 
+                     <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <img src="{% static "img/profile.jpg"%}" class="img-responsive img-circle"  alt="" id="header_profile_picture">
+<!--                         <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+ -->                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                        </li>
+                        <li><a href="{% url 'editProfile' %}"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="{% url 'logout' %}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>   
+                   
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
