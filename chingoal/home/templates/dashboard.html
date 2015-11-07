@@ -51,7 +51,7 @@
                     </li>    -->                 
                      <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    <img src="{% static "img/profile.jpg"%}" class="img-responsive img-circle"  alt="" id="header_profile_picture">
+                    <img src="{{cur_user.photo.url}}" class="img-responsive img-circle"  alt="" id="header_profile_picture">
 <!--                         <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
  -->                    </a>
                     <ul class="dropdown-menu dropdown-user">
@@ -87,7 +87,7 @@
                 <div class="col-lg-2">                    
                 </div>
                 <div class="col-lg-2 text-center">
-                    <a  href="{% url 'viewProfile' username %}"><img src="{% static "img/profile.jpg"%}" class="img-responsive img-circle"  alt="" id="profile_img"></a>
+                    <a  href="{% url 'viewProfile' username %}"><img src="{{cur_user.photo.url}}" class="img-responsive img-circle"  alt="" id="profile_img"></a>
                 </div>
                 
                 <div class="col-lg-4 text-center">
