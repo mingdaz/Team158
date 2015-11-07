@@ -36,22 +36,30 @@
                         <a href="#page-top"></a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#portfolio">Lessons</a>
+                        <a class="page-scroll" href="{% url 'dashboard' %}">Lessons</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#services">Discussion</a>
+                        <a class="page-scroll" href="{% url 'discussion_home' %}">Discussion</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#about">Store</a>
+                        <a class="page-scroll" href="{% url 'store' %}">Store</a>                       
                     </li>                    
-                    <li>
-                        <a class="page-scroll" href="#contact">About Us</a>
-                    </li>
-                    <li>
-                        <a class="page-scroll">
-                            <img src="{% static "img/profile.jpg"%}" class="img-responsive img-circle"  alt="" id="header_profile_picture">
-                        </a>
-                    </li>
+                    
+                    <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                             <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="{% url 'viewProfile' username %}"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                        </li>
+                        <li><a href="{% url 'editProfile' %}"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="{% url 'logout' %}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                    </li>   
                 </ul>
             </div>
             <!-- /.navbar-collapse -->

@@ -27,11 +27,13 @@ def homepage(request):
 @login_required
 def get_test(request):
 	context = {}
+	context['username'] = request.user.username
 	return render(request, 'testpage/learn.html', context)
 
 @login_required
 def get_learn(request,level,lesson):
 	context = {}
+	context['username'] = request.user.username
 	return render(request, 'testpage/learn.html', context)
 
 @login_required
