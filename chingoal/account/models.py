@@ -13,6 +13,10 @@ class Learner(models.Model):
     title = models.CharField(max_length = 20, default = TITLE_CHOICES[0][1], choices = TITLE_CHOICES)
     progress_level = models.CharField(max_length = 20, default = LEVELS[0][1], choices=LEVELS)
     progress_lesson = models.CharField(max_length = 20, default = LESSONS[0][1], choices=LESSONS)
+    
+    current_level = models.CharField(max_length = 20, default = LEVELS[0][1], choices=LEVELS)
+    current_lesson = models.CharField(max_length = 20, default = LESSONS[0][1], choices=LESSONS)
+
     user_vm = models.IntegerField(default = 0)
     lesson_plan = models.IntegerField(default = 1)  # MAX = 5
     follows = models.ManyToManyField(User,related_name = "learner_follows")
