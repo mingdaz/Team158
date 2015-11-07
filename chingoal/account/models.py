@@ -14,8 +14,8 @@ class Learner(models.Model):
     progress_level = models.CharField(max_length = 20, default = LEVELS[0][1], choices=LEVELS)
     progress_lesson = models.CharField(max_length = 20, default = LESSONS[0][1], choices=LESSONS)
     
-    current_level = models.CharField(max_length = 20, default = LEVELS[0][1], choices=LEVELS)
-    current_lesson = models.CharField(max_length = 20, default = LESSONS[0][1], choices=LESSONS)
+    current_level = models.IntegerField(default=0)
+    current_lesson = models.IntegerField(default=1)
 
     user_vm = models.IntegerField(default = 0)
     lesson_plan = models.IntegerField(default = 1)  # MAX = 5
