@@ -19,11 +19,11 @@ class Post(models.Model):
     def get_changed_posts(max_id):
         return Post.objects.filter(id__gt=max_id).distinct()
 
-    # @property
-    # def html(self):
-    #     postTemplate = loader.get_template('grumblr/post_base.html')
-    #     context = Context({'post': self})
-    #     return postTemplate.render(context).replace('\n','').replace('"', '&quot;')
+    @property
+    def html(self):
+        postTemplate = loader.get_template('discussion/post_base.html')
+        context = Context({'post': self})
+        return postTemplate.render(context).replace('\n','').replace('"', '&quot;')
 
 
 class Reply(models.Model):
@@ -39,8 +39,8 @@ class Reply(models.Model):
     def get_replies(postid):
         return Reply.objects.filter(post_id = postid)
 
-    # @property
-    # def html(self):
-    #     replyTemplate = loader.get_template('grumblr/reply_base.html')
-    #     context = Context({'reply':self})
-    #     return replyTemplate.render(context).replace('\n','').replace('"', '&quot;')
+    @property
+    def html(self):
+        replyTemplate = loader.get_template('discussion/reply_base.html')
+        context = Context({'reply':self})
+        return replyTemplate.render(context).replace('\n','').replace('"', '&quot;')
