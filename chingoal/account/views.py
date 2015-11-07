@@ -60,7 +60,7 @@ def register(request):
     new_user = authenticate(username=register_form.cleaned_data['username'], \
                                 password=register_form.cleaned_data['password1'])
     login(request, new_user)
-    return redirect('/')
+    return redirect('/home')
 
 @login_required
 def edit_profile(request):
