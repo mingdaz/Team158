@@ -48,7 +48,7 @@ class EditProfileForm(forms.Form):
         password3 = cleaned_data.get('password3')
         password2 = cleaned_data.get('password2')
         if password2 != password3:
-            raise forms.ValidationError('New passwords did not match.')
+            raise forms.ValidationError('New passwords didn\'t match.')
         return cleaned_data
 
     def clean_username(self):
