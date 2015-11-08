@@ -38,7 +38,7 @@ class Teacher(models.Model):
     user = models.OneToOneField(User, unique = True, related_name="teacher")
     follows = models.ManyToManyField(User,related_name = "teacher_follows")
     bio = models.CharField(max_length = 420, default='Please introduce yourself')
-    photo = models.ImageField(upload_to = 'user_photo', blank = True)
+    photo = models.ImageField(upload_to = 'user_photo', blank = True, default = '/user_photo/portrait/default.jpg')
 
     def __unicode__(self):
         return 'Teacher' + self.user.username
