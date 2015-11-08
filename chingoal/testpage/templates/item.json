@@ -1,0 +1,4 @@
+{
+	"html":"{{item|safe}}",
+	"id":{{id}}
+}

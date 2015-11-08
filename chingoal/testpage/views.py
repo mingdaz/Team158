@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from django.db.models import Count
 from django.db import transaction
+from django.template import loader, Context
 # from grumblr.models import *
 from datetime import datetime	
 # from forms import *
@@ -60,10 +61,18 @@ def test_create(request):
 	return render(request, 'testpage/post_question.html', context)
 
 @login_required
-def test_add_question(request):
-	context = {}
-	context['username'] = request.user.username
-	return render(request, 'testpage/post_question.html', context)
+def test_add_question_mc(request,maxid):
+	itemTemplate = loader.get_template('multichoice.html')
+	maxid = int(maxid)+1
+	item = itemTemplate.render({"id":maxid}).replace('\n','').replace('\"','\'') #More escaping might be needed
+	return render(request, 'item.json', {"item":item,"id":maxid}, content_type='application/json')
+	
+@login_required
+def test_add_question_tr(request,maxid):
+	itemTemplate = loader.get_template('translate.html')
+	maxid = int(maxid)+1
+	item = itemTemplate.render({"id":maxid}).replace('\n','').replace('\"','\'') #More escaping might be needed
+	return render(request, 'item.json', {"item":item,"id":maxid}, content_type='application/json')
 
 @login_required
 def test_save_question(request):
