@@ -78,7 +78,7 @@
     <div style=" margin-top:100px;">
         <div class="card hovercard" >
             <div class="card-background" style="height: 160px">
-                <img class="card-bkimg" alt="" src="http://lorempixel.com/100/100/people/9/">
+                <img class="card-bkimg" alt="" src="{% static "img/profile_bg.jpg"%}">
                 <!-- http://lorempixel.com/850/280/people/9/ -->
             </div>
             <div class="useravatar">
@@ -127,7 +127,11 @@
                                 Title: {{ cur_user.title}}<br/>
                                 Achievement: {{ cur_user.lesson_plan}}<br/>                            
                                 Schedule: {{cur_user.progress_level}} Level
-                                		  {{cur_user.progress_lesson}} Lesson perday<br/>
+                                		  {{cur_user.progress_lesson}} Lesson perday
+                                         
+                                         <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Edit</button>
+
+                                         <br/>
                                 {% endif %}
                                 Self-Bio: {{cur_user.bio}}
                                  
