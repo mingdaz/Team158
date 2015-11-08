@@ -152,7 +152,7 @@ body
 	padding:0px;
 	}
 .rightRoll{ 
-	z-index:9999;
+	z-index:999;
 	right:50px; 
 	width:400px; 
 	height:300px; 
@@ -181,4 +181,12 @@ body
 }
 .text-center {
 	margin-bottom:-20px;
+}
+.modal-header {
+	height: 70px;
+	background-color:black;
+	color: #fed136;
+}
+#myModal {
+	margin-top: 200px;
 }
