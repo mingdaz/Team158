@@ -18,6 +18,7 @@ from mimetypes import guess_type
 from django.core.mail import send_mail
 from django.conf import settings
 from django.core import serializers
+from account.models import *
 
 @login_required
 def homepage(request):
@@ -28,12 +29,22 @@ def homepage(request):
 def get_test(request):
 	context = {}
 	context['username'] = request.user.username
+
+	cur_user = User.objects.get(username__exact = context['username'])
+    # if Learner.objects.filter(user = cur_user):
+	learner = Learner.objects.get(user = cur_user)
+
+	context['cur_user'] = learner
 	return render(request, 'testpage/learn.html', context)
 
 @login_required
 def get_learn(request,level,lesson):
 	context = {}
 	context['username'] = request.user.username
+	cur_user = User.objects.get(username__exact = context['username'])
+    # if Learner.objects.filter(user = cur_user):
+	learner = Learner.objects.get(user = cur_user)
+	context['cur_user'] = learner
 	return render(request, 'testpage/learn.html', context)
 
 @login_required
