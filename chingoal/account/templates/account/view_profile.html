@@ -145,6 +145,7 @@
     </div>
   
     <div class="rightRoll">
+    {% if isLearner == 'yes' %}
      <div class="message_box">
      {% if cur_username != username %}
      <img src="{% static "img/bg2.jpg"%}" style="height:80px; width:350px;" alt=""><a href="#page-top" class="go-top"><span class="glyphicon glyphicon-arrow-up"></span>Back to top</a>
@@ -188,6 +189,7 @@
 <a href="{% url 'dashboard'%}" style="color:#A90508;"><input class="button1" type="button" value="Start Learning" style="margin-top:180px;"></a>
      {% endif %}       
         </div>
+        {% endif %}
       </div>
      <a name="tab3" style="color:white">tab3</a>
       <div class="set-bottom text-center">
