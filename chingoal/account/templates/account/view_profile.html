@@ -131,6 +131,7 @@
   
     <div class="rightRoll">
      <div class="message_box">
+     {% if cur_username != username %}
      <img src="{% static "img/bg2.jpg"%}" style="height:80px; width:350px;" alt=""><a href="#page-top" class="go-top"><span class="glyphicon glyphicon-arrow-up"></span>Back to top</a>
     	<p class=" text-center">Leave your message:</p>
 			<form method="POST" action="{% url 'post' %}">
@@ -140,7 +141,10 @@
                     <input class="button1" type="submit" value="Leave Message" >
 					
             {% csrf_token %}
-      		</form>        
+      		</form> 
+      {% else %}
+            <p>this is me</p>
+     {% endif %}       
         </div>
       </div>
      <a name="tab3" style="color:white">tab3</a>
