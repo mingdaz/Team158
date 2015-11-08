@@ -8,6 +8,9 @@
     {% block head %}
     {% load static %}
     <link href="{% static "css/custom_view_profile.css"%}" rel="stylesheet">
+     <link rel="stylesheet" href="{% static "css/normalize.css"%}">
+
+    <link rel="stylesheet" href="{% static "css/style.css"%}" media="screen" type="text/css" />
     {% endblock %}
     {% block head-origin %}
     {% endblock %}
@@ -75,7 +78,7 @@
     <div style=" margin-top:100px;">
         <div class="card hovercard" >
             <div class="card-background" style="height: 160px">
-                <img class="card-bkimg" alt="" src="http://lorempixel.com/100/100/people/9/">
+                <img class="card-bkimg" alt="" src="{% static "img/profile_bg.jpg"%}">
                 <!-- http://lorempixel.com/850/280/people/9/ -->
             </div>
             <div class="useravatar">
@@ -124,9 +127,14 @@
                                 Title: {{ cur_user.title}}<br/>
                                 Achievement: {{ cur_user.lesson_plan}}<br/>                            
                                 Schedule: {{cur_user.progress_level}} Level
-                                		  {{cur_user.progress_lesson}} Lesson perday<br/>
+                                		  {{cur_user.progress_lesson}} Lesson perday
+                                         
+                                         <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Edit</button>
+
+                                         <br/>
+                                {% endif %}
                                 Self-Bio: {{cur_user.bio}}
-                                {% endif %} 
+                                 
                             </span>
                         </div>
                     </div>
@@ -148,7 +156,34 @@
             {% csrf_token %}
       		</form> 
       {% else %}
-            <p>this is me</p>
+            <div class="description">
+	<p>Lessons Learning Chart</p>
+</div>
+
+<div class="graph__wrapper">
+  <div class="coordinates">
+  	<span></span>
+  	<span></span>
+  	<span></span>
+  	<span></span>
+  	<span></span>
+  	<span></span> 
+  </div>
+    <svg width="315px" height="107px" viewBox="0 0 315 107" version="1.1">
+      <defs>
+          <linearGradient x1="0%" y1="100%" x2="100%" y2="100%" id="linearGradient-1">
+              <stop stop-color="#BA0003" offset="0%"></stop>
+              <stop stop-color="#FF9696" offset="41.7610013%"></stop>
+              <stop stop-color="#CE4E00" offset="78.6870217%"></stop>
+              <stop stop-color="#FEDF7F" offset="100%"></stop>
+          </linearGradient>
+      </defs>
+      <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+          <path d="M2,90 L30,60 L60,40 L90,80 L120,50 L150,100 L180,80" id="Path-1" stroke="url(#linearGradient-1)" stroke-width="4" sketch:type="MSShapeGroup" class="path"></path>
+      </g>
+  </svg>
+</div>
+<a href="{% url 'dashboard'%}" style="color:#A90508;"><input class="button1" type="button" value="Start Learning" style="margin-top:180px;"></a>
      {% endif %}       
         </div>
       </div>

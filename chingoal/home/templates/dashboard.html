@@ -91,17 +91,42 @@
                 
                 <div class="col-lg-4 text-center">
                     <h3>
-                    UserName
-                    </h3>   
-                    <i class="fa fa-star fa-2x text-muted"></i>
-                    <i class="fa fa-star fa-2x text-muted"></i>
-                    <i class="fa fa-star fa-2x text-muted"></i>
-                    <h4 class="text-muted">Title</h4>
+                    {{username}}
+                    </h3>
+                    {% if flag == 0 %}   
+                    <h4 class="text-muted">{{cur_user.title}}</h4>
+                    {% endif %}
                 </div>
                 <div class="col-lg-4 text-center">
+                	{% if flag == 0 %}
                     <h3>Achievement</h3>
-                    <h4 class="text-muted">Schedule</h4>
-                    <h4 class="text-muted">Money</h4>
+                    <i class="fa fa-star fa-2x text-muted" style="color:#fed136;"></i>
+                    {% if current_level > 0 %}
+                    <i class="fa fa-star fa-2x text-muted" style="color:#fed136;"></i>
+                    {% else %}
+                    <i class="fa fa-star fa-2x text-muted"></i>
+                    {% endif %}
+					 {% if current_level > 1 %}
+                    <i class="fa fa-star fa-2x text-muted" style="color:#F78706;"></i>
+                    {% else %}
+                    <i class="fa fa-star fa-2x text-muted"></i>
+                    {% endif %}
+                    {% if current_level > 2 %}
+                    <i class="fa fa-star fa-2x text-muted" style="color:#F78706;"></i>
+                    {% else %}
+                    <i class="fa fa-star fa-2x text-muted"></i>
+                    {% endif %}
+                    {% if current_level > 3 %}
+                    <i class="fa fa-star fa-2x text-muted" style="color:#F26002;"></i>
+                    {% else %}
+                    <i class="fa fa-star fa-2x text-muted"></i>
+                    {% endif %}
+                    {% if current_level > 4 %}
+                    <i class="fa fa-star fa-2x text-muted" style="color:red;"></i>
+                    {% else %}
+                    <i class="fa fa-star fa-2x text-muted"></i>
+                    {% endif %}
+                    {% endif %}
                 </div>
             </div>
             <div class="row">
