@@ -1,4 +1,16 @@
+jQuery.browser = {};
+(function () {
+ jQuery.browser.msie = false;
+ jQuery.browser.version = 0;
+ if (navigator.userAgent.match(/MSIE ([0-9]+)\./)) {
+ jQuery.browser.msie = true;
+ jQuery.browser.version = RegExp.$1;
+ }
+ })();
+
 $(document).ready(function() {
+	
+	
 $(".btn-pref .btn").click(function () {
     $(".btn-pref .btn").removeClass("btn-primary").addClass("btn-default");
     // $(".tab").addClass("active"); // instead of this do the below 
@@ -36,13 +48,3 @@ if (!isie6()) {
                   return false; 
                   } 
 });
-
-jQuery.browser = {};
-(function () {
- jQuery.browser.msie = false;
- jQuery.browser.version = 0;
- if (navigator.userAgent.match(/MSIE ([0-9]+)\./)) {
- jQuery.browser.msie = true;
- jQuery.browser.version = RegExp.$1;
- }
- })();

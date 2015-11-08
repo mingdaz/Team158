@@ -29,7 +29,6 @@ def home(request):
         learner = Learner.objects.get(user = cur_user)
         context['cur_user'] = learner
         context['flag'] = 0
-        context['scheduleForm'] = EditScheduleForm(initial={'progress_level':learner.progress_level,'progress_lesson':learner.progress_lesson})
     
     if Teacher.objects.filter(user = request.user):
         teacher = Teacher.objects.get(user = cur_user)
