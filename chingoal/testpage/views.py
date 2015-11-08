@@ -56,6 +56,7 @@ def get_result(request):
 def test_create(request):
 	context = {}
 	context['username'] = request.user.username
+	context['flag'] = 1
 	return render(request, 'testpage/post_question.html', context)
 
 @login_required
@@ -166,4 +167,3 @@ def learning_post(request):
 	context['username'] = request.user.username
 	return render(request, 'testpage/learn.html', context)
 
-	
