@@ -11,6 +11,7 @@
      <link rel="stylesheet" href="{% static "css/normalize.css"%}">
 
     <link rel="stylesheet" href="{% static "css/style.css"%}" media="screen" type="text/css" />
+    
     {% endblock %}
     {% block head-origin %}
     {% endblock %}
@@ -113,6 +114,7 @@
             </div>
         </div>
     </div>
+    
     <a name="tab1" style="color:white">tab1</a>
     <div class="set-bottom">
     	<div class="row">
@@ -127,10 +129,10 @@
                                 Title: {{ cur_user.title}}<br/>
                                 Achievement: {{ cur_user.lesson_plan}}<br/>                            
                                 Schedule: {{cur_user.progress_level}} Level
-                                		  {{cur_user.progress_lesson}} Lesson perday
+                                		  {{cur_user.progress_lesson}} Lesson per day
                                          
                                          <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Edit</button>
-
+                                       
                                          <br/>
                                 {% endif %}
                                 Self-Bio: {{cur_user.bio}}
@@ -292,5 +294,31 @@
 
 
 {% block script-content %}
-    <script src="{% static "js/view_profile.js"%}"></script>
+    <script src="{% static "js/view_profile.js"%}"></script>    
+{% endblock %}
+
+{% block model-define %}
+                                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                 <h4>Edit your schedule</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form role="form" action="{% url 'editSchedule' %}" method="post">
+                                                    <div class="form-group">
+                                                        <!-- <label>Text area</label> -->
+                                                        {% for field in scheduleForm.visible_fields %}
+                                                            {{field.label_tag}} {{field}}
+                                                            <br>
+                                                        {% endfor %}    
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                                                    {% csrf_token %}
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 {% endblock %}
