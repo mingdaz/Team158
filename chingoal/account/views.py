@@ -123,6 +123,8 @@ def view_profile(request, uname):
             context['isFollowing'] = 'no'
         context['history'] = History.objects.filter(user = cur_user)
         context['isLearner'] = 'yes'
+        context['scheduleForm'] = EditScheduleForm(initial={'progress_level':learner.progress_level,'progress_lesson':learner.progress_lesson})
+
 
     elif Teacher.objects.filter(user=cur_user):
         teacher = Teacher.objects.get(user = cur_user)
@@ -163,7 +165,7 @@ def edit_schedule(request):
         progress_lesson = scheduleForm.cleaned_data['progress_lesson']
         request.user.learner_user.progress_lesson = progress_lesson
     request.user.learner_user.save()
-    return redirect('/')
+    return redirect(reverse('viewProfile', kwargs = {'uname':request.user.username}))
 
 @login_required
 def follow(request, uname, isFollowing, isLearner):
