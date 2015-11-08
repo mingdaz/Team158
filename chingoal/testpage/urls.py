@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 
 urlpatterns = [
     url(r'^$','testpage.views.homepage',name ='gobackhomepage'),
+    # url(r'^photo/(?P<username>.+)','grumblr.views.get_photo',name='photo'),
     url(r'^get-test$','testpage.views.get_test',name ='gettest' ),
     url(r'^get-learn/(?P<level>[0-5]{1})/(?P<lesson>[1-6]{1})$','testpage.views.get_learn',name ='getlearn' ),
     url(r'^get-result$','testpage.views.get_result',name ='getresult' ),

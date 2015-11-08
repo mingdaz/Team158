@@ -55,95 +55,114 @@ def get_result(request):
 @login_required
 def test_create(request):
 	context = {}
-	return render(request, 'testpage/post_question', context)
+	context['username'] = request.user.username
+	return render(request, 'testpage/post_question.html', context)
 
 @login_required
 def test_add_question(request):
 	context = {}
-	return render(request, 'testpage/post_question', context)
+	context['username'] = request.user.username
+	return render(request, 'testpage/post_question.html', context)
 
 @login_required
 def test_save_question(request):
 	context = {}
-	return render(request, 'testpage/post_question', context)
+	context['username'] = request.user.username
+	return render(request, 'testpage/post_question.html', context)
 
 @login_required
 def test_edit_question(request):
 	context = {}
-	return render(request, 'testpage/post_question', context)
+	context['username'] = request.user.username
+	return render(request, 'testpage/post_question.html', context)
 
 @login_required
 def test_delete_question(request):
 	context = {}
-	return render(request, 'testpage/post_question', context)
+	context['username'] = request.user.username
+	return render(request, 'testpage/post_question.html', context)
 
 @login_required
 def test_post(request):
 	context = {}
-	return render(request, 'testpage/post_question', context)
+	context['username'] = request.user.username
+	return render(request, 'testpage/post_question.html', context)
 
 @login_required
 def get_learning(request):
 	context = {}
+	context['username'] = request.user.username
 	return render(request, 'testpage/learn.html', context)
 
 @login_required
 def get_learning(request):
 	context = {}
+	context['username'] = request.user.username
 	return render(request, 'testpage/learn.html', context)
 
 @login_required
 def get_learningResult(request):
 	context = {}
+	context['username'] = request.user.username
 	return render(request, 'testpage/learn.html', context)
 
 @login_required
 def skip_question(request):
 	context = {}
+	context['username'] = request.user.username
 	return render(request, 'testpage/learn.html', context)
 
 @login_required
 def exit_learning(request):
 	context = {}
+	context['username'] = request.user.username
 	return render(request, 'testpage/learn.html', context)
 
 @login_required
 def show_tips(request):
 	context = {}
+	context['username'] = request.user.username
 	return render(request, 'testpage/learn.html', context)
 
 @login_required
 def get_discussion(request):
 	context = {}
+	context['username'] = request.user.username
 	return render(request, 'testpage/learn.html', context)
 
 @login_required
 def create_learning(request):
 	context = {}
+	context['username'] = request.user.username
 	return render(request, 'testpage/learn.html', context)
 
 @login_required
 def learning_add_question(request):
 	context = {}
+	context['username'] = request.user.username
 	return render(request, 'testpage/learn.html', context)
 
 @login_required
 def learning_save_question(request):
 	context = {}
+	context['username'] = request.user.username
 	return render(request, 'testpage/learn.html', context)
 
 @login_required
 def learning_edit_question(request):
 	context = {}
+	context['username'] = request.user.username
 	return render(request, 'testpage/learn.html', context)
 
 @login_required
 def learning_delete_question(request):
 	context = {}
+	context['username'] = request.user.username
 	return render(request, 'testpage/learn.html', context)
 
 @login_required
 def learning_post(request):
 	context = {}
+	context['username'] = request.user.username
 	return render(request, 'testpage/learn.html', context)
 

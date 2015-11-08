@@ -35,5 +35,4 @@ def home(request):
         teacher = Teacher.objects.get(user = cur_user)
         context['cur_user'] = teacher
         context['flag'] = 1
-
     return render(request, 'dashboard.html', context)
