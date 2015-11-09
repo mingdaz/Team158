@@ -1,5 +1,8 @@
 from django.db import models
+from django.db.models import Max
 from django.contrib.auth.models import User
+
+from django.template import loader, Context
 
 class Post(models.Model):
     title = models.CharField(max_length=500)
@@ -19,21 +22,26 @@ class Post(models.Model):
     def get_changed_posts(max_id):
         return Post.objects.filter(id__gt=max_id).distinct()
 
+    # @property
+    # def get_number_replies(self):
+        # return len(Post.objects.filter(reply__reply_to = self))
+        # return len(Reply.objects.filter(reply_to = self))
+
     @property
     def html(self):
         postTemplate = loader.get_template('discussion/post_base.html')
         context = Context({'post': self})
-        return postTemplate.render(context).replace('\n','').replace('"', '&quot;')
+        return postTemplate.render(context).replace('\n','<br>').replace('"', '&quot;')
 
 
 class Reply(models.Model):
     text = models.CharField(max_length=500)
     post_time = models.DateTimeField(auto_now_add = True)
-    author = models.ForeignKey(User)
-    reply_to = models.ForeignKey(Post)
+    author = models.ForeignKey(User, related_name = 'author')
+    reply_to = models.ForeignKey(Post, related_name = 'reply_to')
     
     def __unicode__(self):
-        return self.author + ',' + self.postTime
+        return self.author.username + (str)(self.post_time)
 
     @staticmethod
     def get_replies(postid):
@@ -43,4 +51,4 @@ class Reply(models.Model):
     def html(self):
         replyTemplate = loader.get_template('discussion/reply_base.html')
         context = Context({'reply':self})
-        return replyTemplate.render(context).replace('\n','').replace('"', '&quot;')
+        return replyTemplate.render(context).replace('\n','<br>').replace('"', '&quot;')
