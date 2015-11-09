@@ -20,6 +20,8 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.core import serializers
 from account.models import *
+from forms import * 
+from models import * 
 
 @login_required
 def homepage(request):
@@ -61,24 +63,56 @@ def test_create(request):
 	return render(request, 'testpage/post_question.html', context)
 
 @login_required
-def test_add_question_mc(request,maxid):
+def test_add_question_mc(request):
 	itemTemplate = loader.get_template('multichoice.html')
-	maxid = int(maxid)+1
-	item = itemTemplate.render({"id":maxid}).replace('\n','').replace('\"','\'') #More escaping might be needed
-	return render(request, 'item.json', {"item":item,"id":maxid}, content_type='application/json')
+	new_question = Question(qtype="mc");
+	new_question.save()
+	maxid = new_question.id
+	print maxid
+	item = itemTemplate.render({"id":maxid,"form":MCQFrom()}).replace('\n','').replace('\"','\'') #More escaping might be needed
+	return render(request, 'item.json', {"item":item,"id":maxid,"flag":1}, content_type='application/json')
 	
 @login_required
-def test_add_question_tr(request,maxid):
+def test_add_question_tr(request):
 	itemTemplate = loader.get_template('translate.html')
-	maxid = int(maxid)+1
-	item = itemTemplate.render({"id":maxid}).replace('\n','').replace('\"','\'') #More escaping might be needed
-	return render(request, 'item.json', {"item":item,"id":maxid}, content_type='application/json')
+	new_question = Question(qtype="tr");
+	new_question.save()
+	maxid = new_question.id
+	item = itemTemplate.render({"id":maxid,"form":TRQFrom()}).replace('\n','').replace('\"','\'') #More escaping might be needed
+	return render(request, 'item.json', {"item":item,"id":maxid,"flag":1}, content_type='application/json')
 
 @login_required
-def test_save_question(request):
-	context = {}
-	context['username'] = request.user.username
-	return render(request, 'testpage/post_question.html', context)
+def test_save_mc_question(request,id):
+	mcqform = MCQFrom(request.POST);
+	flag = 0
+	if mcqform.is_valid():
+		new_question = Question.objects.get(id=id)
+		new_question.question=mcqform.cleaned_data['question']
+		new_question.a=mcqform.cleaned_data['a']
+		new_question.b=mcqform.cleaned_data['b']
+		new_question.c=mcqform.cleaned_data['c']
+		new_question.d=mcqform.cleaned_data['d']
+		new_question.answer=request.POST['optionsRadiosInline']
+		new_question.explanation=mcqform.cleaned_data['explanation']
+		new_question.save()
+		flag = 1
+	itemTemplate = loader.get_template('multichoice.html')
+	item = itemTemplate.render({"id":id,"form":mcqform}).replace('\n','').replace('\"','\'') #More escaping might be needed
+	return render(request, 'item.json', {"item":item,"id":id,"flag":flag}, content_type='application/json')
+
+@login_required
+def test_save_tr_question(request,id):
+	trqform = TRQFrom(request.POST);
+	flag = 0
+	if trqform.is_valid():
+		new_question = Question.objects.get(id=id)
+		new_question.question=trqform.cleaned_data['question']
+		new_question.explanation=trqform.cleaned_data['explanation']
+		new_question.save()
+		flag = 1
+	itemTemplate = loader.get_template('translate.html')
+	item = itemTemplate.render({"id":id,"form":trqform}).replace('\n','').replace('\"','\'') #More escaping might be needed
+	return render(request, 'item.json', {"item":item,"id":id,"flag":flag}, content_type='application/json')
 
 @login_required
 def test_edit_question(request):
@@ -87,16 +121,30 @@ def test_edit_question(request):
 	return render(request, 'testpage/post_question.html', context)
 
 @login_required
-def test_delete_question(request):
-	context = {}
-	context['username'] = request.user.username
-	return render(request, 'testpage/post_question.html', context)
+def test_delete_question(request,id):
+	try:
+		x = Question.objects.get(id=id)
+		x.delete()
+	except Question.DoesNotExist:
+		x = None
+	return render(request, 'item.json', {"item":"","id":id,"flag":1}, content_type='application/json')
 
 @login_required
-def test_post(request):
-	context = {}
-	context['username'] = request.user.username
-	return render(request, 'testpage/post_question.html', context)
+def get_test_post_id(request):
+	newtest = Test()
+	id = newtest.id
+	return render(request, 'item.json', {"item":"","id":id,"flag":1}, content_type='application/json')
+
+@login_required
+def test_post(request,test_id,question_id):
+	try:
+		x = Test.objects.get(id=test_id)
+		y = Question.objects.get(id=question_id)
+		x.add(y)
+		flag = 1
+	except Question.DoesNotExist:
+		flag=0
+	return render(request, 'item.json', {"item":"","id":"","flag":flag}, content_type='application/json')
 
 @login_required
 def get_learning(request):

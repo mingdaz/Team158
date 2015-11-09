@@ -1,4 +1,5 @@
 {
 	"html":"{{item|safe}}",
-	"id":{{id}}
+	"id":{{id}},
+	"flag":{{flag}}
 }
