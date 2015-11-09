@@ -53,24 +53,19 @@ def register(request):
         identity = 1
 
     if identity == 0:
-        new_learner = Learner.objects.create(user=new_user)
+        new_learner = Learner.objects.create(user=new_user,activation_key=activation_key)
         new_learner.save()
-        new_user = authenticate(username=register_form.cleaned_data['username'], \
-                                    password=register_form.cleaned_data['password1'])
-        login(request, new_user)
-        return redirect('/home')
 
     elif identity == 1:
         new_teacher = Teacher.objects.create(user=new_user,activation_key=activation_key)
         new_teacher.save()
-        email_subject = 'Account confirmation'
-        email_body = "Hey %s, thanks for signing up. To activate your account, click this link within \
+    email_subject = 'Account confirmation'
+    email_body = "Hey %s, thanks for signing up. To activate your account, click this link within \
             48hours http://127.0.0.1:8000/account/confirm/%s" % (register_form.cleaned_data['username'], activation_key)
             
-        send_mail(email_subject, email_body, '15637test@gmail.com',
-                      [register_form.cleaned_data['email']], fail_silently=False)
+    send_mail(email_subject, email_body, '15637test@gmail.com', [register_form.cleaned_data['email']], fail_silently=False)
                       
-        return redirect(reverse('login'))
+    return redirect(reverse('login'))
 
 
 @login_required
@@ -222,10 +217,13 @@ def register_confirm(request, activation_key):
         HttpResponseRedirect('/home')
     
     # check if there is UserProfile which matches the activation key (if not then display 404)
-    teacher = get_object_or_404(Teacher, activation_key=activation_key)
+    if Teacher.objects.filter(activation_key=activation_key):
+        new_user = Teacher.objects.get(activation_key__exact=activation_key)
+    else:
+        new_user = Learner.objects.get(activation_key__exact=activation_key)
 
     #if the key hasn't expired save user and set him as active and render some template to confirm activation
-    user = teacher.user
+    user = new_user.user
     user.is_active = True
     user.save()
     return render_to_response('account/confirm.html')
