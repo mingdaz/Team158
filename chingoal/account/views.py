@@ -141,15 +141,16 @@ def view_profile(request, uname):
     context['cur_username'] = request.user.username
     
     if Learner.objects.filter(user__exact = request.user):
-        context['isLearner'] = 'yes'
+        
         request_user_learner = Learner.objects.get(user__exact = request.user)
         if request_user_learner.follows.filter(username__exact = cur_user.username):
             context['isFollowing'] = 'yes'
         else:
             context['isFollowing'] = 'no'
+        context['scheduleForm'] = EditScheduleForm(initial={'progress_level':request_user_learner.progress_level,'progress_lesson':request_user_learner.progress_lesson})
 
     else:
-        context['isLearner'] = 'no'
+        
         request_user_teacher = Teacher.objects.get(user__exact = request.user)
         print request_user_teacher
         if request_user_teacher.follows.filter(username__exact = cur_user.username):
@@ -162,7 +163,7 @@ def view_profile(request, uname):
         cur_user_learner = Learner.objects.get(user__exact = cur_user)
         follow_users = cur_user_learner.follows.all()
         context['cur_user'] = cur_user_learner
-        
+        context['isLearner'] = 'yes'
 #        if follow_users.objects.filter(user__in = Learner.objects.all()):
 #            follow_users_learner = follow_users.objects.filter(user__in = Learner.objects.all())
 #            followers_learner = Learner.objects.filter(user__in=follow_users_learner.learner_user.follows.all())
@@ -178,6 +179,7 @@ def view_profile(request, uname):
         cur_user_teacher = Teacher.objects.get(user__exact = cur_user)
         follow_users = cur_user_teacher.follows.all()
         context['cur_user'] = cur_user_teacher
+        context['isLearner'] = 'no'
 
     followers_learner = Learner.objects.none()
     followers_teacher = Teacher.objects.none()
