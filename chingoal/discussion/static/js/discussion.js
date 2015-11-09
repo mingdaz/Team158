@@ -2,63 +2,66 @@
 function populateList() {
     $.get("get_posts")
         .done(function(data) {
-            var postDiv = $('');                                                //TODO -- id of division
+            var postDiv = $('#post_table');
             postDiv.html('');
             for (var i = 0; i < data.posts.length; i ++) {
                 var post = data.posts[i];
                 var post_html = $(post.html);
-                postDiv.append(post_html);                                      //TODO -- get one post div and append replies to that
-                for (var j = 0; j < post.replies.length; j ++) {
-                    var reply = post.replies[j];
-                    var reply_html = $(reply.html);
-                    postDiv.append(reply_html);
-                }
+                postDiv.append(post_html);
             }
         });
 }
 
 
-function new_reply_listener(e) {                                                //TODO -- add reply button
-    
+function new_reply_clicked(e) {
+    e.preventDefault();
     var dt = new Date();
     var date_str = dt.toLocaleDateString();
     var time_str = dt.toLocaleTimeString('en-US', { hour12: false });
     var post_time = date_str + ' ' + time_str;
 
-    var post_text = $()                                                         //TODO -- get post text from popup window
+    var reply_text = $('#replyText')
 
-    $.post('post_reply')
-        .done(function(data)) {
-            var postDiv = $('');                                                //TODO -- get division of posts
-            var post_html = $(data.post.html);
-            postDiv.append(post_html);
-    }
+    $.post('post_reply', {'reply_text': reply_text})
+        .done(function(data) {
+            var replyDiv = $('#replyDiv');
+            var reply_html = $(data.reply.html);
+            console.log(data.reply.html);
+            replyDiv.append(reply_html);
+    });
+
+    $('#myModal').modal('hide');
 }
 
 
-function new_post_listener(e) {
+function new_post_clicked(e) {
+    e.preventDefault();
     
     var dt = new Date();
     var date_str = dt.toLocaleDateString();
     var time_str = dt.toLocaleTimeString('en-US', { hour12: false });
     var post_time = date_str + ' ' + time_str;
 
-    var post_text = $()                                                         //TODO -- get post text from popup window
+    var post_title = $('#postTitle').val();
+    var post_text = $('#postText').val();
 
-    $.post('post_post')
-        .done(function(data)) {
-            var postDiv = $('');                                                //TODO -- get division of posts
-            var post_html = $(data.post.html);
-            postDiv.append(post_html);
-    }
+    $.post('post_post', {'title': post_title, 'text': post_text, 'post_time':post_time})
+        .done(function(data) {
+            var postDiv = $('#post_table');
+            var post_html = $(data.html);
+            postDiv.prepend(post_html);
+    });
+
+    $('#myModal').modal('hide');
 }
 
 
 $(document).ready(function() {
     populateList();
 
-                                                                                //TODO -- add listener
-
+    // $('#myModalLabel').on('click', new_post_clicked)                            //TODO -- add listener
+    $('#postBtn').on('click', new_post_clicked);
+    $('#replyBtn').on('click', new_reply_clicked);
 
     window.setInterval(populateList, 30000);
 
