@@ -128,8 +128,8 @@
                                 {% if isLearner == 'yes' %}
                                 Title: {{ cur_user.title}}<br/>
                                 Achievement: {{ cur_user.lesson_plan}}<br/>                            
-                                Schedule: Learn {{cur_user.progress_level}}
-                                		  {{cur_user.progress_lesson}} today
+                                Schedule: Learn level {{cur_user.progress_level}}
+                                		  lesson {{cur_user.progress_lesson}} today
                                          {% if username == cur_username %}
                                          <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Edit</button>
                         				 {% endif %}               
