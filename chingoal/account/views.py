@@ -34,7 +34,7 @@ def reset(request):
             user = User.objects.get(email = user_input)
         except User.DoesNotExist:
             user = None
-        if Learner.objects.filter(user__exact = user) or  Teacher.objects.filter(user__exact = user):
+        if Learner.objects.filter(user__exact = user) or Teacher.objects.filter(user__exact = user):
             return password_reset(request, template_name='account/reset.html',
             email_template_name='account/reset_email.html',
             subject_template_name='account/reset_subject.txt',
@@ -47,8 +47,7 @@ def reset(request):
             email_template_name='account/reset_email.html',
             subject_template_name='account/reset_subject.txt',
             post_reset_redirect=reverse('reset'))
-# def reset(request):
-#     return password_change_done(request, template_name='account/password_change_done.html')
+
 
 def register(request):
     context = {}
