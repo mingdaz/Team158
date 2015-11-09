@@ -27,6 +27,7 @@ class PostForm(forms.ModelForm):
 
 
 class PostFormForm(forms.Form):
+    title = forms.CharField(max_length = 500)
     text = forms.CharField(max_length = 500)
     post_time = forms.DateTimeField()
 
