@@ -21,12 +21,17 @@ class Question(models.Model):
 	def __unicode__(self):
 		return self.text
 
-
 class Test(models.Model):
 	level = models.IntegerField(default=0)
 	question = models.ManyToManyField(Question)
 	def __unicode__(self):
 		return self.text
+
+	@staticmethod
+	def get_max_id():
+		print "get max id"
+		return Test.objects.all().aggregate(Max('id'))['id__max'] or 0
+
 
 class Learn(models.Model):
 	lock = models.IntegerField()

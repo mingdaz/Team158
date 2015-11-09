@@ -32,13 +32,12 @@ def homepage(request):
 def get_test(request):
 	context = {}
 	context['username'] = request.user.username
-
 	cur_user = User.objects.get(username__exact = context['username'])
-    # if Learner.objects.filter(user = cur_user):
 	learner = Learner.objects.get(user = cur_user)
-
 	context['cur_user'] = learner
-	return render(request, 'testpage/learn.html', context)
+	newtest = Test.objects.get(id = Test.get_max_id())
+	context['question'] = newtest.question.all()
+	return render(request, 'testpage/test.html', context)
 
 @login_required
 def get_learn(request,level,lesson):
@@ -131,8 +130,10 @@ def test_delete_question(request,id):
 
 @login_required
 def get_test_post_id(request):
-	newtest = Test()
+	newtest = Test.objects.create()
+	newtest.save()
 	id = newtest.id
+	print id
 	return render(request, 'item.json', {"item":"","id":id,"flag":1}, content_type='application/json')
 
 @login_required
@@ -140,11 +141,11 @@ def test_post(request,test_id,question_id):
 	try:
 		x = Test.objects.get(id=test_id)
 		y = Question.objects.get(id=question_id)
-		x.add(y)
+		x.question.add(y)
 		flag = 1
 	except Question.DoesNotExist:
 		flag=0
-	return render(request, 'item.json', {"item":"","id":"","flag":flag}, content_type='application/json')
+	return render(request, 'item.json', {"item":"","id":0,"flag":flag}, content_type='application/json')
 
 @login_required
 def get_learning(request):
