@@ -163,7 +163,10 @@ body
 }
 .div2{
 	border:1px solid black;
-	margin-left:50px;
+	margin-left:80px;
+	margin-right:30px;
+	float:left;
+	width:100%;
 	}
 .message_box{
 	right:40px; 
@@ -190,3 +193,19 @@ body
 #myModal {
 	margin-top: 200px;
 }
+.faceul3 li{
+    width:100px;
+    height:85px;
+	position:relative;
+	float:left;
+	
+	
+	bottom:4px;
+	margin-bottom:5px;
+    text-align:center;
+	list-style-type: none;
+}
+.faceul3 img{
+    width:80px;
+    height:70px;
+}	
