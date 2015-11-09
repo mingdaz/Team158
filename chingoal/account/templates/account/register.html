@@ -59,6 +59,14 @@
     <header>
         <div class="container">
             <div class="intro-text">
+                {% if messages %}
+                <ul class="messages" style="background-color:#5cb85c; width:550px; margin-left:320px; height:30px;border-radius:10px;font-size:17px;">
+                {% for message in messages %}
+					<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+                </ul>
+                {% endif %}
+
                 {% for error in register_form.non_field_errors %}
                         {{error}} <br>
                         <br>
