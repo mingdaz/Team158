@@ -17,6 +17,7 @@ from django.contrib import messages
 from models import *
 from forms import *
 from django.shortcuts import render_to_response, get_object_or_404
+from itertools import chain
 
 def reset_confirm(request, uidb64=None, token=None):
     return password_reset_confirm(request, template_name='account/reset_confirm.html',
@@ -138,34 +139,137 @@ def view_profile(request, uname):
     cur_user = User.objects.get(username__exact = uname)
     context['username'] = uname
     context['cur_username'] = request.user.username
-    if Learner.objects.filter(user = cur_user):
-        learner = Learner.objects.get(user__exact = cur_user)
-        context['cur_user'] = learner
-        if Learner.objects.filter(user__in=request.user.learner_user.follows.all()):
-            context['isFollowing'] = 'yes'
-            followers = Learner.objects.filter(user__in=request.user.learner_user.follows.all()).reverse()
-            context['followers'] = followers
-        else:
-            context['isFollowing'] = 'no'
-            context['unfollowers'] = Learner.objects.exclude(user__in=request.user.learner_user.follows.all()).reverse()
-        context['history'] = History.objects.filter(user = cur_user)
+    
+    if Learner.objects.filter(user__exact = request.user):
         context['isLearner'] = 'yes'
-        context['scheduleForm'] = EditScheduleForm(initial={'progress_level':learner.progress_level,'progress_lesson':learner.progress_lesson})
-
-
-    elif Teacher.objects.filter(user=cur_user):
-        teacher = Teacher.objects.get(user__exact = cur_user)
-        context['cur_user'] = teacher
-        if Teacher.objects.filter(user__in=request.user.learner_user.follows.all()):
+        request_user_learner = Learner.objects.get(user__exact = request.user)
+        if request_user_learner.follows.filter(username__exact = cur_user.username):
             context['isFollowing'] = 'yes'
-            followers = Teacher.objects.filter(user__in=request.user.teacher.follows.all()).reverse()
-            context['followers'] = followers
         else:
             context['isFollowing'] = 'no'
-            context['unfollowers'] = Teacher.objects.exclude(user__in=request.user.learner_user.follows.all()).reverse()
-        context['history'] = History.objects.filter(user = cur_user)
+
+    else:
         context['isLearner'] = 'no'
-    print context['isFollowing']
+        request_user_teacher = Teacher.objects.get(user__exact = request.user)
+        print request_user_teacher
+        if request_user_teacher.follows.filter(username__exact = cur_user.username):
+            context['isFollowing'] = 'yes'
+        else:
+            context['isFollowing'] = 'no'
+
+
+    if Learner.objects.filter(user = cur_user):
+        cur_user_learner = Learner.objects.get(user__exact = cur_user)
+        follow_users = cur_user_learner.follows.all()
+        context['cur_user'] = cur_user_learner
+        
+#        if follow_users.objects.filter(user__in = Learner.objects.all()):
+#            follow_users_learner = follow_users.objects.filter(user__in = Learner.objects.all())
+#            followers_learner = Learner.objects.filter(user__in=follow_users_learner.learner_user.follows.all())
+#        
+#        if follow_users.objects.filter(user__in = Teacher.objects.all()):
+#            follow_users_teacher = follow_users.objects.filter(user__in = Teacher.objects.all())
+#            followers_teacher = Teacher.objects.filter(user__in=follow_users_learner.teacher.follows.all())
+#        
+#        followers = [followers_learner, followers_teacher]
+#        context['followers'] = followers
+
+    else:
+        cur_user_teacher = Teacher.objects.get(user__exact = cur_user)
+        follow_users = cur_user_teacher.follows.all()
+        context['cur_user'] = cur_user_teacher
+
+    followers_learner = Learner.objects.none()
+    followers_teacher = Teacher.objects.none()
+    if Learner.objects.filter(user__in=follow_users):
+        followers_learner = Learner.objects.filter(user__in=follow_users)
+
+    if Teacher.objects.filter(user__in=follow_users):
+        followers_teacher = Teacher.objects.filter(user__in=follow_users)
+
+    followers = list(chain(followers_learner,followers_teacher))
+    print followers
+    context['followers'] = followers
+    print Learner.objects.all()
+
+#    if Learner.objects.filter(user__exact = request.user):
+#        context['isLearner'] = 'yes'
+#        if Learner.objects.filter(user = cur_user):
+#            learner = Learner.objects.get(user__exact = cur_user)
+#            context['cur_user'] = learner
+#            if Learner.objects.filter(user__in=cur_user.follows.all()):
+#                context['isFollowing'] = 'yes'
+#                followers = Learner.objects.filter(user__in=request.user.learner_user.follows.all()).reverse()
+#                context['followers'] = followers
+#            else:
+#                context['isFollowing'] = 'no'
+#                unfollowers = Learner.objects.exclude(user__in=request.user.learner_user.follows.all()).reverse()
+#                if unfollowers.filter(user__exact = cur_user):
+#                    unfollowers = unfollowers.exclude(user__exact = cur_user)
+#                context['unfollowers'] = unfollowers
+#            context['history'] = History.objects.filter(user = cur_user)
+#            context['scheduleForm'] = EditScheduleForm(initial={'progress_level':learner.progress_level,'progress_lesson':learner.progress_lesson})
+#
+#
+#        elif Teacher.objects.filter(user=cur_user):
+#            teacher = Teacher.objects.get(user__exact = cur_user)
+#            context['cur_user'] = teacher
+#            if Teacher.objects.filter(user__in=request.user.learner_user.follows.all()):
+#                context['isFollowing'] = 'yes'
+#                followers = Teacher.objects.filter(user__in=request.user.learner_user.follows.all()).reverse()
+#                context['followers'] = followers
+#            else:
+#                context['isFollowing'] = 'no'
+#                unfollowers = Teacher.objects.exclude(user__in=request.user.learner_user.follows.all()).reverse()
+#                if unfollowers.filter(user__exact = cur_user):
+#                    unfollowers = unfollowers.exclude(user__exact = cur_user)
+#                context['unfollowers'] = unfollowers
+#            context['history'] = History.objects.filter(user = cur_user)
+#                
+#    else:
+#        context['isLearner'] = 'no'
+#        if Learner.objects.filter(user = cur_user):
+#            learner = Learner.objects.get(user__exact = cur_user)
+#            context['cur_user'] = learner
+#            if Learner.objects.filter(user__in=learner.follows.all()):
+#                context['isFollowing'] = 'yes'
+#                print "is follwing is yes"
+#                followers = Learner.objects.filter(user__in=learner.follows.all()).reverse()
+#                context['followers'] = followers
+#            elif Teacher.objects.filter(user__in =learner.follows.all()):
+#                context['isFollowing'] = 'yes'
+#                followers = Teacher.objects.filter(user__in=learner.follows.all()).reverse()
+#                context['followers'] = followers
+#            else:
+#                context['isFollowing'] = 'no'
+#                print "is follwing is no"
+#                unfollowers = Teacher.objects.exclude(user__in=learner.follows.all()).reverse()
+#                if unfollowers.filter(user__exact = cur_user):
+#                    unfollowers = unfollowers.exclude(user__exact = cur_user)
+#                context['unfollowers'] = unfollowers
+#            context['history'] = History.objects.filter(user = cur_user)
+#            context['scheduleForm'] = EditScheduleForm(initial={'progress_level':learner.progress_level,'progress_lesson':learner.progress_lesson})
+#        
+#        
+#        elif Teacher.objects.filter(user=cur_user):
+#            teacher = Teacher.objects.get(user__exact = cur_user)
+#            context['cur_user'] = teacher
+#            if Learner.objects.filter(user__in=teacher.follows.all()):
+#                context['isFollowing'] = 'yes'
+#                followers = Learner.objects.filter(user__in=teacher.follows.all()).reverse()
+#                context['followers'] = followers
+#            elif Teacher.objects.filter(user__in=teacher.follows.all()):
+#                context['isFollowing'] = 'yes'
+#                followers = Teacher.objects.filter(user__in=teacher.follows.all()).reverse()
+#                context['followers'] = followers
+#            else:
+#                context['isFollowing'] = 'no'
+#                unfollowers = Teacher.objects.exclude(user__in=teacher.follows.all()).reverse()
+#                if unfollowers.filter(user__exact = cur_user):
+#                    unfollowers = unfollowers.exclude(user__exact = cur_user)
+#                context['unfollowers'] = unfollowers
+#            context['history'] = History.objects.filter(user = cur_user)
+
     return render(request, 'account/view_profile.html', context)
 
 def reset_password(request):
@@ -202,12 +306,14 @@ def follow(request, uname, isFollowing, isLearner):
         follower = request.user.learner_user
     else:
         follower = request.user.teacher
+        print "is teacher"
 
     if isFollowing == 'yes':
         if follower.follows.filter(username__exact = followee.username):
             follower.follows.remove(followee)
             follower.save()
     else:
+        print "follow function: is following no"
         print follower.follows.filter(username__exact = followee.username)
         if not follower.follows.filter(username__exact = followee.username):
             follower.follows.add(followee)
