@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 
 from django.template import loader, Context
 
+from account.models import *
+
 class Post(models.Model):
     title = models.CharField(max_length=500)
     text = models.CharField(max_length=500)
@@ -50,5 +52,14 @@ class Reply(models.Model):
     @property
     def html(self):
         replyTemplate = loader.get_template('discussion/reply_base.html')
-        context = Context({'reply':self})
+
+        # user_temp = Learner.objects.filter(user = request.user)
+        # is_learner = len(user_temp)
+        # if is_learner == 1:
+        #     cur_user = user_temp[0]
+        # else:
+        #     cur_user = Teacher.objects.get(user = request.user)
+        # context = Context({'reply':self, 'cur_user': cur_user})
+
+        context = Context({'reply': self})
         return replyTemplate.render(context).replace('\n','<br>').replace('"', '&quot;')
