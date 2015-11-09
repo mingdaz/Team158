@@ -139,31 +139,33 @@ def view_profile(request, uname):
     context['username'] = uname
     context['cur_username'] = request.user.username
     if Learner.objects.filter(user = cur_user):
-        learner = Learner.objects.get(user = cur_user)
+        learner = Learner.objects.get(user__exact = cur_user)
         context['cur_user'] = learner
-        if learner.follows.filter(username__exact = uname):
+        if Learner.objects.filter(user__in=request.user.learner_user.follows.all()):
             context['isFollowing'] = 'yes'
             followers = Learner.objects.filter(user__in=request.user.learner_user.follows.all()).reverse()
             context['followers'] = followers
         else:
             context['isFollowing'] = 'no'
+            context['unfollowers'] = Learner.objects.exclude(user__in=request.user.learner_user.follows.all()).reverse()
         context['history'] = History.objects.filter(user = cur_user)
         context['isLearner'] = 'yes'
         context['scheduleForm'] = EditScheduleForm(initial={'progress_level':learner.progress_level,'progress_lesson':learner.progress_lesson})
 
 
     elif Teacher.objects.filter(user=cur_user):
-        teacher = Teacher.objects.get(user = cur_user)
+        teacher = Teacher.objects.get(user__exact = cur_user)
         context['cur_user'] = teacher
-        if teacher.follows.filter(username__exact = uname):
+        if Teacher.objects.filter(user__in=request.user.learner_user.follows.all()):
             context['isFollowing'] = 'yes'
             followers = Teacher.objects.filter(user__in=request.user.teacher.follows.all()).reverse()
             context['followers'] = followers
         else:
             context['isFollowing'] = 'no'
+            context['unfollowers'] = Teacher.objects.exclude(user__in=request.user.learner_user.follows.all()).reverse()
         context['history'] = History.objects.filter(user = cur_user)
         context['isLearner'] = 'no'
-
+    print context['isFollowing']
     return render(request, 'account/view_profile.html', context)
 
 def reset_password(request):
@@ -206,9 +208,11 @@ def follow(request, uname, isFollowing, isLearner):
             follower.follows.remove(followee)
             follower.save()
     else:
+        print follower.follows.filter(username__exact = followee.username)
         if not follower.follows.filter(username__exact = followee.username):
             follower.follows.add(followee)
             follower.save()
+
     return redirect(reverse('viewProfile', kwargs = {'uname':uname}))
 
 @login_required
