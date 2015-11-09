@@ -1,3 +1,4 @@
+from django.contrib.auth.forms import PasswordResetForm
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -20,14 +21,33 @@ def reset_confirm(request, uidb64=None, token=None):
         uidb64=uidb64, token=token, post_reset_redirect=reverse('home'))
 
 def reset(request):
+    context={}
+    if request.method == 'POST':
+        form = request.POST
+        data = {
+            'form': form,
+        }
+        value = data['form']
+        user_input=value.get("email",0)
+        try:
+            user = User.objects.get(email = user_input)
+        except User.DoesNotExist:
+            user = None
+        if Learner.objects.filter(user__exact = user) or  Teacher.objects.filter(user__exact = user):
+            return password_reset(request, template_name='account/reset.html',
+            email_template_name='account/reset_email.html',
+            subject_template_name='account/reset_subject.txt',
+            post_reset_redirect=reverse('login'))
+        else:
+            context['error'] = "This email address is invalid"
+            context['form']=PasswordResetForm()
+            return render(request, 'account/reset.html',context)
     return password_reset(request, template_name='account/reset.html',
-        email_template_name='account/reset_email.html',
-        subject_template_name='account/reset_subject.txt',
-        post_reset_redirect=reverse('home'))
-
+            email_template_name='account/reset_email.html',
+            subject_template_name='account/reset_subject.txt',
+            post_reset_redirect=reverse('reset'))
 # def reset(request):
 #     return password_change_done(request, template_name='account/password_change_done.html')
-
 
 def register(request):
     context = {}
@@ -37,7 +57,7 @@ def register(request):
     
     register_form = RegistrationForm(request.POST, request.FILES)
     context['register_form'] = register_form
-
+    print context
     if not register_form.is_valid():
         return render(request, 'account/register.html', context)
 
