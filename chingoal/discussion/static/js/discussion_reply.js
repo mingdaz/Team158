@@ -63,7 +63,6 @@ function new_post_clicked(e) {
 function populateReply() {
     var post_id = $('#hidden_post_id').html();
     var max_reply_id = $('#hidden_max_reply_id').html();
-    // $.get('get_postreply', {'post_id' : post_id, 'max_reply_id' : max_reply_id})
     $.get('get_postreply/' + post_id + '/' + max_reply_id)
         .done(function(data) {
             var replyDiv = $('#replyDiv');
@@ -90,7 +89,6 @@ function new_reply_clicked(e) {
         .done(function(data) {
             var replyDiv = $('#replyDiv');
             var replyHtml = data.html;
-            console.log(replyHtml);
             replyDiv.append(replyHtml);
         })
 
@@ -99,11 +97,16 @@ function new_reply_clicked(e) {
 
 
 function delete_reply_clicked(e) {
-    e.preventDefault();
+    
     var reply_id = $('#hidden_reply_id').html();
+    console.log(reply_id);
     $.post('delete_reply/' + reply_id)
         .done(function(data) {
-            console.log($('#hidden_reply_id').parent().parent());
+            console.log('delete_reply view done. removing element from document....');
+            var divTemp = $('#hidden_reply_id').parent().parent();
+            console.log(divTemp);
+            divTemp.remove();
+            console.log('All done!');
         });    
 }
 
@@ -114,8 +117,6 @@ $(document).ready(function() {
     populateReply();
     $('#replyBtn').on('click', new_reply_clicked);
     $('#replyDiv').on('click', '.delete-reply-btn', delete_reply_clicked)
-    // $('.delete_reply_btn').on('click', delete_reply_clicked);
-    // $('.delete_reply_btn').click
 
     // window.setInterval(populateReply, 30000);
 
