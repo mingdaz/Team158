@@ -87,13 +87,13 @@
                 
             </div>
             <div class="follower">
-                <!--{% if cur_username != username %}-->
-                    <a href="{% url 'follow' username isFollowing isLearner%}">
+                {% if cur_username != username %}
+                    <a href="{% url 'follow' username isFollowing isLearner %}">
                     <button type="button" class="btn btn-primary btn-xs "> 
                     <span class="glyphicon glyphicon-plus"> </span> 
     
-                <!--{% if isFollowing == 'yes' %} Unfollow {% else %} Follow {% endif %}--> follow</button></a>
-                <!--{% endif %}-->
+                {% if isFollowing == 'yes' %} Unfollow {% else %} Follow {% endif %}</button></a>
+                {% endif %}
             </div>
         </div>
         <div class="btn-pref btn-group btn-group-justified btn-group-lg tab-title" role="group" aria-label="...">
@@ -128,11 +128,11 @@
                                 {% if isLearner == 'yes' %}
                                 Title: {{ cur_user.title}}<br/>
                                 Achievement: {{ cur_user.lesson_plan}}<br/>                            
-                                Schedule: {{cur_user.progress_level}}
-                                		  {{cur_user.progress_lesson}}per day
-                                         
+                                Schedule: Learn {{cur_user.progress_level}}
+                                		  {{cur_user.progress_lesson}} today
+                                         {% if username == cur_username %}
                                          <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Edit</button>
-                                       
+                        				 {% endif %}               
                                          <br/>
                                 {% endif %}
                                 Self-Bio: {{cur_user.bio}}
@@ -195,7 +195,6 @@
       <div class="set-bottom text-center">
         <div class="row"> 
             <div class="col-lg-3">
-                {% if cur_username == username %}
                     <div  class="div2"> <span id="title1">My Follower</span><br/>
                     {% for follower in followers %}
                         <div class="list">
@@ -205,7 +204,6 @@
                         </ul>
                         </div>
                         {% endfor %} </div>
-                {% endif%}
               </div>
           <div class="col-lg-3">
             <div class="div2"> <span id="title2">Recommend Friend</span><br/>
@@ -268,11 +266,11 @@
             </div>
             <div class="col-md-4">
                 <ul class="list-inline social-buttons">
-                    <li><a href="#"><i class="fa fa-twitter"></i></a>
+                    <li><a href="http://www.twitter.com"><i class="fa fa-twitter"></i></a>
                     </li>
-                    <li><a href="#"><i class="fa fa-facebook"></i></a>
+                    <li><a href="http://www.facebook.com"><i class="fa fa-facebook"></i></a>
                     </li>
-                    <li><a href="#"><i class="fa fa-linkedin"></i></a>
+                    <li><a href="http://www.linkedin.com"><i class="fa fa-linkedin"></i></a>
                     </li>
                 </ul>
             </div>
