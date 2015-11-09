@@ -12,6 +12,7 @@ from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.contrib.auth.views import password_reset, password_reset_confirm,password_change_done
 import json
 import hashlib, random
+from django.contrib import messages
 
 from models import *
 from forms import *
@@ -83,8 +84,8 @@ def register(request):
             48hours http://127.0.0.1:8000/account/confirm/%s" % (register_form.cleaned_data['username'], activation_key)
             
     send_mail(email_subject, email_body, '15637test@gmail.com', [register_form.cleaned_data['email']], fail_silently=False)
-                      
-    return redirect(reverse('login'))
+    messages.add_message(request, messages.INFO, 'A confirmation email has been sent to your email address.')
+    return redirect(reverse('register'))
 
 
 @login_required
@@ -245,4 +246,4 @@ def register_confirm(request, activation_key):
     user = new_user.user
     user.is_active = True
     user.save()
-    return render_to_response('account/confirm.html')
+    return redirect(reverse('login'))
