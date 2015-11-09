@@ -1,0 +1,15 @@
+{
+    "posts":[
+    {% for post in post_replies %}
+        {
+        "id":{{post.post.id}}, 
+        "html":"{{post.post.html|safe}}",
+        "replies":[
+            {% for reply in post.replies %}
+                { "id":{{reply.id}}, "html":"{{reply.html|safe}}" }
+                {% if not forloop.last %},{% endif %}
+            {% endfor %}]
+        }
+        {% if not forloop.last %},{% endif %}
+    {% endfor %}]
+}
