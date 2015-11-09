@@ -17,4 +17,5 @@ urlpatterns = [
     url(r'^reset/confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$',
             'account.views.reset_confirm', name='reset_confirm'),
     url(r'^reset/$', 'account.views.reset', name='reset'),
+    url(r'^confirm/(?P<activation_key>\w+)/', ('account.views.register_confirm')),
 ]
