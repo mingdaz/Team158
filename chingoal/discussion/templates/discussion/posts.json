@@ -2,7 +2,7 @@
     "posts":[
     {% for post in post_replies %}
         {
-        "id":{{post.post.id}}, 
+        "id":{{post.list_id}}, 
         "html":"{{post.post.html|safe}}",
         "replies":[
             {% for reply in post.replies %}
@@ -10,6 +10,7 @@
                 {% if not forloop.last %},{% endif %}
             {% endfor %}]
         }
+        "number_replies": {{number_replies}}
         {% if not forloop.last %},{% endif %}
     {% endfor %}]
 }
