@@ -39,7 +39,7 @@ class Teacher(models.Model):
     user = models.OneToOneField(User, unique = True, related_name="teacher")
     follows = models.ManyToManyField(User,related_name = "teacher_follows")
     bio = models.CharField(max_length = 420, default='Please introduce yourself')
-    photo = models.ImageField(upload_to = 'user_photo', blank = True, default = '/user_photo/portrait/default.jpg')
+    photo = models.ImageField(upload_to = 'portrait', blank = True, default = '/user_photo/portrait/default.jpg')
     activation_key = models.CharField(max_length=40, blank=True)
 
     def __unicode__(self):
