@@ -20,25 +20,54 @@ function update(){
         var tmp = $(array[i-1]);
         tmp.find(".question-num").html(i);
     }
-    list.data("max-entry",array.length);
+    // list.data("max-entry",array.length);
 }
-//     <script>
-// function display( divs ) {
-//   var a = [];
-//   for ( var i = 0; i < divs.length; i++ ) {
-//     a.push( divs[ i ].innerHTML );
-//   }
-//   $( "span" ).text( a.join(" ") );
-// }
-// display( $( "div" ).get().reverse() );
-// </script>
+
+function postmytest(){
+    var list = $("#question");
+    var array = list.find("li");
+    
+    if(array.length==0){
+      alert("You don't have any question, create some questions")
+      return
+    }    
+    if(list.find(".save-btn").length>0){
+      alert("You have unsave question, please save all questions and then post")
+      return
+    } 
+    $.ajax({
+            type: "POST",
+            url: "/testpage/get-test-post-id",
+            success: function (data,array) {
+                for ( var i = 1; i <= array.length; i++ ) {
+                    var id = $(array[i-1]).data("item-id");
+        //                 $.ajax({
+        //                  type: "POST",
+        //                   url: "/testpage/test-post/"+data.id+id,
+        //                 success: function (data) {
+                
+                
+        //     },
+        //     error: function(data) {
+     
+        //     }
+        // });                    
+                }
+                
+            },
+            error: function(data) {
+                alert("Something went wrong!");
+            }
+        });
+        
+    }
 
 
-function getMultipleChoicw() {
+function getMultipleChoice() {
     var list = $("#question"); 
-    var max_entry = list.data("max-entry")
+    // var max_entry = list.data("max-entry")
    
-    $.get("/testpage/test-add-q-mc/"+max_entry)
+    $.get("/testpage/test-add-q-mc")
       .done(function(data) {
               item = data.html;
               var new_item = $(item);
@@ -48,15 +77,15 @@ function getMultipleChoicw() {
               
               new_item.data("item-id", data.id);
               list.append(new_item);
-              list.data("max-entry",max_entry+1)
+              update()
       });
 }
 
 function getTranslate() {
     var list = $("#question"); 
-    var max_entry = list.data("max-entry")
-    list.data("max-entry",max_entry+1)
-    $.get("/testpage/test-add-q-tr/"+max_entry)
+    // var max_entry = list.data("max-entry")
+
+    $.get("/testpage/test-add-q-tr")
       .done(function(data) {
               item = data.html;
               var new_item = $(item);
@@ -66,25 +95,47 @@ function getTranslate() {
 
               new_item.data("item-id", data.id);
               list.append(new_item);
-              list.data("max-entry",max_entry+1)
+              update();
       });
 }
 
 function btnsave()
 {
-    var btn = $(event.target);
-    btn.removeClass( "save-btn" );
-    btn.addClass( "edit-btn" );
-    btn.removeClass( "btn-info" );
-    btn.addClass( "btn-warning" );
-    btn.html("Edit");
-    btn.unbind("click",btnsave);
-    btn.click(btnedit);
+    var frm = $(event.target).parent().parent().parent();
+    var list = frm.parent();
+        $.ajax({
+            type: frm.attr('method'),
+            url: frm.attr('action'),
+            data: frm.serialize(),
+            success: function (data) {
+                frm.html($(data.html).find('.panel'));
+                frm.find('.delete-btn').click(btndelete);
+                
+                var btn = list.find('.save-btn');
+                if(data.flag==1){
+                  btn.removeClass( "save-btn" );
+                  btn.addClass( "edit-btn" );
+                  btn.removeClass( "btn-info" );
+                  btn.addClass( "btn-warning" );
+                  btn.html("Edit");
+                  btn.click(btnedit);       
+                  list.find("input").prop('disabled', true);  
+                }
+                else{
+                  btn.click(btnsave)
+                }
+                update();
+            },
+            error: function(data) {
+                alert("Something went wrong!");
+            }
+        });
 }
 
 function btnedit()
 {
     var btn = $(event.target);
+    var frm = $(event.target).parent().parent().parent();
     btn.removeClass( "edit-btn" );
     btn.addClass( "save-btn" );
     btn.addClass( "btn-info" );
@@ -92,19 +143,34 @@ function btnedit()
     btn.html("Save");
     btn.unbind("click",btnedit);
     btn.click(btnsave);
+    frm.find("input").prop('disabled', false);
 }
 
 function btndelete()
 {
-    var btn = $(event.target).parent().parent().parent().remove();
-    update();
+    var id = $(event.target).parent().parent().parent().parent().data("item-id");
+    var rm = $(event.target).parent().parent().parent().parent()
+    $.ajax({
+            type: 'POST',
+            url: '/testpage/test-delete-question/'+id,
+            success: function (data) {
+              rm.remove();
+              update();
+            },
+            error: function(data) {
+                alert("Something went wrong!");
+            }
+        });
+    
 }
 
 $(document).ready(function () {  
-  $("#question").data("max-entry",0);
+  // $("#question").data("max-entry",0);
 
-  $("#question-mc").click(getTranslate);
-  $("#question-tr").click(getMultipleChoicw);
+  $("#question-mc").click(getMultipleChoice);
+  $("#question-tr").click(getTranslate);
+  $("#posttest").click(postmytest);
+
 
   var csrftoken = getCookie('csrftoken');
   $(".needcsrf").val(csrftoken);
@@ -114,3 +180,4 @@ $(document).ready(function () {
     }
   });
 });
+
