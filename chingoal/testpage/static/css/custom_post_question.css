@@ -13,3 +13,13 @@
     width: 50px;
     height: 50px;
 }
+
+
+.panel .btn {
+  color: white;
+  /*background-color: #fed136;*/
+  /*border-color: #fed136;*/
+  font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-transform: uppercase;
+  font-weight: 700;
+}
