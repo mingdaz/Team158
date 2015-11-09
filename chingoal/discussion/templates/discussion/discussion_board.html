@@ -89,7 +89,7 @@
                 </thead>
                 {% for post in posts %}
                     <tr>
-                        <td>{{post.post.id}}</td>
+                        <td>{{post.list_id}}</td>
                         <td><a href="{% url 'discussion_reply' post.post.id %}">{{post.post.title}}</a></td>
                         <td>{{post.post.author.username}}</td>
                         <td>{{post.number_replies}}</td>

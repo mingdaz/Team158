@@ -2,11 +2,13 @@
 function populateList() {
     $.get("get_posts")
         .done(function(data) {
-            var postDiv = $('#post_table');
+            var postDiv = $('#post_table > tbody');
             postDiv.html('');
             for (var i = 0; i < data.posts.length; i ++) {
                 var post = data.posts[i];
                 var post_html = $(post.html);
+                $('.list_number_col').html(post.id);
+                $('.number_replies_col').html(post.number_replies);
                 postDiv.append(post_html);
             }
         });
@@ -49,7 +51,10 @@ function new_post_clicked(e) {
         .done(function(data) {
             var postDiv = $('#post_table');
             var post_html = $(data.html);
+            var listLen = $('#post_table > tbody').children().length
             postDiv.prepend(post_html);
+            $('#post_table > tbody').find('td:first').html(listLen + 1)
+            $('#post_table > tbody').find('tr:first').find('td:last').html(0)
     });
 
     $('#myModal').modal('hide');

@@ -87,9 +87,11 @@
             </div>
             <div class="col-lg-3">
                 <div class="panel panel-warning">
-                    <div class="panel-heading text-center"><h3>{{post_user.username}}</h3></div>
+                    <div class="panel-heading text-center">
+                        <a href="{% url 'viewProfile' post_user.username %}"><h3>{{post_user.username}}</h3></a>
+                    </div>
                     <div class="panel-body bg-light-gray text-center">
-                        <img src="{{post_user.photo.url}}" class="img-responsive img-circle"  alt="profile_image" id="profile_img">
+                        <img src="{{cur_user.photo.url}}" class="img-responsive img-circle"  alt="profile_image" id="profile_img">
                         {% for i in user_level_loop %}
                             <i class="fa fa-star fa-2x text-muted"></i>
                         {% endfor %}
@@ -121,7 +123,7 @@
                     </div>
                     <div class="col-lg-2">
                         <a href="{% url 'viewProfile' reply.author.username %}">
-                        <img src="{{reply.author.photo.url}}" class="img-responsive img-circle" 
+                        <img src="{{cur_user.photo.url}}" class="img-responsive img-circle" 
                             alt="reply_user_profile_image" id="reply_user_profile_img">
                         </a>
                     </div>
