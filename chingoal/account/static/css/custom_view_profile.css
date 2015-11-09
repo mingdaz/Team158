@@ -173,7 +173,7 @@ body
 	display:block;
 	position:fixed; 
 	top:315px; 
-	background:url(/static/img/bg1.jpg)
+	
 	}
 .go-top {
 	color:grey;
@@ -189,4 +189,8 @@ body
 }
 #myModal {
 	margin-top: 200px;
+}
+.window_bg{
+	background:url(/static/img/bg1.jpg);
+	height:250px; 
 }
