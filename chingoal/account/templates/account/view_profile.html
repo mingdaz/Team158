@@ -145,10 +145,11 @@
     </div>
   
     <div class="rightRoll">
-    {% if isLearner == 'yes' %}
+    
      <div class="message_box">
      {% if cur_username != username %}
      <img src="{% static "img/bg2.jpg"%}" style="height:80px; width:350px;" alt=""><a href="#page-top" class="go-top"><span class="glyphicon glyphicon-arrow-up"></span>Back to top</a>
+     <div class="window_bg">
     	<p class=" text-center">Leave your message:</p>
 			<form method="POST" action="{% url 'post' %}">
         		<span>
@@ -158,7 +159,9 @@
 					
             {% csrf_token %}
       		</form> 
+        </div>
       {% else %}
+      {% if isLearner == 'yes' %}
             <div class="description">
 	<p>Lessons Learning Chart</p>
 </div>
@@ -187,9 +190,11 @@
   </svg>
 </div>
 <a href="{% url 'dashboard'%}" style="color:#A90508;"><input class="button1" type="button" value="Start Learning" style="margin-top:180px;"></a>
-     {% endif %}       
+	  {% endif %}
+      	  
+         {% endif %}    
         </div>
-        {% endif %}
+       
       </div>
      <a name="tab3" style="color:white">tab3</a>
       <div class="set-bottom text-center">
@@ -199,8 +204,8 @@
                     {% for follower in followers %}
                         <div class="list">
                         <ul class="faceul3">
-                            <li> <img src="{{ follower.photo.url }}" alt="no image" onclick="location.href=#"><br/>
-                        <a href="#" id="username">{{follower.user.username}}</a> </li>
+                            <li> <a  href="{% url 'viewProfile' follower.user.username %}"><img src="{{ follower.photo.url }}" alt="no image"></a><br/>
+                        <a href="{% url 'viewProfile' follower.user.username %}" id="username">{{follower.user.username}}</a> </li>
                         </ul>
                         </div>
                         {% endfor %} </div>
