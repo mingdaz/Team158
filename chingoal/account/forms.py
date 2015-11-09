@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 
@@ -6,13 +7,17 @@ class MyAuthenticationForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control','placeholder': 'Username'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control','placeholder':'Password'}))
 
-class RegistrationForm(forms.Form):
+class RegistrationForm(UserCreationForm):
     username = forms.CharField(max_length = 30, widget = forms.TextInput(attrs={'class':'form-control','placeholder':'Username','autofocus':'true'}))
     password1 = forms.CharField(max_length = 200, label = 'Password',
                                 widget = forms.PasswordInput(attrs={'class':'form-control','placeholder':'Password'}))
     password2 = forms.CharField(max_length = 200, label = 'Confirm Password',
         widget = forms.PasswordInput(attrs={'class':'form-control','placeholder':'Confirm password'}))
     email = forms.EmailField(widget = forms.EmailInput(attrs={'class':'form-control','placeholder':'E-mail'}))
+
+    class Meta:
+        model = User
+        fields = ('username', 'password1', 'password2','email')
 
     def clean(self):
         cleaned_data = super(RegistrationForm, self).clean()
@@ -33,6 +38,13 @@ class RegistrationForm(forms.Form):
         if User.objects.filter(email__exact = email):
             raise forms.ValidationError('Email address is registered!')
         return email
+    def save(self, commit=True):
+        user = super(RegistrationForm, self).save(commit=False)
+        user.email = self.cleaned_data['email']
+        if commit:
+            user.is_active = False # not active until he opens activation link
+            user.save()
+        return user
 
 
 

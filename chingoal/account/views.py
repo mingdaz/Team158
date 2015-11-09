@@ -8,13 +8,14 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from django.core.urlresolvers import reverse
 from django.core.mail import send_mail
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.contrib.auth.views import password_reset, password_reset_confirm,password_change_done
 import json
+import hashlib, random
 
 from models import *
 from forms import *
-
+from django.shortcuts import render_to_response, get_object_or_404
 
 def reset_confirm(request, uidb64=None, token=None):
     return password_reset_confirm(request, template_name='account/reset_confirm.html',
@@ -55,16 +56,17 @@ def register(request):
         context['register_form'] = RegistrationForm()
         return render(request, 'account/register.html', context)
     
-    register_form = RegistrationForm(request.POST, request.FILES)
+    register_form = RegistrationForm(request.POST)
     context['register_form'] = register_form
     print context
     if not register_form.is_valid():
         return render(request, 'account/register.html', context)
-
-    new_user = User.objects.create_user(username=register_form.cleaned_data['username'],
-                                    password=register_form.cleaned_data['password1'],
-                                    email=register_form.cleaned_data['email'])
-    new_user.save()
+    register_form.save()
+    username=register_form.cleaned_data['username']
+    email=register_form.cleaned_data['email']
+    salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
+    activation_key = hashlib.sha1(salt+email).hexdigest()
+    new_user=User.objects.get(username=username)
     if request.POST['optionsRadiosInline'] == 'option1':
         identity = 0
     elif request.POST['optionsRadiosInline'] == 'option2':
@@ -73,14 +75,23 @@ def register(request):
     if identity == 0:
         new_learner = Learner.objects.create(user=new_user)
         new_learner.save()
+        new_user = authenticate(username=register_form.cleaned_data['username'], \
+                                    password=register_form.cleaned_data['password1'])
+        login(request, new_user)
+        return redirect('/home')
+
     elif identity == 1:
-        new_teacher = Teacher.objects.create(user=new_user)
+        new_teacher = Teacher.objects.create(user=new_user,activation_key=activation_key)
         new_teacher.save()
-    
-    new_user = authenticate(username=register_form.cleaned_data['username'], \
-                                password=register_form.cleaned_data['password1'])
-    login(request, new_user)
-    return redirect('/home')
+        email_subject = 'Account confirmation'
+        email_body = "Hey %s, thanks for signing up. To activate your account, click this link within \
+            48hours http://127.0.0.1:8000/account/confirm/%s" % (register_form.cleaned_data['username'], activation_key)
+            
+        send_mail(email_subject, email_body, '15637test@gmail.com',
+                      [register_form.cleaned_data['email']], fail_silently=False)
+                      
+        return redirect(reverse('login'))
+
 
 @login_required
 def edit_profile(request):
@@ -224,3 +235,17 @@ def post_question(request):
     context['add_post_errors'] = errors
     context['newUser'] = newUser
     return render(request, 'grumblr/global_stream.html', context)
+
+def register_confirm(request, activation_key):
+    #check if user is already logged in and if he is redirect him to some other url, e.g. home
+    if request.user.is_authenticated():
+        HttpResponseRedirect('/home')
+    
+    # check if there is UserProfile which matches the activation key (if not then display 404)
+    teacher = get_object_or_404(Teacher, activation_key=activation_key)
+
+    #if the key hasn't expired save user and set him as active and render some template to confirm activation
+    user = teacher.user
+    user.is_active = True
+    user.save()
+    return render_to_response('account/confirm.html')
