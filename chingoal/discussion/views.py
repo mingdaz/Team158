@@ -79,7 +79,7 @@ def get_posts(request):
 
 
 @login_required
-@transaction.atomic
+# @transaction.atomic
 def post_post(request):
     form = PostFormForm(request.POST)
     if not form.is_valid():
@@ -97,7 +97,7 @@ def post_post(request):
 
 
 @login_required
-@transaction.atomic
+# @transaction.atomic
 def post_reply(request):
     form = ReplyForm(request.POST)
     if not form.is_valid():
@@ -122,7 +122,7 @@ def get_postreply(request, post_id, max_reply_id):
 
 
 @login_required
-@transaction.atomic
+# @transaction.atomic
 def delete_post(request, post_id):
     postTemp = Post.objects.get(id = post_id)
     replies = Reply.objects.filter(reply_to__id = post_id)
@@ -133,7 +133,7 @@ def delete_post(request, post_id):
 
 
 @login_required
-@transaction.atomic
+# @transaction.atomic
 def delete_reply(request, reply_id):
     replyTemp = Reply.objects.get(id = reply_id)
     post_id = replyTemp.reply_to.id
