@@ -15,6 +15,10 @@ from account.models import *
 from account.forms import *
 
 # Create your views here.
+def homepage(request):
+    context = {}
+    return render(request, 'home.html', context)
+
 @login_required
 def home(request):
     context = {}
@@ -24,11 +28,10 @@ def home(request):
     if Learner.objects.filter(user = request.user):
         learner = Learner.objects.get(user = cur_user)
         context['cur_user'] = learner
-        context['scheduleForm'] = EditScheduleForm(initial={'progress_level':learner.progress_level,'progress_lesson':learner.progress_lesson})
+        context['flag'] = 0
     
     if Teacher.objects.filter(user = request.user):
         teacher = Teacher.objects.get(user = cur_user)
         context['cur_user'] = teacher
-
-
-    return render(request, 'home.html', context)
+        context['flag'] = 1
+    return render(request, 'dashboard.html', context)

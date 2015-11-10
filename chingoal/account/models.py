@@ -13,12 +13,17 @@ class Learner(models.Model):
     title = models.CharField(max_length = 20, default = TITLE_CHOICES[0][1], choices = TITLE_CHOICES)
     progress_level = models.CharField(max_length = 20, default = LEVELS[0][1], choices=LEVELS)
     progress_lesson = models.CharField(max_length = 20, default = LESSONS[0][1], choices=LESSONS)
+    
+    current_level = models.IntegerField(default=0)
+    current_lesson = models.IntegerField(default=1)
+
     user_vm = models.IntegerField(default = 0)
     lesson_plan = models.IntegerField(default = 1)  # MAX = 5
     follows = models.ManyToManyField(User,related_name = "learner_follows")
     bio = models.CharField(max_length = 420, default='Please introduce yourself')
-    photo = models.ImageField(upload_to = 'portrait', blank = True, default = '/portrait/1438711509100.jpg')
+    photo = models.ImageField(upload_to = 'portrait', blank = True, default = '/user_photo/portrait/default.jpg')
     unlock = models.IntegerField(default = 0)
+    activation_key = models.CharField(max_length=40, blank=True)
     
     def __unicode__(self):
         return 'Learner' + self.user.username
@@ -34,7 +39,8 @@ class Teacher(models.Model):
     user = models.OneToOneField(User, unique = True, related_name="teacher")
     follows = models.ManyToManyField(User,related_name = "teacher_follows")
     bio = models.CharField(max_length = 420, default='Please introduce yourself')
-    photo = models.ImageField(upload_to = 'user_photo', blank = True)
+    photo = models.ImageField(upload_to = 'portrait', blank = True, default = '/user_photo/portrait/default.jpg')
+    activation_key = models.CharField(max_length=40, blank=True)
 
     def __unicode__(self):
         return 'Teacher' + self.user.username

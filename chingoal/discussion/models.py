@@ -1,5 +1,10 @@
 from django.db import models
+from django.db.models import Max
 from django.contrib.auth.models import User
+
+from django.template import loader, Context
+
+from account.models import *
 
 class Post(models.Model):
     title = models.CharField(max_length=500)
@@ -20,27 +25,41 @@ class Post(models.Model):
         return Post.objects.filter(id__gt=max_id).distinct()
 
     # @property
-    # def html(self):
-    #     postTemplate = loader.get_template('grumblr/post_base.html')
-    #     context = Context({'post': self})
-    #     return postTemplate.render(context).replace('\n','').replace('"', '&quot;')
+    # def get_number_replies(self):
+        # return len(Post.objects.filter(reply__reply_to = self))
+        # return len(Reply.objects.filter(reply_to = self))
+
+    @property
+    def html(self):
+        postTemplate = loader.get_template('discussion/post_base.html')
+        context = Context({'post': self})
+        return postTemplate.render(context).replace('\n','<br>').replace('"', '&quot;')
 
 
 class Reply(models.Model):
     text = models.CharField(max_length=500)
     post_time = models.DateTimeField(auto_now_add = True)
-    author = models.ForeignKey(User)
-    reply_to = models.ForeignKey(Post)
+    author = models.ForeignKey(User, related_name = 'author')
+    reply_to = models.ForeignKey(Post, related_name = 'reply_to')
     
     def __unicode__(self):
-        return self.author + ',' + self.postTime
+        return self.author.username + (str)(self.post_time)
 
     @staticmethod
     def get_replies(postid):
         return Reply.objects.filter(post_id = postid)
 
-    # @property
-    # def html(self):
-    #     replyTemplate = loader.get_template('grumblr/reply_base.html')
-    #     context = Context({'reply':self})
-    #     return replyTemplate.render(context).replace('\n','').replace('"', '&quot;')
+    @property
+    def html(self):
+        replyTemplate = loader.get_template('discussion/reply_base.html')
+
+        # user_temp = Learner.objects.filter(user = request.user)
+        # is_learner = len(user_temp)
+        # if is_learner == 1:
+        #     cur_user = user_temp[0]
+        # else:
+        #     cur_user = Teacher.objects.get(user = request.user)
+        # context = Context({'reply':self, 'cur_user': cur_user})
+
+        context = Context({'reply': self})
+        return replyTemplate.render(context).replace('\n','<br>').replace('"', '&quot;')

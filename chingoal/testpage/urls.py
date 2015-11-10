@@ -1,16 +1,22 @@
 
 from django.conf.urls import include, url
+from django.core.urlresolvers import reverse
 
 urlpatterns = [
+    url(r'^$','testpage.views.homepage',name ='gobackhomepage'),
+    # url(r'^photo/(?P<username>.+)','grumblr.views.get_photo',name='photo'),
     url(r'^get-test$','testpage.views.get_test',name ='gettest' ),
-    url(r'^get-learn$','testpage.views.get_learn',name ='getlearn' ),
+    url(r'^get-learn/(?P<level>[0-5]{1})/(?P<lesson>[1-6]{1})$','testpage.views.get_learn',name ='getlearn' ),
     url(r'^get-result$','testpage.views.get_result',name ='getresult' ),
     url(r'^test-create$','testpage.views.test_create',name ='testcreate' ),
-    url(r'^test-add-question$','testpage.views.test_add_question',name ='testaddquestion' ),
-    url(r'^test-save-question$','testpage.views.test_save_question',name ='testsavequestion' ),
+    url(r'^test-add-q-mc$','testpage.views.test_add_question_mc',name ='testaddmcq' ),
+    url(r'^test-add-q-tr$','testpage.views.test_add_question_tr',name ='testaddtrq' ),
+    url(r'^test-save-mcquestion/(?P<id>[0-9]*)$','testpage.views.test_save_mc_question',name ='testsavemcquestion' ),
+    url(r'^test-save-trquestion/(?P<id>[0-9]*)$','testpage.views.test_save_tr_question',name ='testsavetrquestion' ),
     url(r'^test-edit-question$','testpage.views.test_edit_question',name ='testeditquestion' ),
-    url(r'^test-delete-question$','testpage.views.test_delete_question',name ='testdeletequestion' ),
-    url(r'^test-post$','testpage.views.test_post',name ='testpost' ),
+    url(r'^get-test-post-id$','testpage.views.get_test_post_id',name ='gettestpostid' ),
+    url(r'^test-delete-question/(?P<id>[0-9]*)$','testpage.views.test_delete_question',name ='testdeletequestion' ),
+    url(r'^test-post/(?P<test_id>[0-9]*)/(?P<question_id>[0-9]*)$','testpage.views.test_post',name ='testpost' ),
     url(r'^get-learningResult$','testpage.views.get_learningResult',name ='getlearningResult' ),
     url(r'^skip-question$','testpage.views.skip_question',name ='skipquestion' ),
     url(r'^exit-learning$','testpage.views.exit_learning',name ='exitlearning' ),

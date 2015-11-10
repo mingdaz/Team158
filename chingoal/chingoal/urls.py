@@ -21,14 +21,13 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', 'home.views.home', name='home'),
+    url(r'^$', 'home.views.homepage', name='home'),
+    url(r'^home/', include('home.urls')),
     url(r'^store/', include('store.urls')),
     url(r'^account/', include('account.urls')),
     url(r'^discussion/', include('discussion.urls')),
     url(r'^testpage/', include('testpage.urls')),
-    url(r'^reset/confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$',
-            'account.views.reset_confirm', name='reset_confirm'),
-    url(r'^reset/$', 'account.views.reset', name='reset'),
+
 
     # Ajax urls
     # transfer search parameters as get parameters

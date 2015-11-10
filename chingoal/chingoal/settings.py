@@ -83,7 +83,7 @@ ROOT_URLCONF = 'chingoal.urls'
 LOGIN_URL = '/account/login'
 
 # Default URL to redirect to after a user logs in.
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/home/'
 
 TEMPLATES = [
     {
