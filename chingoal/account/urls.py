@@ -18,4 +18,5 @@ urlpatterns = [
             'account.views.reset_confirm', name='reset_confirm'),
     url(r'^reset/$', 'account.views.reset', name='reset'),
     url(r'^confirm/(?P<activation_key>\w+)/', ('account.views.register_confirm')),
+    url(r'^get_photo/(?P<username>.*)$', 'account.views.get_photo', name = 'get_photo'),
 ]

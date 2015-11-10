@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from django.core.urlresolvers import reverse
 from django.core.mail import send_mail
-from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect, Http404
 from django.contrib.auth.views import password_reset, password_reset_confirm,password_change_done
 import json
 import hashlib, random
@@ -18,6 +18,8 @@ from models import *
 from forms import *
 from django.shortcuts import render_to_response, get_object_or_404
 from itertools import chain
+
+from mimetypes import guess_type
 
 def reset_confirm(request, uidb64=None, token=None):
     return password_reset_confirm(request, template_name='account/reset_confirm.html',
@@ -372,3 +374,21 @@ def register_confirm(request, activation_key):
     user.is_active = True
     user.save()
     return redirect(reverse('login'))
+
+
+@login_required
+def get_photo(request, username):
+
+    user_temp = Learner.objects.filter(user__username = username)
+    is_learner = len(user_temp)
+    if is_learner == 1:
+        cur_user = user_temp[0]
+    else:
+        cur_user = Teacher.objects.get(user__username = username)    
+        
+    if not cur_user.photo:
+        raise Http404
+
+    content_type = guess_type(cur_user.photo.name)
+
+    return HttpResponse(cur_user.photo, content_type = content_type)
