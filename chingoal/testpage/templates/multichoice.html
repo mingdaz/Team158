@@ -66,17 +66,30 @@ Question <p class="question-num" style="display:inline">{{id}}</p> (Multiple Cho
 </div>
 <label>Chooseing the correct answer</label>
 <label class="radio-inline">
+{% if not answerchoice or answerchoice == "A" %}
 <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline1" value="A" checked>A
+{% else %}
+<input type="radio" name="optionsRadiosInline" id="optionsRadiosInline1" value="A" >A
+{% endif %}
 </label>
 <label class="radio-inline">
-<input type="radio" name="optionsRadiosInline" id="optionsRadiosInline2" value="B">B
-</label>
+{% if answerchoice == "B" %}
+<input type="radio" name="optionsRadiosInline" id="optionsRadiosInline1" value="B" checked>B
+{% else %}
+<input type="radio" name="optionsRadiosInline" id="optionsRadiosInline1" value="B" >B
+{% endif %}</label>
 <label class="radio-inline">
-<input type="radio" name="optionsRadiosInline" id="optionsRadiosInline3" value="C">C
-</label>
+{% if answerchoice == "C" %}
+<input type="radio" name="optionsRadiosInline" id="optionsRadiosInline1" value="C" checked>C
+{% else %}
+<input type="radio" name="optionsRadiosInline" id="optionsRadiosInline1" value="C" >C
+{% endif %}</label>
 <label class="radio-inline">
-<input type="radio" name="optionsRadiosInline" id="optionsRadiosInline3" value="D">D
-</label>
+{% if answerchoice == "D" %}
+<input type="radio" name="optionsRadiosInline" id="optionsRadiosInline1" value="D" checked>D
+{% else %}
+<input type="radio" name="optionsRadiosInline" id="optionsRadiosInline1" value="D" >D
+{% endif %}</label>
 <br>
 <label>Answer Explanation</label>
 <div class="row">
