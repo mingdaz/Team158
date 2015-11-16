@@ -231,6 +231,12 @@ def newRoom(request,uname):
     return redirect("/discussion/chat")
 
 @login_required
+def deleteRoom(request,rid):
+    if len(ChatRoom.objects.filter(id = rid))>0:
+        ChatRoom.objects.filter(id__exact= rid).delete()
+    return redirect("/discussion/chat")
+
+@login_required
 def updateRoom(request):
     rooms = ChatRoom.objects.all()
     json = {}
