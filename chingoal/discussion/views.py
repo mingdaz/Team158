@@ -161,7 +161,7 @@ def index(request):
     return render_to_response('discussion/index.html', {'username': user.username, 'RoomObj': RoomObj,'flag':flag})
 
 @login_required
-def room(request, roomid):
+def room(request, room_id):
     user = request.user
     if Learner.objects.filter(user__exact=user):
         learner = Learner.objects.get(user__exact=user)
@@ -171,7 +171,7 @@ def room(request, roomid):
         teacher = Teacher.objects.get(user__exact=user)
         teacher.inchat = True
         teacher.save()
-    roomObj = ChatRoom.objects.get(id=roomid)
+    roomObj = ChatRoom.objects.get(id=room_id)
     result = RoomAccount.objects.filter(username=user, roomname=roomObj)
     if not result:
         u = RoomAccount(username=user, roomname=roomObj)
