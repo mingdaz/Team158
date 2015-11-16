@@ -36,12 +36,21 @@ def delete_post(request):
 def discussion_home(request):
     posts = Post.objects.all().order_by('-post_time')
     post_replies = [];
+    context={}
     i = len(posts)
     for post in posts:
         number_replies = len(Reply.objects.filter(reply_to = post))
         post_replies.append({'post':post, 'number_replies' : number_replies, 'list_id' : i})
         i -= 1
-    context = {'username' : request.user.username, 'posts' : post_replies}
+    if Learner.objects.filter(user = request.user):
+        learner = Learner.objects.get(user = request.user)
+        flag= 0
+       
+    if Teacher.objects.filter(user = request.user):
+        teacher = Teacher.objects.get(user = request.user)
+        flag = 1
+
+    context = {'username' : request.user.username, 'posts' : post_replies,'flag':flag}
     return render(request, 'discussion/discussion_board.html', context)
 
 
