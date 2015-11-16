@@ -15,4 +15,12 @@ urlpatterns = [
     url(r'^discussion_reply/delete_reply/(?P<reply_id>\d+)$', 'discussion.views.delete_reply', name  = 'delete_reply'),
     # url(r'^discussion_reply/get_postreply$', 'discussion.views.get_postreply', name = 'get_postreply'),
     # url(r'discussion_reply/get_postreply?'),
+    url(r'^chat$','discussion.views.index',name ='chat'),
+    url(r'^(\d)$', 'discussion.views.room',name='room'),
+    url(r'^getmsg/$', 'discussion.views.getmsg'),
+    url(r'^putmsg/$', 'discussion.views.putmsg'),
+    url(r'^exitchat/$', 'discussion.views.exituser'),
+    url(r'^onlinelist/$', 'discussion.views.onlineuser'),
+    url(r'^createRoom/(?P<uname>\w+)$', 'discussion.views.newRoom',name='createRoom'),
+    url(r'^update/$', 'discussion.views.updateRoom'),
    ]
