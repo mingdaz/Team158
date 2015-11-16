@@ -1,0 +1,55 @@
+{% extends "discussion/chat_base.html" %}
+
+{% block nav-left %}
+	<ul class="nav navbar-nav">
+		<li class="active"><a href="#">首页</a></li>
+		<li class="disabled"><a>聊天室</a></li>
+	</ul>
+{% endblock %}
+
+{% block content %}
+	<div id="home">
+		<div class="page-header">
+		<h1>{{ username }},欢迎来到聊天室!</h1>
+		<h3>全部房间</h3>
+		</div>
+        {% if flag == 1 %}<a href="{% url 'createRoom' username %}">Create a new room</a>{% endif %}
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>房间序号</th>
+					<th>房间名</th>
+				</tr>
+			</thead>
+			<tbody id="roomlist">
+				{% for item in RoomObj %}
+					<tr>
+						<th>{{ item.id }}</th>
+						<th><a href="/discussion/"+{{item.id}}>{{ item }}</a></th>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+{% endblock %}
+
+{% block js %}
+<script>
+function updaterooms() {
+		$.get("/discussion/update", function(data){
+		    $("#roomlist").empty();
+		    var rooms = data['rooms'];
+            for (num in rooms) {
+                var room = rooms[num];
+                var html = '<tr><th>'+room.id+'</th><th><a href="/discussion/"'+room.id+'>'+room.roomname+'</a></th></tr>'
+                $('#roomlist').append(html);   
+            }          
+        });
+}
+$(document).ready(function () {
+    setInterval(updaterooms, 2000);
+});		
+
+</script>
+
+{% endblock %}
