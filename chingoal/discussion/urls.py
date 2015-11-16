@@ -23,4 +23,5 @@ urlpatterns = [
     url(r'^onlinelist/$', 'discussion.views.onlineuser'),
     url(r'^createRoom/(?P<uname>\w+)$', 'discussion.views.newRoom',name='createRoom'),
     url(r'^update/$', 'discussion.views.updateRoom'),
+    url(r'^delete/(?P<rid>\d+)$','discussion.views.deleteRoom'),
    ]
