@@ -16,7 +16,7 @@ urlpatterns = [
     # url(r'^discussion_reply/get_postreply$', 'discussion.views.get_postreply', name = 'get_postreply'),
     # url(r'discussion_reply/get_postreply?'),
     url(r'^chat$','discussion.views.index',name ='chat'),
-    url(r'^(\d)$', 'discussion.views.room',name='room'),
+    url(r'^goRoom/(?P<room_id>\d+)$', 'discussion.views.room',name='room'),
     url(r'^getmsg/$', 'discussion.views.getmsg'),
     url(r'^putmsg/$', 'discussion.views.putmsg'),
     url(r'^exitchat/$', 'discussion.views.exituser'),
