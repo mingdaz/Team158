@@ -38,10 +38,17 @@
                     <li>
                         <a class="page-scroll" href="{% url 'discussion_home' %}">Discussion</a>
                     </li>
-                    <li>
-                        <a class="page-scroll" href="{% url 'store' %}">Store</a>                       
-                    </li>                    
+                    {% if flag == 1 %}
+                     <li>
+                           <a href="{% url 'testcreate' %}">Create Test</a>                   
+                    </li>   
+                    {% else %}
                     
+                    <li>
+                    <a class="page-scroll" href="{% url 'store' %}">Store</a> 
+                        </li>
+                                      
+                    {% endif %}
                     <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                              <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
@@ -102,7 +109,9 @@
         <div class="row">
             <div class="col-lg-5"></div>
             <div class="col-lg-2">
-                <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">New Post</button>                
+            <div class="row">
+                <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">New Post</button>		                <button class="btn btn-primary btn-lg" >Going to chatroom</button>
+            </div>
             </div>
             <div class="col-lg-5"></div>
         </div>
