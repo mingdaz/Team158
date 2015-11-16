@@ -25,8 +25,8 @@
 				{% for item in RoomObj %}
 					<tr>
 						<th>{{ item.id }}</th>
-						<th><a href="/discussion/"+{{item.id}}>{{ item }}</a></th>
-						<th><a href="/discussion/delete"+{{item.id}}>X</a></th>
+						<th><a href="{% url 'room' item.id %}">{{ item }}</a></th>
+						<th><a href="/discussion/delete/"+{{item.id}}>X</a></th>
 					</tr>
 				{% endfor %}
 			</tbody>
@@ -42,8 +42,8 @@ function updaterooms() {
 		    var rooms = data['rooms'];
             for (num in rooms) {
                 var room = rooms[num];
-                var html = '<tr><th>'+room.id+'</th><th><a href="/discussion/"'+room.id+'>'+room.roomname+'</a></th>\
-                <th><a href="/discussion/delete"'+room.id+'>X</a></th></tr>';
+                var html = '<tr><th>'+room.id+'</th><th><a href="/discussion/goRoom/'+room.id+'">'+room.roomname+'</a></th>\
+                <th><a href="/discussion/delete/'+room.id+'">X</a></th></tr>';
                 $('#roomlist').append(html);   
             }          
         });
