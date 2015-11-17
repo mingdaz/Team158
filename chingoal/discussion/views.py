@@ -158,7 +158,7 @@ def index(request):
     else:
         flag = 1
     RoomObj = ChatRoom.objects.all()
-    return render_to_response('discussion/index.html', {'username': user.username, 'RoomObj': RoomObj,'flag':flag})
+    return render(request, 'discussion/index.html', {'username': user.username, 'RoomObj': RoomObj,'flag':flag})
 
 @login_required
 def room(request, room_id):
@@ -225,8 +225,14 @@ def onlineuser(request):
     return HttpResponse(json.dumps(userlist))
 
 @login_required
-def newRoom(request,uname):
-    new_room = ChatRoom(roomname=uname+" "+time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))
+def newRoom(request):
+    error = []
+    if not 'roomname' in request.POST or not request.POST['roomname']:
+        error.append('Room name is required.')
+    if error:
+        return render(request, 'discussion/index.html', {'error':error})
+    name = request.POST['roomname']
+    new_room = ChatRoom(roomname=name+" "+time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())),owner=request.user.username)
     new_room.save()
     return redirect("/discussion/chat")
 
@@ -243,6 +249,6 @@ def updateRoom(request):
     json['rooms'] = []
     for room in rooms:
         print room.roomname
-        r = {'roomname': room.roomname, 'id': room.id}
+        r = {'roomname': room.roomname, 'id': room.id, 'owner':room.owner}
         json['rooms'].append(r)
     return JsonResponse(json)
