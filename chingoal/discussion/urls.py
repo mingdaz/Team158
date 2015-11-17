@@ -21,7 +21,7 @@ urlpatterns = [
     url(r'^putmsg/$', 'discussion.views.putmsg'),
     url(r'^exitchat/$', 'discussion.views.exituser'),
     url(r'^onlinelist/$', 'discussion.views.onlineuser'),
-    url(r'^createRoom/(?P<uname>\w+)$', 'discussion.views.newRoom',name='createRoom'),
+    url(r'^createRoom$', 'discussion.views.newRoom',name='createRoom'),
     url(r'^update/$', 'discussion.views.updateRoom'),
-    url(r'^delete/(?P<rid>\d+)$','discussion.views.deleteRoom'),
+    url(r'^delete/(?P<rid>\d+)$','discussion.views.deleteRoom',name='deleteRoom'),
    ]
