@@ -204,7 +204,7 @@
                     {% for follower in followers %}
                         <div class="list">
                         <ul class="faceul3">
-                            <li> <a  href="{% url 'viewProfile' follower.user.username %}"><img src="{{ follower.photo.url }}" alt="no image"></a><br/>
+                            <li> <a  href="{% url 'viewProfile' follower.user.username %}"><img src="{{ follower.photo.url }}" alt="no image"></a>
                         <a href="{% url 'viewProfile' follower.user.username %}" id="username">{{follower.user.username}}</a> </li>
                         </ul>
                         </div>
@@ -215,8 +215,8 @@
                 {% for unfollower in unfollowers %}
                 <div class="list">
                 <ul class="faceul3">
-                    <li> <img src="{{ unfollower.photo.url }}" alt="no image" onclick="location.href=#"><br/>
-                <a href="#" id="username1">{{unfollower.user.username}}</a> </li>
+                    <li> <img src="{{ unfollower.photo.url }}" alt="no image" onclick="location.href={% url 'viewProfile' unfollower.user.username %}">
+                <a href="{% url 'viewProfile' unfollower.user.username %}" id="username1">{{unfollower.user.username}}</a> </li>
                 </ul>
                 </div>
                 {% endfor %} 
