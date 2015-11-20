@@ -1,3 +1,9 @@
+“””
+MySQL 
+	root 12345
+	user 12345
+“””
+
 """
 Django settings for chingoal project.
 
@@ -58,7 +64,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'drealtime',
+    
     'home',
     'account',
     'testpage',
@@ -70,7 +76,6 @@ INSTALLED_APPS = (
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'drealtime.middleware.iShoutCookieMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
@@ -111,7 +116,7 @@ WSGI_APPLICATION = 'chingoal.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': chingoal,
+        'NAME': 'chingoal',
         'USER': 'user',
         'PASSWORD': '12345',
         'HOST': 'localhost',
@@ -143,7 +148,7 @@ STATIC_ROOT = PROJECT_PATH + '/static/'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = '15637test@gmail.com'
-EMAIL_HOST_PASSWORD = '123$%^7890'
+EMAIL_HOST_PASSWORD = '123$%^789'
 EMAIL_PORT = 587
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'user_photo')
