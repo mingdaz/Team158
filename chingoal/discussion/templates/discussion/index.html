@@ -1,21 +1,19 @@
 {% extends "base.html" %}
 
-
     {% block title-content %}
-    <title>Chingoal_DiscussionBoard</title>
+    <title>Chatroom</title>
     {% endblock %}
-
     {% block head %}
     {% load static %}
     <link href="{% static "css/custom_discussion_board.css"%}" rel="stylesheet">    {% endblock %}
     {% block head-origin %}
     {% endblock %}
-
-    {% block main-content %}
-    <!-- Navigation -->
-    <nav class="navbar navbar-default navbar-fixed-top">
+    
+    
+{% block main-content %}
+ {% csrf_token %}
+   <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header page-scroll">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
@@ -26,7 +24,7 @@
                 <a class="navbar-brand page-scroll" href="#page-top">Chingoal</a>
             </div>
 
-            <!-- Collect the nav links, forms, and other content for toggling -->
+            <!~~ Collect the nav links, forms, and other content for toggling ~~>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li class="hidden">
@@ -62,64 +60,51 @@
                         <li><a href="{% url 'logout' %}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
                     </ul>
-                    <!-- /.dropdown-user -->
+                    <!~~ /.dropdown-user ~~>
                     </li>   
                 </ul>
             </div>
-            <!-- /.navbar-collapse -->
+            <!~~ /.navbar-collapse ~~>
         </div>
-        <!-- /.container-fluid -->
+        <!~~ /.container-fluid ~~>
     </nav>
 
-
-    <!-- Portfolio Grid Section -->
-    <section id="portfolio" class="bg-light-gray">    
-
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <h2 class="section-heading">Posts</h2>
-                <h3 class="section-subheading text-muted">Here you can post any questions you might have and get all of them solved!</h3>
-            </div>                
+	<section id="portfolio" class="bg-light-gray">
+		<h2 style="margin-left:70px;">{{ username }},welcome to chat rooms!</h2>
+    {% if flag == 1 %}
+        {% if error %}
+        <p>{{error}}</p>
+        {% endif %}
+        <form role="form" action="/discussion/createRoom" method="post">
+        <div style="margin-left:70px;">
+            <input type="text" name="roomname" spellcheck="false">
+            <input type="submit" value="Create a new room">
         </div>
-
-        <div class="row">
-            <div class="col-lg-1"></div>
-            <div class="col-lg-10">
-                <table class="table table-hover" id="post_table">
-                <thead>
-                    <tr>
-                    <td>#</td>
-                    <td>Post Title</td>
-                    <td>Author</td>
-                    <td># Replies</td>
-                    </tr>
-                </thead>
-                {% for post in posts %}
-                    <tr>
-                        <td>{{post.list_id}}</td>
-                        <td><a href="{% url 'discussion_reply' post.post.id %}">{{post.post.title}}</a></td>
-                        <td>{{post.post.author.username}}</td>
-                        <td>{{post.number_replies}}</td>
-                    </tr>
-                {% endfor %}                
-                </table>
-            </div>
-            <div class="col-lg-1"></div>            
-        </div>
-        <div class="row">
-            <div class="col-lg-5"></div>
-            <div class="col-lg-2">
-            <div class="row">
-                <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">New Post</button>
-                <a class="btn btn-primary btn-lg" href="{% url 'chat' %}">Going to chatroom</a>
-            </div>
-            </div>
-            <div class="col-lg-5"></div>
-        </div>
-    </section>
-
-
-    <footer>
+        {% csrf_token %}
+        </form>        
+    {% endif %}
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Room number</th>
+					<th>Room name</th>
+					<th>Created by</th>
+				</tr>
+			</thead>
+			<tbody id="roomlist">
+				{% for item in RoomObj %}
+					<tr>
+						<th>{{ item.id }}</th>
+						<th><a href="{% url 'room' item.id %}">{{ item }}</a></th>
+						<th>{{item.owner}}</th>
+						<th><a href="{% url 'deleteRoom' item.id %}">X</a></th>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</section>
+	
+<footer>
         <div class="container">
             <div class="row">
                 <div class="col-md-4">
@@ -146,44 +131,25 @@
             </div>
         </div>
     </footer>
-    {% endblock %}
+    {% endblock %}    
+    
+<script src="/../static/js/jquery-1.11.2.js" type="text/javascript"></script>
 
+<script>
+function updaterooms() {
+		$.get("/discussion/update", function(data){
+		    $("#roomlist").empty();
+		    var rooms = data['rooms'];
+            for (num in rooms) {
+                var room = rooms[num];
+                var html = '<tr><th>'+room.id+'</th><th><a href="/discussion/goRoom/'+room.id+'">'+room.roomname+'</a></th>\
+                <th>'+room.owner+'</th><th><a href="/discussion/delete/'+room.id+'">X</a></th></tr>';
+                $('#roomlist').append(html);   
+            }          
+        });
+}
+$(document).ready(function () {
+    setInterval(updaterooms, 2000);
+});		
 
-    {% block origin-script %}
-    {% endblock %}
-
-
-
-{% block model-define %}
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title" id="myModalLabel">New Post</h4>
-            </div>
-            <p></p>
-            <div class="modal-body">
-                <form role="form">
-                    <div class="form-group">
-                        <p></p>
-                        <textarea class="form-control" rows="1" id="postTitle" placeholder="Post Title"></textarea>
-                        <p></p>
-                        <textarea class="form-control" rows="5" id="postText" placeholder="Post Text"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary" id="postBtn">Post</button>
-                    <button type="reset" class="btn btn-warning" id="resetBtn">Reset</button>
-                </form>
-
-            </div>
-        </div>
-    </div>
-</div>
-{% endblock %}
-
-{% block script-content %}
-{% load static %}
-<script src="{% static 'js/discussion.js' %}" type="text/javascript"></script>
-{% endblock %}
-
-
+</script>

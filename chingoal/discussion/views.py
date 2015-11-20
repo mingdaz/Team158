@@ -1,10 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, render_to_response
 
 from django.core.urlresolvers import reverse
 
 from django.contrib.auth.decorators import login_required
 
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, JsonResponse
 
 from django.db import transaction
 
@@ -12,7 +12,8 @@ from forms import *
 from models import *
 
 from account.models import *
-
+import time
+import json
 
 @login_required
 # @transaction.atomic
@@ -36,12 +37,21 @@ def delete_post(request):
 def discussion_home(request):
     posts = Post.objects.all().order_by('-post_time')
     post_replies = [];
+    context={}
     i = len(posts)
     for post in posts:
         number_replies = len(Reply.objects.filter(reply_to = post))
         post_replies.append({'post':post, 'number_replies' : number_replies, 'list_id' : i})
         i -= 1
-    context = {'username' : request.user.username, 'posts' : post_replies}
+    if Learner.objects.filter(user = request.user):
+        learner = Learner.objects.get(user = request.user)
+        flag= 0
+       
+    if Teacher.objects.filter(user = request.user):
+        teacher = Teacher.objects.get(user = request.user)
+        flag = 1
+
+    context = {'username' : request.user.username, 'posts' : post_replies,'flag':flag}
     return render(request, 'discussion/discussion_board.html', context)
 
 
@@ -139,3 +149,106 @@ def delete_reply(request, reply_id):
     post_id = replyTemp.reply_to.id
     replyTemp.delete()
     return render(request, 'discussion/reply.json', {}, content_type = 'application/json')
+
+@login_required
+def index(request):
+    user = request.user
+    if Learner.objects.filter(user__exact=user):
+        flag = 0
+    else:
+        flag = 1
+    RoomObj = ChatRoom.objects.all()
+    return render(request, 'discussion/index.html', {'username': user.username, 'RoomObj': RoomObj,'flag':flag})
+
+@login_required
+def room(request, room_id):
+    user = request.user
+    if Learner.objects.filter(user__exact=user):
+        learner = Learner.objects.get(user__exact=user)
+        learner.inchat = True
+        learner.save()
+    else:
+        teacher = Teacher.objects.get(user__exact=user)
+        teacher.inchat = True
+        teacher.save()
+    roomObj = ChatRoom.objects.get(id=room_id)
+    result = RoomAccount.objects.filter(username=user, roomname=roomObj)
+    if not result:
+        u = RoomAccount(username=user, roomname=roomObj)
+        u.save()
+    userlObj = RoomAccount.objects.filter(roomname=roomObj)
+    userlist = []
+    for i in userlObj:
+        userlist.append(i.username)
+    return render_to_response('discussion/room.html', {'user': user, 'roomObj': roomObj, 'userlist': userlist})
+
+@login_required
+def getmsg(request):
+    roomid = request.GET.get('roomid')
+    roomObj = ChatRoom.objects.get(id=roomid)
+    chatpoolObj = ChatPool.objects.filter(roomname=roomObj)
+    msglist = []
+    for i in chatpoolObj:
+        msglist.append(i.msg)
+    return HttpResponse(json.dumps(msglist))
+
+@login_required
+def putmsg(request):
+    roomid, content = request.POST.get('roomid'), request.POST.get('content')
+    roomObj = ChatRoom.objects.get(id=roomid)
+    s = ChatPool(roomname=roomObj, msg=content)
+    s.save()
+    return HttpResponse("OK")
+
+@login_required
+def exituser(request):
+    roomid, userid = request.POST.get('roomid'), request.POST.get('userid')
+    roomObj = ChatRoom.objects.get(id=roomid)
+    userObj = User.objects.get(id=userid)
+    u = RoomAccount.objects.filter(username=userObj, roomname=roomObj)
+    u.delete()
+    return HttpResponse("OK")
+
+@login_required
+def onlineuser(request):
+    roomid, userid = request.GET.get('roomid'), request.GET.get('userid')
+    roomObj = ChatRoom.objects.get(id=roomid)
+    userObj = User.objects.get(id=userid)
+    u = RoomAccount.objects.filter(username=userObj, roomname=roomObj)
+    if not u:
+        u = RoomAccount(username=userObj, roomname=roomObj)
+        u.save()
+    userlObj = RoomAccount.objects.filter(roomname=roomObj)
+    userlist = []
+    for i in userlObj:
+        userlist.append(str(i.username))
+    return HttpResponse(json.dumps(userlist))
+
+@login_required
+def newRoom(request):
+    error = []
+    if not 'roomname' in request.POST or not request.POST['roomname']:
+        error.append('Room name is required.')
+    if error:
+        return render(request, 'discussion/index.html', {'error':error})
+    name = request.POST['roomname']
+    new_room = ChatRoom(roomname=name+" "+time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())),owner=request.user.username)
+    new_room.save()
+    return redirect("/discussion/chat")
+
+@login_required
+def deleteRoom(request,rid):
+    if len(ChatRoom.objects.filter(id = rid))>0:
+        ChatRoom.objects.filter(id__exact= rid).delete()
+    return redirect("/discussion/chat")
+
+@login_required
+def updateRoom(request):
+    rooms = ChatRoom.objects.all()
+    json = {}
+    json['rooms'] = []
+    for room in rooms:
+        print room.roomname
+        r = {'roomname': room.roomname, 'id': room.id, 'owner':room.owner}
+        json['rooms'].append(r)
+    return JsonResponse(json)
