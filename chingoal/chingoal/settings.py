@@ -137,7 +137,7 @@ STATIC_URL = '/static/'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = '15637test@gmail.com'
-EMAIL_HOST_PASSWORD = '123$%^789'
+EMAIL_HOST_PASSWORD = '123$%^7890'
 EMAIL_PORT = 587
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'user_photo')
