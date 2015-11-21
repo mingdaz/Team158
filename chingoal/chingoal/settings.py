@@ -36,16 +36,21 @@ ALLOWED_HOSTS = []
 #     'django.template.loaders.app_directories.Loader',
 # )
 
-# STATICFILES_FINDERS = (
-#     'django.contrib.staticfiles.finders.FileSystemFinder',
-#     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-# )
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
 
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    PROJECT_PATH + '/static/',
+    #PROJECT_PATH + '/static/',
+    BASE_DIR + '/home/static',
+    BASE_DIR + '/account/static',
+    BASE_DIR + '/discussion/static',
+    BASE_DIR + '/store/static',
+    BASE_DIR + '/testpage/static',
 )
 
 
@@ -143,6 +148,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = PROJECT_PATH + '/static/'
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
