@@ -13,7 +13,31 @@
 <script type="text/javascript">
     console.log("receive alert");
     ishout.on('alertchannel',function(data) {
-              $("#newmsg").text(data.msg)
+              $("#newmsg").text(data.count);
+              var list = $("#msglist");
+              var html = '<li><a data-toggle="modal" data-target="#reply_box'+data.count+'">\
+                                <i class="fa fa-comment fa-fw"></i>'+data.sender+'</a></li>';                                
+              list.prepend(html);
+              var list2 = $("#reply_box_list");
+              var sendname = data.sender;
+              var html2 = '<div class="modal fade" id="reply_box'+data.count+'" tabindex="-1" role="dialog" \
+                                aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;"> \
+                                <div class="modal-dialog"> \
+                                    <div class="modal-content"> \
+                                        <div class="modal-header"> \
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> \
+                 					        <h4>From: '+sendname+'</h4> \
+                                        </div> \
+                                        <div class="modal-body"> \
+                                            <p>'+data.time+'</p> \
+									        <p>'+data.text+'</p> \
+                                            <input type="text" name="textarea1" style="width : 300px;" required> \
+                                            <button type="submit" class="btn btn-primary btn-sm">Reply</button> \
+                                    	</div> \
+                                    </div> \
+                                </div>\
+                                </div>';
+              list2.append(html2);
     });
     ishout.init();
 </script>
