@@ -13,6 +13,7 @@ from django.contrib.auth.views import password_reset, password_reset_confirm,pas
 import json
 import hashlib, random
 from django.contrib import messages
+from datetime import datetime
 
 from models import *
 from forms import *
@@ -144,6 +145,9 @@ def view_profile(request, uname):
     context['username'] = uname
     context['uid'] = cur_user.id
     context['cur_username'] = request.user.username
+    context['cur_uid'] = request.user.id
+    context['newmsgs'] = request.user.newmsg.all().order_by('-timestamp')
+    context['msgcount'] = request.user.newmsg.all().count()
     
     if Learner.objects.filter(user__exact = request.user):
         
@@ -397,16 +401,23 @@ def get_photo(request, username):
     return HttpResponse(cur_user.photo, content_type = content_type)
 
 @login_required
-def alert(request,uname,uid):
+def send(request,receiver_name, sender_name):
     text = request.POST['textarea1']
+    sender = request.user.username
     if len(text) > 0:
-        receiver = User.objects.get(username__exact = uname)
-        newmsg = Newmsg(user=receiver, text=text)
+        receiver = User.objects.get(username__exact = receiver_name)
+        newmsg = Newmsg(user=receiver, text=text, sender=sender)
         newmsg.save()
         count = receiver.newmsg.all().count()
         ishout_client.emit(
-            int(uid),
+            int(receiver.id),
             'alertchannel',
-            data = {'msg':count}
+            data = {'count':count,'time':str(datetime.now()), 'text':text, 'sender':sender}
         )
-    return redirect(reverse('viewProfile', kwargs = {'uname':uname}))
+    return redirect(reverse('viewProfile', kwargs = {'uname':sender_name}))
+
+
+
+
+
+
