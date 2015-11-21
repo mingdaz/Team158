@@ -1,16 +1,72 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-
+<!doctype html>
+<html>
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    {% load static %}
+    <link href="{% static "css/custom_discussion_board.css"%}" rel="stylesheet">
     <title>ChatRoom</title>
   </head>
   <body>
-	<ul class="nav navbar-nav" xmlns="http://www.w3.org/1999/html">
-		<li><button onclick="onbeforeunload_handler()">首页</button></li>
-	</ul>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand page-scroll" href="#page-top">Chingoal</a>
+            </div>
 
+            <!~~ Collect the nav links, forms, and other content for toggling ~~>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="hidden">
+                        <a href="#page-top"></a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="{% url 'dashboard' %}">Lessons</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="{% url 'discussion_home' %}">Discussion</a>
+                    </li>
+                    {% if flag == 1 %}
+                     <li>
+                           <a href="{% url 'testcreate' %}">Create Test</a>                   
+                    </li>   
+                    {% else %}
+                    
+                    <li>
+                    <a class="page-scroll" href="{% url 'store' %}">Store</a> 
+                        </li>
+                                      
+                    {% endif %}
+                    <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                             <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="{% url 'viewProfile' user.username %}"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                        </li>
+                        <li><a href="{% url 'editProfile' %}"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="{% url 'logout' %}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                    <!~~ /.dropdown-user ~~>
+                    </li>   
+                </ul>
+            </div>
+            <!~~ /.navbar-collapse ~~>
+        </div>
+        <!~~ /.container-fluid ~~>
+    </nav>
+  <ul>
+		<li><button onclick="onbeforeunload_handler()">首页</button></li>
+   </ul>
 	<div class="page-header">
 	<h3>当前房间: {{ roomObj.roomname }}</h3>
 	</div>
@@ -22,8 +78,8 @@
 			</ul>
 		</div>
 	</div>
-		<textarea id="msg" style="border: 1px solid #000000;resize: none;margin-top: 20px;margin-left: -15px;width: 550px;height: 80px;"></textarea>
-		<button id="sendmsg" class="btn btn-success" style="width: 50px;height: 80px; margin-top: -71px;margin-left: -5px;font-size: 20px;border-radius: 0">发<br>送</button>
+		<textarea id="msg" style="border: 1px solid #000000;resize: none;margin-top: 20px;margin-left: 15px;width: 550px;height: 80px;"></textarea>
+		<button id="sendmsg" class="btn btn-success" style="width: 50px;height: 80px; margin-top: -71px;margin-left: 15px;font-size: 20px;border-radius: 0">发<br>送</button>
 
 <script src="/../static/js/jquery-1.11.2.js" type="text/javascript"></script>
 	<script>
@@ -129,7 +185,7 @@
             var userid={{ user.id }};
             var data = {roomid: roomid, userid: userid};
             console.log('success');
-            
+    
             window.location.href = "/";
             syncrequest('/discussion/exitchat/', data,'post',null);
         
