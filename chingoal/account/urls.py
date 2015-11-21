@@ -19,5 +19,5 @@ urlpatterns = [
     url(r'^reset/$', 'account.views.reset', name='reset'),
     url(r'^confirm/(?P<activation_key>\w+)/', ('account.views.register_confirm')),
     url(r'^get_photo/(?P<username>.*)$', 'account.views.get_photo', name = 'get_photo'),
-    url(r'^reply/(?P<uname>\w+)/(?P<uid>\w+)$', 'account.views.alert', name = 'reply'),
+    url(r'^send/(?P<receiver_name>\w+)/(?P<sender_name>\w+)$', 'account.views.send', name = 'send'),
 ]
