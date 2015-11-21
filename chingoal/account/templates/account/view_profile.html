@@ -71,13 +71,13 @@
                     </li> 
                     <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                             <i class="fa fa-envelope fa-fw"></i><i id="newmsg"></i><i class="fa fa-caret-down"></i>
+                             <i class="fa fa-envelope fa-fw"></i><i id="newmsg">{{msgcount}}</i><i class="fa fa-caret-down"></i>
                     </a>
-                    <ul class="dropdown-menu dropdown-user">
-                        <li><a data-toggle="modal" data-target="#reply_box"><i class="fa fa-comment fa-fw"></i> User Profile</a>
+                    <ul id="msglist" class="dropdown-menu dropdown-user">
+                        {% for msg in newmsgs %}
+                        <li><a data-toggle="modal" data-target="#reply_box{{ forloop.counter }}"><i class="fa fa-comment fa-fw"></i>{{msg.sender}}</a>
                         </li>
-                        <li><a data-toggle="modal" data-target="#reply_box"><i class="fa fa-comment fa-fw"></i> Settings</a>
-                        </li>
+                        {% endfor %}
                     </ul>
 					</li>
                 </ul>
@@ -162,7 +162,7 @@
      <img src="{% static "img/bg2.jpg"%}" style="height:80px; width:350px;" alt=""><a href="#page-top" class="go-top"><span class="glyphicon glyphicon-arrow-up"></span>Back to top</a>
      <div class="window_bg">
     	<p class=" text-center">Leave your message:</p>
-			<form method="POST" action="{% url 'reply' username uid %}">
+			<form method="POST" action="{% url 'send' username username %}">
         		<span>
         			<textarea id="textarea1" name="textarea1" required placeholder="leave your message here..."></textarea>
         		</span>
@@ -337,20 +337,27 @@
                                         </div>
                                     </div>
                                 </div>
-<div class="modal fade" id="reply_box" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+ <div id="reply_box_list">                               
+    {% for msg in newmsgs %}
+<div class="modal fade" id="reply_box{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                           <div class="modal-header">
-               <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="color:#FFD000;">×</button>
-                 							  <h4>From: username</h4>
+               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                 							  <h4>From: {{msg.sender}}</h4>
                                            </div>
                                            <div class="modal-body">
-                                    <p>jwaiejfowajeo</p>
-									<p>wefiwjao</p>
-                                    <input type="text" style="width : 300px;" required>
-                                    <button type="submit" class="btn btn-primary btn-sm">Reply</button>
+                                    <p>{{msg.timestamp}}</p>
+									<p>{{msg.text}}</p>
+									<form role="form" action="{% url 'send' msg.sender cur_username %}" method="post">
+                                        <input type="text" name="textarea1" style="width : 300px;" required>
+                                        <button type="submit" class="btn btn-primary btn-sm">Reply</button>
+                                       {% csrf_token %}
+                                    </form>
                                     		</div>
                                         </div>
                                     </div>
-                                </div>                                
+                                </div> 
+        {% endfor %}
+    </div>                              
 {% endblock %}
