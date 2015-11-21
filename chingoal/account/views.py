@@ -20,6 +20,8 @@ from django.shortcuts import render_to_response, get_object_or_404
 from itertools import chain
 
 from mimetypes import guess_type
+from drealtime import iShoutClient
+ishout_client = iShoutClient()
 
 def reset_confirm(request, uidb64=None, token=None):
     return password_reset_confirm(request, template_name='account/reset_confirm.html',
@@ -140,6 +142,7 @@ def view_profile(request, uname):
     context = {}
     cur_user = User.objects.get(username__exact = uname)
     context['username'] = uname
+    context['uid'] = cur_user.id
     context['cur_username'] = request.user.username
     
     if Learner.objects.filter(user__exact = request.user):
@@ -392,3 +395,13 @@ def get_photo(request, username):
     content_type = guess_type(cur_user.photo.name)
 
     return HttpResponse(cur_user.photo, content_type = content_type)
+
+@login_required
+def alert(request,uname,uid):
+    print "alert"
+    ishout_client.emit(
+        int(uid),
+        'alertchannel',
+        data = {'msg':'Hello dear friend'}
+    )
+    return redirect(reverse('viewProfile', kwargs = {'uname':uname}))

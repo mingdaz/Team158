@@ -194,6 +194,9 @@ body
 #myModal {
 	margin-top: 200px;
 }
+#reply_box {
+	margin-top: 200px;
+}
 .window_bg{
 	background:url(/static/img/bg1.jpg);
 	height:250px; 
@@ -214,4 +217,4 @@ body
 .faceul3 img{
     width:80px;
     height:70px;
-}	
+}

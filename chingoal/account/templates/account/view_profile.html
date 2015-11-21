@@ -3,6 +3,7 @@
 
     {% block title-content %}
     <title>Chingoal_profile</title>
+
   {% endblock %}
 
     {% block head %}
@@ -67,8 +68,18 @@
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
-                    </li>   
-
+                    </li> 
+                    <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                             <i class="fa fa-envelope fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a data-toggle="modal" data-target="#reply_box"><i class="fa fa-comment fa-fw"></i> User Profile</a>
+                        </li>
+                        <li><a data-toggle="modal" data-target="#reply_box"><i class="fa fa-comment fa-fw"></i> Settings</a>
+                        </li>
+                    </ul>
+					</li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -151,7 +162,7 @@
      <img src="{% static "img/bg2.jpg"%}" style="height:80px; width:350px;" alt=""><a href="#page-top" class="go-top"><span class="glyphicon glyphicon-arrow-up"></span>Back to top</a>
      <div class="window_bg">
     	<p class=" text-center">Leave your message:</p>
-			<form method="POST" action="{% url 'post' %}">
+			<form method="POST" action="{% url 'reply' username uid %}">
         		<span>
         			<textarea id="textarea1" name="text" placeholder="leave your message here...(42 characters or less)"></textarea>
         		</span>
@@ -307,7 +318,7 @@
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="color:#FFD000;">×</button>
                  <h4>Edit your schedule</h4>
                                             </div>
                                             <div class="modal-body">
@@ -326,4 +337,20 @@
                                         </div>
                                     </div>
                                 </div>
+<div class="modal fade" id="reply_box" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="color:#FFD000;">×</button>
+                 							  <h4>From: username</h4>
+                                           </div>
+                                           <div class="modal-body">
+                                    <p>jwaiejfowajeo</p>
+									<p>wefiwjao</p>
+                                    <input type="text" style="width : 300px; ">
+                                    <button type="submit" class="btn btn-primary btn-sm">Reply</button>
+                                    		</div>
+                                        </div>
+                                    </div>
+                                </div>                                
 {% endblock %}
