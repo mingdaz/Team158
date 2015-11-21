@@ -398,10 +398,15 @@ def get_photo(request, username):
 
 @login_required
 def alert(request,uname,uid):
-    print "alert"
-    ishout_client.emit(
-        int(uid),
-        'alertchannel',
-        data = {'msg':'Hello dear friend'}
-    )
+    text = request.POST['textarea1']
+    if len(text) > 0:
+        receiver = User.objects.get(username__exact = uname)
+        newmsg = Newmsg(user=receiver, text=text)
+        newmsg.save()
+        count = receiver.newmsg.all().count()
+        ishout_client.emit(
+            int(uid),
+            'alertchannel',
+            data = {'msg':count}
+        )
     return redirect(reverse('viewProfile', kwargs = {'uname':uname}))
