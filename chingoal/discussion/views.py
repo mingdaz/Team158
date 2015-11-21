@@ -165,11 +165,9 @@ def room(request, room_id):
     user = request.user
     if Learner.objects.filter(user__exact=user):
         learner = Learner.objects.get(user__exact=user)
-        learner.inchat = True
         learner.save()
     else:
         teacher = Teacher.objects.get(user__exact=user)
-        teacher.inchat = True
         teacher.save()
     roomObj = ChatRoom.objects.get(id=room_id)
     result = RoomAccount.objects.filter(username=user, roomname=roomObj)
@@ -202,6 +200,7 @@ def putmsg(request):
 
 @login_required
 def exituser(request):
+    print "exituser"
     roomid, userid = request.POST.get('roomid'), request.POST.get('userid')
     roomObj = ChatRoom.objects.get(id=roomid)
     userObj = User.objects.get(id=userid)

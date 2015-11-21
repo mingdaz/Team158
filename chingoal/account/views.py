@@ -13,6 +13,7 @@ from django.contrib.auth.views import password_reset, password_reset_confirm,pas
 import json
 import hashlib, random
 from django.contrib import messages
+from datetime import datetime
 
 from models import *
 from forms import *
@@ -86,7 +87,7 @@ def register(request):
         new_teacher.save()
     email_subject = 'Account confirmation'
     email_body = "Hey %s, thanks for signing up. To activate your account, click this link within \
-            48hours http://127.0.0.1:8000/account/confirm/%s" % (register_form.cleaned_data['username'], activation_key)
+            48hours http://54.164.42.224//account/confirm/%s" % (register_form.cleaned_data['username'], activation_key)
             
     send_mail(email_subject, email_body, '15637test@gmail.com', [register_form.cleaned_data['email']], fail_silently=False)
     messages.add_message(request, messages.INFO, 'A confirmation email has been sent to your email address.')
@@ -144,6 +145,9 @@ def view_profile(request, uname):
     context['username'] = uname
     context['uid'] = cur_user.id
     context['cur_username'] = request.user.username
+    context['cur_uid'] = request.user.id
+    context['newmsgs'] = request.user.newmsg.all().order_by('-timestamp')
+    context['msgcount'] = request.user.newmsg.all().count()
     
     if Learner.objects.filter(user__exact = request.user):
         
@@ -397,11 +401,23 @@ def get_photo(request, username):
     return HttpResponse(cur_user.photo, content_type = content_type)
 
 @login_required
-def alert(request,uname,uid):
-    print "alert"
-    ishout_client.emit(
-        int(uid),
-        'alertchannel',
-        data = {'msg':'Hello dear friend'}
-    )
-    return redirect(reverse('viewProfile', kwargs = {'uname':uname}))
+def send(request,receiver_name, sender_name):
+    text = request.POST['textarea1']
+    sender = request.user.username
+    if len(text) > 0:
+        receiver = User.objects.get(username__exact = receiver_name)
+        newmsg = Newmsg(user=receiver, text=text, sender=sender)
+        newmsg.save()
+        count = receiver.newmsg.all().count()
+        ishout_client.emit(
+            int(receiver.id),
+            'alertchannel',
+            data = {'count':count,'time':str(datetime.now()), 'text':text, 'sender':sender}
+        )
+    return redirect(reverse('viewProfile', kwargs = {'uname':sender_name}))
+
+
+
+
+
+

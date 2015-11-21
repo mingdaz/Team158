@@ -24,7 +24,6 @@ class Learner(models.Model):
     photo = models.ImageField(upload_to = 'portrait', blank = True, default = '/user_photo/portrait/default.jpg')
     unlock = models.IntegerField(default = 0)
     activation_key = models.CharField(max_length=40, blank=True)
-    inchat = models.BooleanField(default=False)
     
     def __unicode__(self):
         return 'Learner' + self.user.username
@@ -36,13 +35,20 @@ class History(models.Model):
     def __unicode__(self):
         return self.content
 
+class Newmsg(models.Model):
+    user = models.ForeignKey(User, related_name="newmsg")
+    timestamp = models.DateTimeField(auto_now_add=True)
+    text = models.CharField(max_length = 420)
+    sender = models.CharField(max_length = 40)
+    def __unicode__(self):
+        return self.text
+
 class Teacher(models.Model):
     user = models.OneToOneField(User, unique = True, related_name="teacher")
     follows = models.ManyToManyField(User,related_name = "teacher_follows")
     bio = models.CharField(max_length = 420, default='Please introduce yourself')
     photo = models.ImageField(upload_to = 'portrait', blank = True, default = '/user_photo/portrait/default.jpg')
     activation_key = models.CharField(max_length=40, blank=True)
-    inchat = models.BooleanField(default=False)
     
     def __unicode__(self):
         return 'Teacher' + self.user.username

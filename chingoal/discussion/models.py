@@ -66,7 +66,7 @@ class Reply(models.Model):
 
 
 class ChatRoom(models.Model):
-    roomname = models.CharField(max_length=8, unique=True)
+    roomname = models.CharField(max_length=100, unique=True)
     owner = models.CharField(max_length=100)
     def __unicode__(self):
         return self.roomname
