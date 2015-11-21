@@ -81,6 +81,14 @@
                             Creating Test
                         </div>
                         <div class="panel-body">
+                        <form id="levelform" role="form" action="{% url 'editSchedule' %}" method="post">
+                        <div class="form-group">
+                        {% for field in chooselevel.visible_fields %}
+                        {{field.label_tag}} {{field}}
+                        <br>
+                        {% endfor %}    
+                        </div>
+                        </form>
                             <ul style="list-style: none;" id="question">
 
                            </ul>                             

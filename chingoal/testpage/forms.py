@@ -18,6 +18,22 @@ class TRQFrom(forms.Form):
         cleaned_data = super(TRQFrom, self).clean()
         return cleaned_data
 
+class TestLevelForm(forms.Form):
+    LEVELS = (
+        ('0','Zero level'),
+        ('1','One level'),
+        ('2','Two levels'),
+        ('3','Three levels'),
+        ('4','Four levels'),
+        ('5','Five levels'),
+    )
+
+    test_level = forms.ChoiceField(choices=LEVELS, label="Test Level", widget=forms.Select())
+
+    def clean(self):
+        cleaned_data = super(TestLevelForm, self).clean()
+        return cleaned_data
+
 
 # class TestFrom(forms.ModelForm):
 #     # shortbio = forms.CharField( widget=forms.Textarea, required = False)
