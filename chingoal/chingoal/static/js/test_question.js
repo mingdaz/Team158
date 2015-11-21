@@ -13,15 +13,6 @@ function getCookie(name) {
     return cookieValue;
 }
 
-function update(){
-    var list = $("#question");
-    var array = list.find("li");
-    for ( var i = 1; i <= array.length; i++ ) {
-        var tmp = $(array[i-1]);
-        tmp.find(".question-num").html(i);
-    }
-    // list.data("max-entry",array.length);
-}
 
 function postmytest(){
     var list = $("#question");

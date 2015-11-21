@@ -35,8 +35,10 @@ def get_test(request,level):
 	cur_user = User.objects.get(username__exact = context['username'])
 	learner = Learner.objects.get(user = cur_user)
 	context['cur_user'] = learner
-	newtest = Test.objects.filter(level = level)
-	context['question'] = newtest[0].question.all()
+	# newtest = Test.objects.filter(level = level)
+	# context['test_id'] = newtest[5].id;
+	# context['qnum'] = len(newtest[5].question.all());
+	
 	return render(request, 'testpage/test.html', context)
 
 @login_required
@@ -44,7 +46,6 @@ def get_learn(request,level,lesson):
 	context = {}
 	context['username'] = request.user.username
 	cur_user = User.objects.get(username__exact = context['username'])
-    # if Learner.objects.filter(user = cur_user):
 	learner = Learner.objects.get(user = cur_user)
 	context['cur_user'] = learner
 	return render(request, 'testpage/learn.html', context)

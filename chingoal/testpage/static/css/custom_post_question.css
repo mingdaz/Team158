@@ -25,5 +25,5 @@
 }
 
 .progress{
-  color: black;
+  background-color: rgba(8, 8, 8, 0.25);
 }
