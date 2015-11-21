@@ -31,19 +31,19 @@
                         <a href="#page-top"></a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="{% url 'dashboard' %}">Lessons</a>
+                        <a class="page-scroll" href="{% url 'dashboard' %}" onclick="onbeforeunload_handler()">Lessons</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="{% url 'discussion_home' %}">Discussion</a>
+                        <a class="page-scroll" href="{% url 'discussion_home' %}" onclick="onbeforeunload_handler()" >Discussion</a>
                     </li>
                     {% if flag == 1 %}
                      <li>
-                           <a href="{% url 'testcreate' %}">Create Test</a>                   
+                           <a href="{% url 'testcreate' %}" onclick="onbeforeunload_handler()">Create Test</a>
                     </li>   
                     {% else %}
                     
                     <li>
-                    <a class="page-scroll" href="{% url 'store' %}">Store</a> 
+                    <a class="page-scroll" href="{% url 'store' %}" onclick="onbeforeunload_handler()">Store</a>
                         </li>
                                       
                     {% endif %}
@@ -52,9 +52,9 @@
                              <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li><a href="{% url 'viewProfile' user.username %}"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                        <li><a href="{% url 'viewProfile' user.username %}" onclick="onbeforeunload_handler()"><i class="fa fa-user fa-fw"></i> User Profile</a>
                         </li>
-                        <li><a href="{% url 'editProfile' %}"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        <li><a href="{% url 'editProfile' %}" onclick="onbeforeunload_handler()"><i class="fa fa-gear fa-fw"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
                         <li><a href="{% url 'logout' %}" onclick="onbeforeunload_handler()"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
