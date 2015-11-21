@@ -202,6 +202,7 @@ def putmsg(request):
 
 @login_required
 def exituser(request):
+    print "exituser"
     roomid, userid = request.POST.get('roomid'), request.POST.get('userid')
     roomObj = ChatRoom.objects.get(id=roomid)
     userObj = User.objects.get(id=userid)

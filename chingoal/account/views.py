@@ -86,7 +86,7 @@ def register(request):
         new_teacher.save()
     email_subject = 'Account confirmation'
     email_body = "Hey %s, thanks for signing up. To activate your account, click this link within \
-            48hours http://127.0.0.1:8000/account/confirm/%s" % (register_form.cleaned_data['username'], activation_key)
+            48hours http://54.164.42.224//account/confirm/%s" % (register_form.cleaned_data['username'], activation_key)
             
     send_mail(email_subject, email_body, '15637test@gmail.com', [register_form.cleaned_data['email']], fail_silently=False)
     messages.add_message(request, messages.INFO, 'A confirmation email has been sent to your email address.')
@@ -398,10 +398,15 @@ def get_photo(request, username):
 
 @login_required
 def alert(request,uname,uid):
-    print "alert"
-    ishout_client.emit(
-        int(uid),
-        'alertchannel',
-        data = {'msg':'Hello dear friend'}
-    )
+    text = request.POST['textarea1']
+    if len(text) > 0:
+        receiver = User.objects.get(username__exact = uname)
+        newmsg = Newmsg(user=receiver, text=text)
+        newmsg.save()
+        count = receiver.newmsg.all().count()
+        ishout_client.emit(
+            int(uid),
+            'alertchannel',
+            data = {'msg':count}
+        )
     return redirect(reverse('viewProfile', kwargs = {'uname':uname}))

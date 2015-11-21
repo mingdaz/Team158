@@ -36,6 +36,13 @@ class History(models.Model):
     def __unicode__(self):
         return self.content
 
+class Newmsg(models.Model):
+    user = models.ForeignKey(User, related_name="newmsg")
+    timestamp = models.DateTimeField(auto_now_add=True)
+    text = models.CharField(max_length = 420)
+    def __unicode__(self):
+        return self.text
+
 class Teacher(models.Model):
     user = models.OneToOneField(User, unique = True, related_name="teacher")
     follows = models.ManyToManyField(User,related_name = "teacher_follows")
