@@ -29,14 +29,14 @@ def homepage(request):
 	return redirect('dashboard')
 
 @login_required
-def get_test(request):
+def get_test(request,level):
 	context = {}
 	context['username'] = request.user.username
 	cur_user = User.objects.get(username__exact = context['username'])
 	learner = Learner.objects.get(user = cur_user)
 	context['cur_user'] = learner
-	newtest = Test.objects.get(id = Test.get_max_id())
-	context['question'] = newtest.question.all()
+	newtest = Test.objects.filter(level = level)
+	context['question'] = newtest[0].question.all()
 	return render(request, 'testpage/test.html', context)
 
 @login_required
@@ -59,6 +59,7 @@ def test_create(request):
 	context = {}
 	context['username'] = request.user.username
 	context['flag'] = 1
+	context['chooselevel'] = TestLevelForm()
 	return render(request, 'testpage/post_question.html', context)
 
 @login_required
@@ -146,6 +147,20 @@ def test_post(request,test_id,question_id):
 	except Question.DoesNotExist:
 		flag=0
 	return render(request, 'item.json', {"item":"","id":0,"flag":flag}, content_type='application/json')
+
+@login_required
+def test_set_level(request,test_id):
+	x = Test.objects.get(id=test_id)
+	form = TestLevelForm(request.POST)
+	if form.is_valid():
+		x.level = form.cleaned_data['test_level']
+		x.save()
+		flag = 1
+		print "valid"
+	else:
+		flag = 0
+	return render(request, 'item.json', {"item":"","id":0,"flag":flag}, content_type='application/json')
+
 
 @login_required
 def get_learning(request):

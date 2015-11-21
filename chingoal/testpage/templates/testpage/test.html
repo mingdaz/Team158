@@ -76,19 +76,18 @@
             </div>
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="panel panel-primary">
+<!--                     <div class="panel panel-primary">
                         <div class="panel-heading">
                             Creating Test
-                        </div>
-                        <div class="panel-body">
-                            <ul style="list-style: none;" id="question">
+                        </div> -->
+                        <!-- <div class="panel-body"> -->
+                            <!-- <ul style="list-style: none;" id="question"> -->
 
-                                {% for item in question %}
+                                <!-- {% for item in question %} -->
 
 {% if item.qtype == "tr" %}
-<li>
 <!-- <form action="{% url 'testsavetrquestion' id %}" method="post"> -->
-<div class="panel panel-success">
+<div class="panel panel-primary">
 <div class="panel-heading">
 Question <p class="question-num" style="display:inline">{{item.id}}</p> (Word Translate)
 </div>
@@ -110,14 +109,12 @@ Question <p class="question-num" style="display:inline">{{item.id}}</p> (Word Tr
 </div>            
 </div>
 <div class="panel-footer">
-<button type="button" class="btn btn-info save-btn">Save</button>
+<button type="button" class="btn btn-warning next-btn">Next</button>
 </div>
 </div>
-</li>
 {% else %}
-<li>
 <!-- <form action="{% url 'testsavemcquestion' id %}" method="post"> -->
-<div class="panel panel-success">
+<div class="panel panel-primary">
 <div class="panel-heading">
 Question <p class="question-num" style="display:inline">{{item.id}}</p> (Multiple Choice)
 </div>
@@ -162,26 +159,38 @@ Question <p class="question-num" style="display:inline">{{item.id}}</p> (Multipl
 
 </div>
 <div class="panel-footer">
-<button type="button" class="btn btn-info save-btn">Save</button>
+<div class="row">
+<div class="col-lg-3">
+<button type="button" class="btn btn-warning next-btn">Next</button>
+</div>
+<div class="col-lg-6">
+<div class="progress">
+   <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="60" 
+      aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+      <span class="sr-only">40% 完成</span>
+   </div>
+</div>
+</div>
+<div class="col-lg-3"></div>
+</div>
 </div>
 </div>
 <!-- </form> -->
-</li>
 {% endif %}
 
-                                {% endfor %}
+                                <!-- {% endfor %} -->
 
-                           </ul>                             
-                        </div>
-                        <div class="panel-footer">
+                           <!-- </ul>                              -->
+                        <!-- </div> -->
+<!--                         <div class="panel-footer">
                             <div class="row">
                                 <div class="col-lg-4">
                                 <button id="posttest" type="button" class="btn btn-info btn-lg btn-block">Submit</button>
                                 </div>
                             </div>
                             
-                        </div>
-                    </div>
+                        </div> -->
+                    <!-- </div> -->
                 </div>
                 <!-- /.col-lg-4 -->
             </div>

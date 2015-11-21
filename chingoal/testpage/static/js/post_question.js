@@ -41,6 +41,18 @@ function postmytest(){
             success: function (data) {
                 var id;
                 var flag = 1;
+                $.ajax({
+                    type: "POST",
+                    url: "/testpage/test-level/"+data.id,
+                    data: $("#levelform").serialize(),
+                    success: function (data) {
+                      console.log("success")
+                    },
+                    error: function(data) {
+                      flag = 0;
+                      console.log("error")
+                    }
+                });  
                 for ( var i = 1; i <= array.length; i++ ) {
                     id = $(array[i-1]).data("item-id");
                         $.ajax({
