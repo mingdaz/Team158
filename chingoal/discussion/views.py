@@ -165,11 +165,9 @@ def room(request, room_id):
     user = request.user
     if Learner.objects.filter(user__exact=user):
         learner = Learner.objects.get(user__exact=user)
-        learner.inchat = True
         learner.save()
     else:
         teacher = Teacher.objects.get(user__exact=user)
-        teacher.inchat = True
         teacher.save()
     roomObj = ChatRoom.objects.get(id=room_id)
     result = RoomAccount.objects.filter(username=user, roomname=roomObj)
