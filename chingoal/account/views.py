@@ -84,7 +84,7 @@ def register(request):
         new_teacher.save()
     email_subject = 'Account confirmation'
     email_body = "Hey %s, thanks for signing up. To activate your account, click this link within \
-            48hours http://127.0.0.1:8000/account/confirm/%s" % (register_form.cleaned_data['username'], activation_key)
+            48hours http://54.164.42.224//account/confirm/%s" % (register_form.cleaned_data['username'], activation_key)
             
     send_mail(email_subject, email_body, '15637test@gmail.com', [register_form.cleaned_data['email']], fail_silently=False)
     messages.add_message(request, messages.INFO, 'A confirmation email has been sent to your email address.')
