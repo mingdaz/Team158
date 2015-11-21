@@ -24,7 +24,6 @@ class Learner(models.Model):
     photo = models.ImageField(upload_to = 'portrait', blank = True, default = '/user_photo/portrait/default.jpg')
     unlock = models.IntegerField(default = 0)
     activation_key = models.CharField(max_length=40, blank=True)
-    inchat = models.BooleanField(default=False)
     
     def __unicode__(self):
         return 'Learner' + self.user.username
@@ -50,7 +49,6 @@ class Teacher(models.Model):
     bio = models.CharField(max_length = 420, default='Please introduce yourself')
     photo = models.ImageField(upload_to = 'portrait', blank = True, default = '/user_photo/portrait/default.jpg')
     activation_key = models.CharField(max_length=40, blank=True)
-    inchat = models.BooleanField(default=False)
     
     def __unicode__(self):
         return 'Teacher' + self.user.username
