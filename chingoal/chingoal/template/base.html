@@ -13,6 +13,7 @@
 <script type="text/javascript">
     console.log("receive alert");
     ishout.on('alertchannel',function(data) {
+              alert("send")
               $("#newmsg").text(data.count);
               var list = $("#msglist");
               var html = '<li><a data-toggle="modal" data-target="#reply_box'+data.count+'">\

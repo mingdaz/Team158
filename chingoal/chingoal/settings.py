@@ -45,12 +45,12 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    #PROJECT_PATH + '/static/',
-    BASE_DIR + '/home/static',
-    BASE_DIR + '/account/static',
-    BASE_DIR + '/discussion/static',
-    BASE_DIR + '/store/static',
-    BASE_DIR + '/testpage/static',
+    PROJECT_PATH + '/static/',
+    #BASE_DIR + '/home/static',
+                    # BASE_DIR + '/account/static',
+                    #BASE_DIR + '/discussion/static',
+                    #BASE_DIR + '/store/static',
+                    #BASE_DIR + '/testpage/static',
 )
 
 
@@ -113,22 +113,22 @@ WSGI_APPLICATION = 'chingoal.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'chingoal',
-        'USER': 'user',
-        'PASSWORD': '12345',
-        'HOST': 'localhost',
-        'PORT': '',
-    }
-}
 #DATABASES = {
 #    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#        'ENGINE': 'django.db.backends.mysql',
+#        'NAME': 'chingoal',
+#        'USER': 'user',
+#        'PASSWORD': '12345',
+#        'HOST': 'localhost',
+#        'PORT': '',
+#    }
 #}
-#}
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+}
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
@@ -148,7 +148,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = PROJECT_PATH + '/static/'
+# STATIC_ROOT = PROJECT_PATH + '/static/'
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
