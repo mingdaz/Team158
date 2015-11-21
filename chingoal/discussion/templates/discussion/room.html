@@ -1,13 +1,17 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+{% extends "base.html" %}
+
+    {% block title-content %}
+     <title>ChatRoom</title>
+    {% endblock %}
+    {% block head %}
     {% load static %}
     <link href="{% static "css/custom_discussion_board.css"%}" rel="stylesheet">
-    <title>ChatRoom</title>
-  </head>
-  <body>
+   {% endblock %}
+   {% block head-origin %}
+    {% endblock %}
+
+  {% block main-content %}
+  {% csrf_token %}
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header page-scroll">
@@ -53,7 +57,7 @@
                         <li><a href="{% url 'editProfile' %}"><i class="fa fa-gear fa-fw"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
-                        <li><a href="{% url 'logout' %}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        <li><a href="{% url 'logout' %}" onclick="onbeforeunload_handler()"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
                     </ul>
                     <!~~ /.dropdown-user ~~>
@@ -64,22 +68,24 @@
         </div>
         <!~~ /.container-fluid ~~>
     </nav>
-  <ul>
-		<li><button onclick="onbeforeunload_handler()">首页</button></li>
-   </ul>
+    <section id="portfolio" class="bg-light-gray">   
 	<div class="page-header">
-	<h3>当前房间: {{ roomObj.roomname }}</h3>
+	<h3 style="margin-left:200px;">Current Room: {{ roomObj.roomname }}</h3>
 	</div>
 	<div class="row">
-		<div style="width: 600px;height: 500px;border: 1px solid #000000;float: left;overflow: auto;" id="chatting"></div>
-		<div style="width: 200px;height: 500px;border: 1px solid #000000;float: left;margin-left: 30px;">
-			<div style="border-bottom: 1px solid #000000;"><h4>在线列表:</h4></div>
+		<div style="width: 600px;height: 500px;border: 1px solid #000000;float: left;margin-left: 200px;overflow: auto;" id="chatting"></div>
+		<div class="text-center" style="width: 200px;height: 500px;border: 1px solid #000000;float: left;margin-left: 20px;">
+			<div style="border-bottom: 1px solid #000000;"><h4>OnlineList:</h4></div>
 			<ul id="onlinelist" class="list-group" style="overflow: auto;height: 458px;">
 			</ul>
 		</div>
 	</div>
-		<textarea id="msg" style="border: 1px solid #000000;resize: none;margin-top: 20px;margin-left: 15px;width: 550px;height: 80px;"></textarea>
-		<button id="sendmsg" class="btn btn-success" style="width: 50px;height: 80px; margin-top: -71px;margin-left: 15px;font-size: 20px;border-radius: 0">发<br>送</button>
+		<textarea id="msg" style="border: 1px solid #000000;resize: none;margin-top: 20px;margin-left:185px;width: 550px;height: 80px;"></textarea>
+		<button id="sendmsg" class="btn btn-success" style="width: 100px;height: 50px; margin-top: -71px;margin-left: 15px;font-size: 20px;border-radius: 0">Send</button>
+	</section>
+{% endblock %} 
+   
+{% block script-content %}
 
 <script src="/../static/js/jquery-1.11.2.js" type="text/javascript"></script>
 	<script>
@@ -185,7 +191,6 @@
             var userid={{ user.id }};
             var data = {roomid: roomid, userid: userid};
             console.log('success');
-    
             window.location.href = "/";
             syncrequest('/discussion/exitchat/', data,'post',null);
         
@@ -202,5 +207,4 @@
 		}
 
 	</script>
-</body>
-</html>
+{% endblock %}	
