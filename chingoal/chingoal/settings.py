@@ -111,7 +111,7 @@ WSGI_APPLICATION = 'chingoal.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': chingoal,
+        'NAME': 'chingoal',
         'USER': 'user',
         'PASSWORD': '12345',
         'HOST': 'localhost',
