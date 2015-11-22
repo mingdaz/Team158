@@ -141,6 +141,8 @@ def edit_profile(request):
 @login_required
 def view_profile(request, uname):
     context = {}
+    if request.user.newmsg.filter(isReply=True).count() > 10:
+        request.user.newmsg.filter(isReply=True).delete()
     cur_user = User.objects.get(username__exact = uname)
     context['username'] = uname
     context['uid'] = cur_user.id
@@ -333,9 +335,36 @@ def send(request,receiver_name, sender_name):
         ishout_client.emit(
             receiver.id,
             'alertchannel',
-            data = {'count':count,'time':str(datetime.now()), 'text':text, 'sender':sender, 'uname':receiver.username}
+            data = {'count':count,'time':str(datetime.now()), 'text':text, 'sender':sender, 'receiver':sender_name, 'msgid':newmsg.id}
         )
     return redirect(reverse('viewProfile', kwargs = {'uname':sender_name}))
+
+
+@login_required
+def reply(request,receiver_name, sender_name, replyid):
+    tmp = request.user.newmsg.get(id__exact = replyid)
+    tmp.isReply = True
+    tmp.save()
+    text = request.POST['textarea1']
+    sender = request.user.username
+    if len(text) > 0:
+        receiver = User.objects.get(username__exact = receiver_name)
+        newmsg = Newmsg(user=receiver, text=text, sender=sender)
+        newmsg.save()
+        count = receiver.newmsg.all().count()
+        ishout_client.emit(
+                           int(receiver.id),
+                           'alertchannel',
+                           data = {'count':count,'time':str(datetime.now()), 'text':text, 'sender':sender, 'receiver':sender_name, 'msgid':newmsg.id}
+                           )
+    return redirect(reverse('viewProfile', kwargs = {'uname':sender_name}))
+
+@login_required
+def dismiss(request, replyid):
+    tmp = request.user.newmsg.get(id__exact = replyid)
+    tmp.isReply = True
+    tmp.save()
+    return redirect(reverse('viewProfile', kwargs = {'uname':request.user.username}))
 
 
 

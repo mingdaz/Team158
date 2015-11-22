@@ -14,12 +14,13 @@
     ishout.on('alertchannel',function(data) {
 	      $("#newmsg").text(data.count);
               var list = $("#msglist");
-              var html = '<li><a data-toggle="modal" data-target="#reply_box'+data.count+'">\
+              var html = '<li><a data-toggle="modal" data-target="#reply_box'+data.msgid+'" style="color:red">\
                                 <i class="fa fa-comment fa-fw"></i>'+data.sender+'</a></li>';                                
               list.prepend(html);
               var list2 = $("#reply_box_list");
               var sendname = data.sender;
-              var html2 = '<div class="modal fade" id="reply_box'+data.count+'" tabindex="-1" role="dialog" \
+              var token = getCookie("csrftoken");
+              var html2 = '<div class="modal fade" id="reply_box'+data.msgid+'" tabindex="-1" role="dialog" \
                                 aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;"> \
                                 <div class="modal-dialog"> \
                                     <div class="modal-content"> \
@@ -30,15 +31,70 @@
                                         <div class="modal-body"> \
                                             <p>'+data.time+'</p> \
 									        <p>'+data.text+'</p> \
-                                            <input type="text" name="textarea1" style="width : 300px;" required> \
-                                            <button type="submit" class="btn btn-primary btn-sm replyBtn">Reply</button> \
+                                            <input type="text" class="textarea1" style="width : 300px;" required> \
+                                            <button type="submit" class="btn btn-primary btn-sm" id="replyBtn'+data.msgid+'"\
+                                                    receiver="'+data.receiver+'" sender="'+sendname+'" token="'+token+'" replyid="'+data.msgid+'">Reply</button> \
+                                            <a href="/account/dismiss/'+data.msgid+'" class="btn btn-primary btn-sm">Dismiss</a> \
                                     	</div> \
                                     </div> \
                                 </div>\
                                 </div>';
               list2.append(html2);
-    });
-    ishout.init();
+              bindReplyBtnListener("#replyBtn"+data.msgid);
+    }).on('alerts', function(data){
+        var sendTime = new Date().Format(". dd, yyyy, hh:mm:ss");
+          var month = new Array();
+          month[0] = "Jan";
+          month[1] = "Feb";
+          month[2] = "Mar";
+          month[3] = "Apr";
+          month[4] = "May";
+          month[5] = "Jun";
+          month[6] = "Jul";
+          month[7] = "Aug";
+          month[8] = "Sep";
+          month[9] = "Oct";
+          month[10] = "Nov";
+          month[11] = "Dec";
+          
+          var d = new Date();
+          var n = month[d.getMonth()];
+        var msg=data.text;
+        var name = data.username;
+        var content = "<span style='color: green'>"+name+"&nbsp;"+n+sendTime+"</span><br><span>"+"&nbsp;"+msg+"</span></br>";
+        $('#msg').val("");
+        $('#chatting').append(content);
+        var height = document.getElementById("chatting").scrollHeight;
+        $("#chatting").scrollTop(height);
+
+}).init();
+
+    
+    function bindReplyBtnListener(selector) {
+        $(selector).click(function(event) {
+            event.preventDefault();
+            var sender = $(this).attr("sender");
+            var receiver = $(this).attr("receiver");
+            var csrf = $(this).attr("token");
+            var data = $(".textarea1").val();
+            $(".textarea1").val('');
+            var id = $(this).attr("replyid");
+            $.post("/account/reply/"+sender+"/"+receiver+"/"+id, {'textarea1':data,'csrfmiddlewaretoken':csrf}, function(data) {
+                   
+            });
+        });
+    }
+
+    function getCookie(cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0; i<ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1);
+            if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+        }
+        return "";
+    }
 </script>
     {% block title-content %}
     <title>Chingoal_Dashboard</title>
