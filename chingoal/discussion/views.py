@@ -52,6 +52,8 @@ def discussion_home(request):
         flag = 1
 
     context = {'username' : request.user.username, 'posts' : post_replies,'flag':flag}
+    context['newmsgs'] = request.user.newmsg.all().order_by('-timestamp')
+    context['msgcount'] = request.user.newmsg.all().count()
     return render(request, 'discussion/discussion_board.html', context)
 
 
@@ -163,8 +165,6 @@ def index(request):
 @login_required
 def room(request, room_id):
     user = request.user
-    # context['newmsgs'] = request.user.newmsg.all().order_by('-timestamp')
-    # context['msgcount'] = request.user.newmsg.all().count()
     if Learner.objects.filter(user__exact=user):
         learner = Learner.objects.get(user__exact=user)
         learner.save()
