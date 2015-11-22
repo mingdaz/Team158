@@ -75,7 +75,10 @@
                     </a>
                     <ul id="msglist" class="dropdown-menu dropdown-user">
                         {% for msg in newmsgs %}
-                        <li><a data-toggle="modal" data-target="#reply_box{{ forloop.counter }}"><i class="fa fa-comment fa-fw"></i>{{msg.sender}}</a>
+                        <li>{% if msg.isReply %}<a data-toggle="modal" data-target="#reply_box{{ msg.id }}">
+                            {% else %}<a data-toggle="modal" data-target="#reply_box{{ msg.id }}" style="color:red;">
+                            {% endif %}
+                            <i class="fa fa-comment fa-fw"></i>{{msg.sender}}</a>
                         </li>
                         {% endfor %}
                     </ul>
@@ -339,7 +342,7 @@
                                 </div>
  <div id="reply_box_list">                               
     {% for msg in newmsgs %}
-<div class="modal fade" id="reply_box{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+<div class="modal fade" id="reply_box{{ msg.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                           <div class="modal-header">
@@ -349,9 +352,10 @@
                                            <div class="modal-body">
                                     <p>{{msg.timestamp}}</p>
 									<p>{{msg.text}}</p>
-									<form role="form" action="{% url 'send' msg.sender cur_username %}" method="post">
+									<form role="form" action="{% url 'reply' msg.sender cur_username msg.id %}" method="post">
                                         <input type="text" name="textarea1" style="width : 300px;" required>
                                         <button type="submit" class="btn btn-primary btn-sm">Reply</button>
+                                        <a href={% url 'dismiss' msg.id %} class="btn btn-primary btn-sm">Dismiss</a>
                                        {% csrf_token %}
                                     </form>
                                     		</div>
