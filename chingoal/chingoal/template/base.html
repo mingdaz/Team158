@@ -42,10 +42,26 @@
               list2.append(html2);
               bindReplyBtnListener("#replyBtn"+data.msgid);
     }).on('alerts', function(data){
-        var sendTime = new Date().Format("yyyy-MM-dd hh:mm:ss");
+        var sendTime = new Date().Format(". dd, yyyy, hh:mm:ss");
+          var month = new Array();
+          month[0] = "Jan";
+          month[1] = "Feb";
+          month[2] = "Mar";
+          month[3] = "Apr";
+          month[4] = "May";
+          month[5] = "Jun";
+          month[6] = "Jul";
+          month[7] = "Aug";
+          month[8] = "Sep";
+          month[9] = "Oct";
+          month[10] = "Nov";
+          month[11] = "Dec";
+          
+          var d = new Date();
+          var n = month[d.getMonth()];
         var msg=data.text;
         var name = data.username;
-        var content = "<span style='color: green'>"+name+"&nbsp;"+sendTime+"</span><br><span>"+"&nbsp;"+msg+"</span></br>";
+        var content = "<span style='color: green'>"+name+"&nbsp;"+n+sendTime+"</span><br><span>"+"&nbsp;"+msg+"</span></br>";
         $('#msg').val("");
         $('#chatting').append(content);
         var height = document.getElementById("chatting").scrollHeight;
