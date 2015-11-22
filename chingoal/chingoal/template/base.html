@@ -11,9 +11,7 @@
     {% load drealtimetags %}
 {% ishout_js %}
 <script type="text/javascript">
-    console.log("receive alert");
     ishout.on('alertchannel',function(data) {
-              alert("send")
               $("#newmsg").text(data.count);
               var list = $("#msglist");
               var html = '<li><a data-toggle="modal" data-target="#reply_box'+data.count+'">\
@@ -33,7 +31,7 @@
                                             <p>'+data.time+'</p> \
 									        <p>'+data.text+'</p> \
                                             <input type="text" name="textarea1" style="width : 300px;" required> \
-                                            <button type="submit" class="btn btn-primary btn-sm">Reply</button> \
+                                            <button type="submit" class="btn btn-primary btn-sm replyBtn">Reply</button> \
                                     	</div> \
                                     </div> \
                                 </div>\
