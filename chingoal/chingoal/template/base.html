@@ -41,8 +41,18 @@
                                 </div>';
               list2.append(html2);
               bindReplyBtnListener("#replyBtn"+data.msgid);
-    });
-    ishout.init();
+    }).on('alerts', function(data){
+        var sendTime = new Date().Format("yyyy-MM-dd hh:mm:ss");
+        var msg=data.text;
+        var name = data.username;
+        var content = "<span style='color: green'>"+name+"&nbsp;"+sendTime+"</span><br><span>"+"&nbsp;"+msg+"</span></br>";
+        $('#msg').val("");
+        $('#chatting').append(content);
+        var height = document.getElementById("chatting").scrollHeight;
+        $("#chatting").scrollTop(height);
+
+}).init();
+
     
     function bindReplyBtnListener(selector) {
         $(selector).click(function(event) {

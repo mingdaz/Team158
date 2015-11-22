@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^createRoom$', 'discussion.views.newRoom',name='createRoom'),
     url(r'^update/$', 'discussion.views.updateRoom'),
     url(r'^delete/(?P<rid>\d+)$','discussion.views.deleteRoom',name='deleteRoom'),
+    url(r'^send-message/(?P<room_id>\d+)/(?P<user_id>\d+)$', 'discussion.views.send_message', name = 'send-message'),
    ]

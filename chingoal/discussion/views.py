@@ -14,6 +14,9 @@ from models import *
 from account.models import *
 import time
 import json
+from itertools import chain
+from drealtime import iShoutClient
+ishout_client = iShoutClient()
 
 @login_required
 # @transaction.atomic
@@ -167,6 +170,17 @@ def index(request):
 @login_required
 def room(request, room_id):
     user = request.user
+    ishout_client.register_group(
+        user.id,
+        room_id
+    )
+
+    roomObj = ChatRoom.objects.get(id=room_id)
+    chatpoolObj = ChatPool.objects.filter(roomname=roomObj)
+    msglist = []
+    for i in chatpoolObj:
+        msglist.append(i)
+        print i
     if Learner.objects.filter(user__exact=user):
         learner = Learner.objects.get(user__exact=user)
         learner.save()
@@ -182,7 +196,7 @@ def room(request, room_id):
     userlist = []
     for i in userlObj:
         userlist.append(i.username)
-    return render_to_response('discussion/room.html', {'user': user, 'roomObj': roomObj, 'userlist': userlist,
+    return render(request,'discussion/room.html', {'user': user, 'roomObj': roomObj, 'userlist': userlist,'msglist':msglist,
                                                        'newmsgs' :user.newmsg.all().order_by('-timestamp'),
                                                        'cur_username':user.username,'msgcount':user.newmsg.all().count()})
 
@@ -257,3 +271,18 @@ def updateRoom(request):
         r = {'roomname': room.roomname, 'id': room.id, 'owner':room.owner}
         json['rooms'].append(r)
     return JsonResponse(json)
+
+def send_message(request, room_id, user_id):
+    text=request.POST['text']
+
+    sender = request.user
+    if len(text) > 0:
+        roomObj = ChatRoom.objects.get(id=room_id)
+        s = ChatPool(roomname=roomObj, msg=text, sender=request.user.username)
+        s.save()
+        ishout_client.broadcast_group(
+            room_id,
+            'alerts',
+            data = {'text':text,'username':request.user.username}
+        )
+    return redirect(reverse('room', kwargs = {'room_id':room_id}))
