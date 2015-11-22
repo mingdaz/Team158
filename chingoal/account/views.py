@@ -410,9 +410,9 @@ def send(request,receiver_name, sender_name):
         newmsg.save()
         count = receiver.newmsg.all().count()
         ishout_client.emit(
-            int(receiver.id),
+            receiver.id,
             'alertchannel',
-            data = {'count':count,'time':str(datetime.now()), 'text':text, 'sender':sender}
+            data = {'count':count,'time':str(datetime.now()), 'text':text, 'sender':sender, 'uname':receiver.username}
         )
     return redirect(reverse('viewProfile', kwargs = {'uname':sender_name}))
 

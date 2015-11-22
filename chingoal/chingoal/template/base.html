@@ -13,8 +13,8 @@
 <script type="text/javascript">
     
     ishout.on('alertchannel',function(data) {
-              console.log("receive alert");
-              $("#newmsg").text(data.count);
+             
+	      $("#newmsg").text(data.count);
               var list = $("#msglist");
               var html = '<li><a data-toggle="modal" data-target="#reply_box'+data.count+'">\
                                 <i class="fa fa-comment fa-fw"></i>'+data.sender+'</a></li>';                                
