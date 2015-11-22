@@ -163,6 +163,8 @@ def index(request):
 @login_required
 def room(request, room_id):
     user = request.user
+    # context['newmsgs'] = request.user.newmsg.all().order_by('-timestamp')
+    # context['msgcount'] = request.user.newmsg.all().count()
     if Learner.objects.filter(user__exact=user):
         learner = Learner.objects.get(user__exact=user)
         learner.save()
@@ -178,7 +180,9 @@ def room(request, room_id):
     userlist = []
     for i in userlObj:
         userlist.append(i.username)
-    return render_to_response('discussion/room.html', {'user': user, 'roomObj': roomObj, 'userlist': userlist})
+    return render_to_response('discussion/room.html', {'user': user, 'roomObj': roomObj, 'userlist': userlist,
+                                                       'newmsgs' :user.newmsg.all().order_by('-timestamp'),
+                                                       'cur_username':user.username,'msgcount':user.newmsg.all().count()})
 
 @login_required
 def getmsg(request):
