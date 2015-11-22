@@ -160,7 +160,9 @@ def index(request):
     else:
         flag = 1
     RoomObj = ChatRoom.objects.all()
-    return render(request, 'discussion/index.html', {'username': user.username, 'RoomObj': RoomObj,'flag':flag})
+    return render(request, 'discussion/index.html', {'username': user.username, 'RoomObj': RoomObj,'flag':flag,
+                                                     'newmsgs':user.newmsg.all().order_by('-timestamp'),
+                                                     'msgcount':user.newmsg.all().count()})
 
 @login_required
 def room(request, room_id):
