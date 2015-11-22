@@ -45,12 +45,12 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    #PROJECT_PATH + '/static/',
-    BASE_DIR + '/home/static',
-    BASE_DIR + '/account/static',
-    BASE_DIR + '/discussion/static',
-    BASE_DIR + '/store/static',
-    BASE_DIR + '/testpage/static',
+    PROJECT_PATH + '/static/',
+    #BASE_DIR + '/home/static',
+                    # BASE_DIR + '/account/static',
+                    #BASE_DIR + '/discussion/static',
+                    #BASE_DIR + '/store/static',
+                    #BASE_DIR + '/testpage/static',
 )
 
 
