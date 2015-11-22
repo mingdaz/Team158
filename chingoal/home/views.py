@@ -17,8 +17,6 @@ from account.forms import *
 # Create your views here.
 def homepage(request):
     context = {}
-    context['newmsgs'] = request.user.newmsg.all().order_by('-timestamp')
-    context['msgcount'] = request.user.newmsg.all().count()
     context['username'] = request.user.username
     return render(request, 'home.html', context)
 
