@@ -162,6 +162,35 @@ def test_set_level(request,test_id):
 		flag = 0
 	return render(request, 'item.json', {"item":"","id":0,"flag":flag}, content_type='application/json')
 
+@login_required
+def next_questions(request):
+	# print request.POST
+	qid = int(request.POST['qid'])
+	qnum = int(request.POST['qnum'])
+	if qid==-1:
+		qnum = 0
+		learner = Learner.objects.get(user__exact = request.user)
+		newtest = Test.objects.filter(level = learner.current_level)[6]
+		qid = newtest.id
+		question = newtest.question.all()[0]
+		length = len(newtest.question.all())
+	else:
+		print "else"
+		newtest = Test.objects.get(id = qid)
+		length = len(newtest.question.all())
+		if qnum<length:
+			question = newtest.question.all()[qnum]
+		else:
+			question = newtest.question.all()[0]
+	qtype = question.qtype
+	qnum = qnum+1
+	if qtype=="tr":
+		itemTemplate = loader.get_template('test-tr.html')
+	else:
+		itemTemplate = loader.get_template('test-mc.html')
+
+	item = itemTemplate.render({"item":question}).replace('\n','').replace('\"','\'') #More escaping might be needed
+	return render(request, 'testcontent.json', {"item":item,"id":qid,"flag":1,"qnum":qnum,"max":length}, content_type='application/json')
 
 @login_required
 def get_learning(request):

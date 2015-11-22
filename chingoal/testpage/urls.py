@@ -29,4 +29,5 @@ urlpatterns = [
     url(r'^learning-edit-question$','testpage.views.learning_edit_question',name ='learningeditquestion' ),
     url(r'^learning-delete-question$','testpage.views.learning_delete_question',name ='learningdelete_question' ),
     url(r'^learning-post$','testpage.views.learning_post',name ='learningpost' ),
+    url(r'^next-questions$','testpage.views.next_questions',name ='nextquestions' ),
 ]
