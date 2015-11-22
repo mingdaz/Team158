@@ -52,6 +52,8 @@ def discussion_home(request):
         flag = 1
 
     context = {'username' : request.user.username, 'posts' : post_replies,'flag':flag}
+    context['newmsgs'] = request.user.newmsg.all().order_by('-timestamp')
+    context['msgcount'] = request.user.newmsg.all().count()
     return render(request, 'discussion/discussion_board.html', context)
 
 
@@ -158,7 +160,9 @@ def index(request):
     else:
         flag = 1
     RoomObj = ChatRoom.objects.all()
-    return render(request, 'discussion/index.html', {'username': user.username, 'RoomObj': RoomObj,'flag':flag})
+    return render(request, 'discussion/index.html', {'username': user.username, 'RoomObj': RoomObj,'flag':flag,
+                                                     'newmsgs':user.newmsg.all().order_by('-timestamp'),
+                                                     'msgcount':user.newmsg.all().count()})
 
 @login_required
 def room(request, room_id):
@@ -178,7 +182,9 @@ def room(request, room_id):
     userlist = []
     for i in userlObj:
         userlist.append(i.username)
-    return render_to_response('discussion/room.html', {'user': user, 'roomObj': roomObj, 'userlist': userlist})
+    return render_to_response('discussion/room.html', {'user': user, 'roomObj': roomObj, 'userlist': userlist,
+                                                       'newmsgs' :user.newmsg.all().order_by('-timestamp'),
+                                                       'cur_username':user.username,'msgcount':user.newmsg.all().count()})
 
 @login_required
 def getmsg(request):

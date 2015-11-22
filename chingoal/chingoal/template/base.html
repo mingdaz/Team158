@@ -11,9 +11,7 @@
     {% load drealtimetags %}
 {% ishout_js %}
 <script type="text/javascript">
-    
     ishout.on('alertchannel',function(data) {
-             
 	      $("#newmsg").text(data.count);
               var list = $("#msglist");
               var html = '<li><a data-toggle="modal" data-target="#reply_box'+data.count+'">\
