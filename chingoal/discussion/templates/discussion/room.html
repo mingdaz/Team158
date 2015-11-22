@@ -88,7 +88,7 @@
 	<div class="row">
 		<div style="width: 600px;height: 500px;border: 1px solid #000000;float: left;margin-left: 200px;overflow: auto;" id="chatting">
 			{% for message in msglist %}
-			<span style="color: green"> {{message.sender.username}} &nbsp {{message.time}} </span><br>
+			<span style="color: green"> {{message.sender}} &nbsp {{message.time}} </span><br>
 			<span> &nbsp {{message.msg}}</span></br>
 			{% endfor %}
 		</div>
