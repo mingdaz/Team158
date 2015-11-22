@@ -272,17 +272,16 @@ def updateRoom(request):
         json['rooms'].append(r)
     return JsonResponse(json)
 
-def send_message(request, room_id, user_id):
-    text=request.POST['text']
-
-    sender = request.user
+def send_message(request, room_id):
+    text=request.POST.get('text')
+    uname=request.POST.get('username')
     if len(text) > 0:
         roomObj = ChatRoom.objects.get(id=room_id)
-        s = ChatPool(roomname=roomObj, msg=text, sender=request.user.username)
+        s = ChatPool(roomname=roomObj, msg=text, sender=uname)
         s.save()
         ishout_client.broadcast_group(
             room_id,
             'alerts',
-            data = {'text':text,'username':request.user.username}
+            data = {'text':text,'username':uname}
         )
-    return redirect(reverse('room', kwargs = {'room_id':room_id}))
+    return HttpResponse("OK")
