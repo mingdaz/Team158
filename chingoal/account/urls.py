@@ -20,4 +20,6 @@ urlpatterns = [
     url(r'^confirm/(?P<activation_key>\w+)/', ('account.views.register_confirm')),
     url(r'^get_photo/(?P<username>.*)$', 'account.views.get_photo', name = 'get_photo'),
     url(r'^send/(?P<receiver_name>\w+)/(?P<sender_name>\w+)$', 'account.views.send', name = 'send'),
+    url(r'^reply/(?P<receiver_name>\w+)/(?P<sender_name>\w+)/(?P<replyid>\d+)$', 'account.views.reply', name = 'reply'),
+    url(r'^dismiss/(?P<replyid>\d+)$', 'account.views.dismiss', name = 'dismiss'),
 ]

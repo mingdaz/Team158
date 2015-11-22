@@ -17,14 +17,18 @@ from account.forms import *
 # Create your views here.
 def homepage(request):
     context = {}
+    context['newmsgs'] = request.user.newmsg.all().order_by('-timestamp')
+    context['msgcount'] = request.user.newmsg.all().count()
+    context['username'] = request.user.username
     return render(request, 'home.html', context)
 
 @login_required
 def home(request):
     context = {}
     cur_user = request.user
-    
     context['username'] = cur_user.username
+    context['newmsgs'] = request.user.newmsg.all().order_by('-timestamp')
+    context['msgcount'] = request.user.newmsg.all().count()
     if Learner.objects.filter(user = request.user):
         learner = Learner.objects.get(user = cur_user)
         context['cur_user'] = learner

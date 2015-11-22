@@ -40,6 +40,7 @@ class Newmsg(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     text = models.CharField(max_length = 420)
     sender = models.CharField(max_length = 40)
+    isReply = models.BooleanField(default = False)
     def __unicode__(self):
         return self.text
 
