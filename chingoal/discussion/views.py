@@ -180,7 +180,7 @@ def room(request, room_id):
     msglist = []
     for i in chatpoolObj:
         msglist.append(i)
-
+        print i
     if Learner.objects.filter(user__exact=user):
         learner = Learner.objects.get(user__exact=user)
         learner.save()
