@@ -12,6 +12,8 @@
 
   {% block main-content %}
   {% csrf_token %}
+	<span class="hide" name="room_id">{{roomObj.id}}</span>
+    <span class="hide" name="user_id">{{user.id}}</span>
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header page-scroll">
@@ -84,15 +86,24 @@
 	<h3 style="margin-left:200px;">Current Room: {{ roomObj.roomname }}</h3>
 	</div>
 	<div class="row">
-		<div style="width: 600px;height: 500px;border: 1px solid #000000;float: left;margin-left: 200px;overflow: auto;" id="chatting"></div>
+		<div style="width: 600px;height: 500px;border: 1px solid #000000;float: left;margin-left: 200px;overflow: auto;" id="chatting">
+			{% for message in msglist %}
+			<span style="color: green"> {{message.sender.username}} &nbsp {{message.time}} </span><br>
+			<span> &nbsp {{message.msg}}</span></br>
+			{% endfor %}
+		</div>
 		<div class="text-center" style="width: 200px;height: 500px;border: 1px solid #000000;float: left;margin-left: 20px;">
 			<div style="border-bottom: 1px solid #000000;"><h4>OnlineList:</h4></div>
 			<ul id="onlinelist" class="list-group" style="overflow: auto;height: 458px;">
 			</ul>
 		</div>
 	</div>
-		<textarea id="msg" style="border: 1px solid #000000;resize: none;margin-top: 20px;margin-left:185px;width: 550px;height: 80px;"></textarea>
-		<button id="sendmsg" class="btn btn-success" style="width: 100px;height: 50px; margin-top: -71px;margin-left: 15px;font-size: 20px;border-radius: 0">Send</button>
+	 <form role="form" action="{% url 'send-message' roomObj.id user.id%}" method="post">
+			<textarea id="msg" name="text" style="border: 1px solid #000000;resize: none;margin-top: 20px;margin-left:185px;width: 550px;height: 80px;"></textarea>
+			<button type="submit" class="btn btn-primary btn-sm">Send</button>
+		   {% csrf_token %}
+	 </form>
+		<!--<button id="sendmsg" class="btn btn-success" style="width: 100px;height: 50px; margin-top: -71px;margin-left: 15px;font-size: 20px;border-radius: 0">Send</button>-->
 	</section>
 {% endblock %} 
 {% block model-define %}
@@ -216,7 +227,7 @@
 			var roomid={{ roomObj.id }};
 			var userid={{ user.id }};
 			var data = {roomid: roomid, userid: userid};
-			syncrequest('/discussion/getmsg/',data,'get',updatechatting);
+			<!--syncrequest('/discussion/getmsg/',data,'get',updatechatting);-->
 			syncrequest('/discussion/onlinelist/',data,'get',updateonlinelist);
 		},1000);
 
