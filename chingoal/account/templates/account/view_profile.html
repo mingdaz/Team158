@@ -311,54 +311,6 @@
     {% block origin-script %}
     {% endblock %}
 
-{% block model-define %}
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-               <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="color:#FFD000;">×</button>
-               <h4>Edit your schedule</h4>
-            </div>
-            <div class="modal-body">
-                <form role="form" action="{% url 'editSchedule' %}" method="post">
-                    <div class="form-group">
-                        <!-- <label>Text area</label> -->
-                        {% for field in scheduleForm.visible_fields %}
-                            {{field.label_tag}} {{field}}
-                            <br>
-                        {% endfor %}
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-                    {% csrf_token %}
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<div id="reply_box_list">
-    {% for msg in newmsgs %}
-    <div class="modal fade" id="reply_box{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                <h4>From: {{msg.sender}}</h4>
-                           </div>
-                           <div class="modal-body">
-                             <p>{{msg.timestamp}}</p>
-                             <p>{{msg.text}}</p>
-                            <form role="form" action="{% url 'send' msg.sender cur_username %}" method="post">
-                                <input type="text" name="textarea1" style="width : 300px;" required>
-                                <button type="submit" class="btn btn-primary btn-sm">Reply</button>
-                               {% csrf_token %}
-                            </form>
-                           </div>
-                        </div>
-                    </div>
-                </div>
-        {% endfor %}
-</div>
-{% endblock %}
 
 {% block script-content %}
     <script src="{% static "js/view_profile.js"%}"></script>    
