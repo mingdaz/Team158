@@ -45,12 +45,16 @@ def get_learn(request,level,lesson):
 	learner = Learner.objects.get(user = cur_user)
 	context['cur_user'] = learner
 
-	learn_matrial = Learn.objects.get(level__exact = level, lesson__exact = lesson)
-	ltype = learn_matrial.ltype
-	if ltype == 'text':
-		return render(request, 'testpage/learn.html', context)
-	else:
-		return render(request, 'testpage/learn_audio.html', context)
+	# learn_matrial = Learn.objects.filter(level__exact = level, lesson__exact = lesson)	
+	# ltype = learn_matrial.ltype
+	# if ltype == 'text':
+	# 	return render(request, 'testpage/learn.html', context)
+	# else:
+	# 	return render(request, 'testpage/learn_audio.html', context)
+
+	print learner.current_level
+
+	return render(request, 'testpage/learn.html', context)
 
 @login_required
 def get_result(request):
@@ -387,3 +391,11 @@ def upload_audio_learn(request):
 	form.save()
 
 	return render(request, 'testpage/upload_text_learn.html', {})
+
+def learn_audio(request):
+	context = {}
+	context['username'] = request.user.username
+	cur_user = User.objects.get(username__exact = context['username'])
+	learner = Learner.objects.get(user = cur_user)
+	context['cur_user'] = learner
+	return render(request, 'testpage/learn_audio.html', context)
