@@ -265,6 +265,11 @@ def next_questions(request):
 	return render(request, 'testcontent.json', {"item":item,"id":qid,"flag":flag,"qnum":qnum,"max":length}, content_type='application/json')
 
 @login_required
+def learn_audio(request):
+	context = {}
+	return render(request, 'testpage/audio.html', context)
+
+@login_required
 def get_learning(request):
 	context = {}
 	context['username'] = request.user.username
