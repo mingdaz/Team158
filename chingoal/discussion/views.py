@@ -184,9 +184,11 @@ def room(request, room_id):
     if Learner.objects.filter(user__exact=user):
         learner = Learner.objects.get(user__exact=user)
         learner.save()
+        flag= 0
     else:
         teacher = Teacher.objects.get(user__exact=user)
         teacher.save()
+        flag= 1
     roomObj = ChatRoom.objects.get(id=room_id)
     result = RoomAccount.objects.filter(username=user, roomname=roomObj)
     if not result:
@@ -196,7 +198,8 @@ def room(request, room_id):
     userlist = []
     for i in userlObj:
         userlist.append(i.username)
-    return render(request,'discussion/room.html', {'user': user, 'roomObj': roomObj, 'userlist': userlist,'msglist':msglist,
+    return render(request,'discussion/room.html', {'user': user, 'roomObj': roomObj,'flag': flag,
+                                                   'userlist': userlist,'msglist':msglist,
                                                        'newmsgs' :user.newmsg.all().order_by('-timestamp'),
                                                        'cur_username':user.username,'msgcount':user.newmsg.all().count()})
 
