@@ -278,7 +278,13 @@ def newRoom(request):
 @login_required
 def deleteRoom(request,rid):
     if len(ChatRoom.objects.filter(id = rid))>0:
-        ChatRoom.objects.filter(id__exact= rid).delete()
+        roomObj = ChatRoom.objects.get(id__exact= rid)
+        ishout_client.broadcast_group(
+            rid,
+            'deletechannel',
+            data = {'roomname':roomObj.roomname}
+        )
+        roomObj.delete()
     return redirect("/discussion/chat")
 
 @login_required
@@ -286,6 +292,7 @@ def updateRoom(request):
     rooms = ChatRoom.objects.all()
     json = {}
     json['rooms'] = []
+    json['cur_username']=request.user.username
     for room in rooms:
         print room.roomname
         r = {'roomname': room.roomname, 'id': room.id, 'owner':room.owner}
