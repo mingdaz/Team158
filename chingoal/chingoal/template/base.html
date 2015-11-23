@@ -68,7 +68,9 @@
         var height = document.getElementById("chatting").scrollHeight;
         $("#chatting").scrollTop(height);
 
-}).init();
+    }).on('deletechannel', function(data) {
+         alert("Room "+data.roomname+" has been deleted!");
+    }).init();
 
     
     function bindReplyBtnListener(selector) {
