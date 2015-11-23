@@ -31,4 +31,7 @@ urlpatterns = [
     url(r'^learning-post$','testpage.views.learning_post',name ='learningpost' ),
     url(r'^next-questions$','testpage.views.next_questions',name ='nextquestions' ),
     url(r'^question-result$','testpage.views.question_result',name ='questionresult'),
+
+    url(r'^upload-text-learn$','testpage.views.upload_text_learn',name='uploadtextlearn'),
+    url(r'^upload-audio-learn$','testpage.views.upload_audio_learn',name='uploadaudiolearn'),
 ]
