@@ -34,4 +34,7 @@ urlpatterns = [
 
     url(r'^upload-text-learn$','testpage.views.upload_text_learn',name='uploadtextlearn'),
     url(r'^upload-audio-learn$','testpage.views.upload_audio_learn',name='uploadaudiolearn'),
+
+    # This is for presentation
+    url(r'^learn-audio$','testpage.views.learn_audio', name = 'learnaudio'),
 ]
