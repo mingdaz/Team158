@@ -12,6 +12,10 @@ def home(request):
     context['username'] = request.user.username
     context['newmsgs'] = request.user.newmsg.all().order_by('-timestamp')
     context['msgcount'] = request.user.newmsg.all().count()
+    if request.user.newmsg.filter(isReply=False):
+        context['hasnewmsg'] = 'yes'
+    else:
+        context['hasnewmsg'] = 'no'
     return render(request,'store/store.html',context)
 
 @login_required
