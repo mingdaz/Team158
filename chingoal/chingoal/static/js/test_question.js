@@ -13,6 +13,16 @@ function getCookie(name) {
     return cookieValue;
 }
 
+function update(){
+    var list = $("#question");
+    var array = list.find("li");
+    for ( var i = 1; i <= array.length; i++ ) {
+        var tmp = $(array[i-1]);
+        tmp.find(".question-num").html(i);
+        tmp.find(".save-btn").click(btnsave);
+    }
+    // list.data("max-entry",array.length);
+}
 
 function postmytest(){
     var list = $("#question");
@@ -62,42 +72,6 @@ function postmytest(){
     }
 
 
-function getMultipleChoice() {
-    var list = $("#question"); 
-    // var max_entry = list.data("max-entry")
-   
-    $.get("/testpage/test-add-q-mc")
-      .done(function(data) {
-              item = data.html;
-              var new_item = $(item);
-              
-              new_item.find('.save-btn').click(btnsave);
-              new_item.find('.delete-btn').click(btndelete);
-              
-              new_item.data("item-id", data.id);
-              list.append(new_item);
-              update()
-      });
-}
-
-function getTranslate() {
-    var list = $("#question"); 
-    // var max_entry = list.data("max-entry")
-
-    $.get("/testpage/test-add-q-tr")
-      .done(function(data) {
-              item = data.html;
-              var new_item = $(item);
-              
-              new_item.find('.save-btn').click(btnsave);
-              new_item.find('.delete-btn').click(btndelete);
-
-              new_item.data("item-id", data.id);
-              list.append(new_item);
-              update();
-      });
-}
-
 function btnsave()
 {
     var frm = $(event.target).parent().parent().parent();
@@ -107,8 +81,8 @@ function btnsave()
             url: frm.attr('action'),
             data: frm.serialize(),
             success: function (data) {
-                frm.html($(data.html).find('.panel'));
-                frm.find('.delete-btn').click(btndelete);
+            //     frm.html($(data.html).find('.panel'));
+            //     frm.find('.delete-btn').click(btndelete);
                 
                 var btn = list.find('.save-btn');
                 if(data.flag==1){
@@ -145,31 +119,14 @@ function btnedit()
     frm.find("input").prop('disabled', false);
 }
 
-function btndelete()
-{
-    var id = $(event.target).parent().parent().parent().parent().data("item-id");
-    var rm = $(event.target).parent().parent().parent().parent()
-    $.ajax({
-            type: 'POST',
-            url: '/testpage/test-delete-question/'+id,
-            success: function (data) {
-              rm.remove();
-              update();
-            },
-            error: function(data) {
-                alert("Something went wrong!");
-            }
-        });
-    
-}
 
 $(document).ready(function () {  
-  // $("#question").data("max-entry",0);
+    // $("#question").data("max-entry",0);
 
-  $("#question-mc").click(getMultipleChoice);
-  $("#question-tr").click(getTranslate);
-  $("#posttest").click(postmytest);
-
+  // $("#question-mc").click(getMultipleChoice);
+  // $("#question-tr").click(getTranslate);
+  $("#submittest").click(postmytest);
+  update();
 
   var csrftoken = getCookie('csrftoken');
   $(".needcsrf").val(csrftoken);

@@ -51,6 +51,8 @@ STATICFILES_DIRS = (
     # BASE_DIR + '/discussion/static',
     # BASE_DIR + '/store/static',
     # BASE_DIR + '/testpage/static',
+    # '/usr/local/lib/python2.7/dist-packages/drealtime/templatetags',
+
 )
 
 
@@ -73,9 +75,9 @@ INSTALLED_APPS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'drealtime.middleware.iShoutCookieMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'drealtime.middleware.iShoutCookieMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',

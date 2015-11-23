@@ -143,6 +143,10 @@ def view_profile(request, uname):
     context = {}
     if request.user.newmsg.filter(isReply=True).count() > 10:
         request.user.newmsg.filter(isReply=True).delete()
+    if request.user.newmsg.filter(isReply=False):
+        context['hasnewmsg'] = 'yes'
+    else:
+        context['hasnewmsg'] = 'no'
     cur_user = User.objects.get(username__exact = uname)
     context['username'] = uname
     context['uid'] = cur_user.id
@@ -333,7 +337,7 @@ def send(request,receiver_name, sender_name):
         newmsg.save()
         count = receiver.newmsg.all().count()
         ishout_client.emit(
-            int(receiver.id),
+            receiver.id,
             'alertchannel',
             data = {'count':count,'time':str(datetime.now()), 'text':text, 'sender':sender, 'receiver':sender_name, 'msgid':newmsg.id}
         )

@@ -43,16 +43,23 @@
                         <a class="page-scroll" href="#">Store</a>                       
                     </li>
                     <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                             <i class="fa fa-envelope fa-fw"></i><i id="newmsg">{{msgcount}}</i><i class="fa fa-caret-down"></i>
-                    </a>
-                    <ul id="msglist" class="dropdown-menu dropdown-user">
-                        {% for msg in newmsgs %}
-                        <li><a data-toggle="modal" data-target="#reply_box{{ forloop.counter }}"><i class="fa fa-comment fa-fw"></i>{{msg.sender}}</a>
-                        </li>
-                        {% endfor %}
-                    </ul>
-					</li>
+                        {% if hasnewmsg == 'no' %}
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="msgbar">
+                            {% else %}
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="msgbar" style="color:red">
+                                {% endif %}
+                            <i class="fa fa-envelope fa-fw"></i><i id="newmsg">{{msgcount}}</i><i class="fa fa-caret-down"></i>
+                        </a>
+                        <ul id="msglist" class="dropdown-menu dropdown-user">
+                            {% for msg in newmsgs %}
+                            <li>{% if msg.isReply %}<a data-toggle="modal" data-target="#reply_box{{ msg.id }}">
+                                {% else %}<a data-toggle="modal" data-target="#reply_box{{ msg.id }}" style="color:red;">
+                                    {% endif %}
+                                    <i class="fa fa-comment fa-fw"></i>{{msg.sender}}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
                     <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                              <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
@@ -222,29 +229,30 @@
 
 {% endblock %}
  {% block model-define %}
-<div id="reply_box_list">
-    {% for msg in newmsgs %}
-    <div class="modal fade" id="reply_box{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                <h4>From: {{msg.sender}}</h4>
-                           </div>
-                           <div class="modal-body">
-                             <p>{{msg.timestamp}}</p>
-                             <p>{{msg.text}}</p>
-                            <form role="form" action="{% url 'send' msg.sender username %}" method="post">
-                                <input type="text" name="textarea1" style="width : 300px;" required>
-                                <button type="submit" class="btn btn-primary btn-sm">Reply</button>
-                               {% csrf_token %}
-                            </form>
-                           </div>
-                        </div>
-                    </div>
-                </div>
-        {% endfor %}
-</div>
+ <div id="reply_box_list">
+     {% for msg in newmsgs %}
+     <div class="modal fade" id="reply_box{{ msg.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+         <div class="modal-dialog">
+             <div class="modal-content">
+                 <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                     <h4>From: {{msg.sender}}</h4>
+                 </div>
+                 <div class="modal-body">
+                     <p>{{msg.timestamp}}</p>
+                     <p>{{msg.text}}</p>
+                     <form role="form" action="{% url 'reply' msg.sender username msg.id %}" method="post">
+                         <input type="text" name="textarea1" style="width : 300px;" required>
+                             <button type="submit" class="btn btn-primary btn-sm">Reply</button>
+                             <a href={% url 'dismiss' msg.id %} class="btn btn-primary btn-sm">Dismiss</a>
+                             {% csrf_token %}
+                             </form>
+                 </div>
+             </div>
+         </div>
+     </div>
+     {% endfor %}
+ </div>
 {% endblock %}
 
 {% block origin-script %}

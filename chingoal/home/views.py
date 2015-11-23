@@ -36,4 +36,8 @@ def home(request):
         teacher = Teacher.objects.get(user = cur_user)
         context['cur_user'] = teacher
         context['flag'] = 1
+    if request.user.newmsg.filter(isReply=False):
+        context['hasnewmsg'] = 'yes'
+    else:
+        context['hasnewmsg'] = 'no'
     return render(request, 'dashboard.html', context)

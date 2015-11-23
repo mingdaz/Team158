@@ -57,6 +57,10 @@ def discussion_home(request):
     context = {'username' : request.user.username, 'posts' : post_replies,'flag':flag}
     context['newmsgs'] = request.user.newmsg.all().order_by('-timestamp')
     context['msgcount'] = request.user.newmsg.all().count()
+    if request.user.newmsg.filter(isReply=False):
+        context['hasnewmsg'] = 'yes'
+    else:
+        context['hasnewmsg'] = 'no'
     return render(request, 'discussion/discussion_board.html', context)
 
 
@@ -163,7 +167,11 @@ def index(request):
     else:
         flag = 1
     RoomObj = ChatRoom.objects.all()
-    return render(request, 'discussion/index.html', {'username': user.username, 'RoomObj': RoomObj,'flag':flag,
+    if request.user.newmsg.filter(isReply=False):
+        hasnewmsg = 'yes'
+    else:
+        hasnewmsg = 'no'
+    return render(request, 'discussion/index.html', {'username': user.username, 'hasnewmsg':hasnewmsg,'RoomObj': RoomObj,'flag':flag,
                                                      'newmsgs':user.newmsg.all().order_by('-timestamp'),
                                                      'msgcount':user.newmsg.all().count()})
 
@@ -174,7 +182,10 @@ def room(request, room_id):
         user.id,
         room_id
     )
-
+    if request.user.newmsg.filter(isReply=False):
+        hasnewmsg = 'yes'
+    else:
+        hasnewmsg = 'no'
     roomObj = ChatRoom.objects.get(id=room_id)
     chatpoolObj = ChatPool.objects.filter(roomname=roomObj)
     msglist = []
@@ -184,9 +195,11 @@ def room(request, room_id):
     if Learner.objects.filter(user__exact=user):
         learner = Learner.objects.get(user__exact=user)
         learner.save()
+        flag= 0
     else:
         teacher = Teacher.objects.get(user__exact=user)
         teacher.save()
+        flag= 1
     roomObj = ChatRoom.objects.get(id=room_id)
     result = RoomAccount.objects.filter(username=user, roomname=roomObj)
     if not result:
@@ -196,7 +209,9 @@ def room(request, room_id):
     userlist = []
     for i in userlObj:
         userlist.append(i.username)
-    return render(request,'discussion/room.html', {'user': user, 'roomObj': roomObj, 'userlist': userlist,'msglist':msglist,
+
+    return render(request,'discussion/room.html', {'user': user, 'roomObj': roomObj,'flag': flag,
+                                                   'userlist': userlist,'msglist':msglist,'hasnewmsg':hasnewmsg,
                                                        'newmsgs' :user.newmsg.all().order_by('-timestamp'),
                                                        'cur_username':user.username,'msgcount':user.newmsg.all().count()})
 
@@ -226,6 +241,11 @@ def exituser(request):
     userObj = User.objects.get(id=userid)
     u = RoomAccount.objects.filter(username=userObj, roomname=roomObj)
     u.delete()
+    ishout_client.unregister_group(
+        userid,
+        roomid
+    )
+
     return HttpResponse("OK")
 
 @login_required
@@ -258,7 +278,13 @@ def newRoom(request):
 @login_required
 def deleteRoom(request,rid):
     if len(ChatRoom.objects.filter(id = rid))>0:
-        ChatRoom.objects.filter(id__exact= rid).delete()
+        roomObj = ChatRoom.objects.get(id__exact= rid)
+        ishout_client.broadcast_group(
+            rid,
+            'deletechannel',
+            data = {'roomname':roomObj.roomname}
+        )
+        roomObj.delete()
     return redirect("/discussion/chat")
 
 @login_required
@@ -266,23 +292,24 @@ def updateRoom(request):
     rooms = ChatRoom.objects.all()
     json = {}
     json['rooms'] = []
+    json['cur_username']=request.user.username
     for room in rooms:
         print room.roomname
         r = {'roomname': room.roomname, 'id': room.id, 'owner':room.owner}
         json['rooms'].append(r)
     return JsonResponse(json)
 
-def send_message(request, room_id, user_id):
-    text=request.POST['text']
-
-    sender = request.user
+def send_message(request, room_id):
+    text=request.POST.get('text')
+    uname=request.POST.get('username')
     if len(text) > 0:
         roomObj = ChatRoom.objects.get(id=room_id)
-        s = ChatPool(roomname=roomObj, msg=text, sender=request.user.username)
+        s = ChatPool(roomname=roomObj, msg=text, sender=uname)
         s.save()
+        print room_id
         ishout_client.broadcast_group(
             room_id,
             'alerts',
-            data = {'text':text,'username':request.user.username}
+            data = {'text':text,'username':uname}
         )
-    return redirect(reverse('room', kwargs = {'room_id':room_id}))
+    return HttpResponse("OK")
