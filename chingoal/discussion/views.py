@@ -226,6 +226,11 @@ def exituser(request):
     userObj = User.objects.get(id=userid)
     u = RoomAccount.objects.filter(username=userObj, roomname=roomObj)
     u.delete()
+    ishout_client.unregister_group(
+        userid,
+        roomid
+    )
+
     return HttpResponse("OK")
 
 @login_required
@@ -279,6 +284,7 @@ def send_message(request, room_id):
         roomObj = ChatRoom.objects.get(id=room_id)
         s = ChatPool(roomname=roomObj, msg=text, sender=uname)
         s.save()
+        print room_id
         ishout_client.broadcast_group(
             room_id,
             'alerts',
