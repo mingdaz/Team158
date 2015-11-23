@@ -51,6 +51,7 @@ STATICFILES_DIRS = (
     BASE_DIR + '/discussion/static',
     BASE_DIR + '/store/static',
     BASE_DIR + '/testpage/static',
+    '/usr/local/lib/python2.7/dist-packages/drealtime/templatetags',
 )
 
 
@@ -73,9 +74,9 @@ INSTALLED_APPS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'drealtime.middleware.iShoutCookieMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'drealtime.middleware.iShoutCookieMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
@@ -148,7 +149,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
-# STATIC_ROOT = PROJECT_PATH + '/static/'
+STATIC_ROOT = PROJECT_PATH + '/static/'
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'

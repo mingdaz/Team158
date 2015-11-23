@@ -14,6 +14,9 @@ from models import *
 from account.models import *
 import time
 import json
+from itertools import chain
+from drealtime import iShoutClient
+ishout_client = iShoutClient()
 
 @login_required
 # @transaction.atomic
@@ -52,6 +55,8 @@ def discussion_home(request):
         flag = 1
 
     context = {'username' : request.user.username, 'posts' : post_replies,'flag':flag}
+    context['newmsgs'] = request.user.newmsg.all().order_by('-timestamp')
+    context['msgcount'] = request.user.newmsg.all().count()
     return render(request, 'discussion/discussion_board.html', context)
 
 
@@ -158,17 +163,32 @@ def index(request):
     else:
         flag = 1
     RoomObj = ChatRoom.objects.all()
-    return render(request, 'discussion/index.html', {'username': user.username, 'RoomObj': RoomObj,'flag':flag})
+    return render(request, 'discussion/index.html', {'username': user.username, 'RoomObj': RoomObj,'flag':flag,
+                                                     'newmsgs':user.newmsg.all().order_by('-timestamp'),
+                                                     'msgcount':user.newmsg.all().count()})
 
 @login_required
 def room(request, room_id):
     user = request.user
+    ishout_client.register_group(
+        user.id,
+        room_id
+    )
+
+    roomObj = ChatRoom.objects.get(id=room_id)
+    chatpoolObj = ChatPool.objects.filter(roomname=roomObj)
+    msglist = []
+    for i in chatpoolObj:
+        msglist.append(i)
+        print i
     if Learner.objects.filter(user__exact=user):
         learner = Learner.objects.get(user__exact=user)
         learner.save()
+        flag= 0
     else:
         teacher = Teacher.objects.get(user__exact=user)
         teacher.save()
+        flag= 1
     roomObj = ChatRoom.objects.get(id=room_id)
     result = RoomAccount.objects.filter(username=user, roomname=roomObj)
     if not result:
@@ -178,7 +198,10 @@ def room(request, room_id):
     userlist = []
     for i in userlObj:
         userlist.append(i.username)
-    return render_to_response('discussion/room.html', {'user': user, 'roomObj': roomObj, 'userlist': userlist})
+    return render(request,'discussion/room.html', {'user': user, 'roomObj': roomObj,'flag': flag,
+                                                   'userlist': userlist,'msglist':msglist,
+                                                       'newmsgs' :user.newmsg.all().order_by('-timestamp'),
+                                                       'cur_username':user.username,'msgcount':user.newmsg.all().count()})
 
 @login_required
 def getmsg(request):
@@ -206,6 +229,11 @@ def exituser(request):
     userObj = User.objects.get(id=userid)
     u = RoomAccount.objects.filter(username=userObj, roomname=roomObj)
     u.delete()
+    ishout_client.unregister_group(
+        userid,
+        roomid
+    )
+
     return HttpResponse("OK")
 
 @login_required
@@ -251,3 +279,18 @@ def updateRoom(request):
         r = {'roomname': room.roomname, 'id': room.id, 'owner':room.owner}
         json['rooms'].append(r)
     return JsonResponse(json)
+
+def send_message(request, room_id):
+    text=request.POST.get('text')
+    uname=request.POST.get('username')
+    if len(text) > 0:
+        roomObj = ChatRoom.objects.get(id=room_id)
+        s = ChatPool(roomname=roomObj, msg=text, sender=uname)
+        s.save()
+        print room_id
+        ishout_client.broadcast_group(
+            room_id,
+            'alerts',
+            data = {'text':text,'username':uname}
+        )
+    return HttpResponse("OK")

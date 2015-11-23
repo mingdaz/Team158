@@ -141,6 +141,8 @@ def edit_profile(request):
 @login_required
 def view_profile(request, uname):
     context = {}
+    if request.user.newmsg.filter(isReply=True).count() > 10:
+        request.user.newmsg.filter(isReply=True).delete()
     cur_user = User.objects.get(username__exact = uname)
     context['username'] = uname
     context['uid'] = cur_user.id
@@ -215,85 +217,6 @@ def view_profile(request, uname):
 
     context['followers'] = followers
     context['unfollowers'] = unfollowers
-
-#    if Learner.objects.filter(user__exact = request.user):
-#        context['isLearner'] = 'yes'
-#        if Learner.objects.filter(user = cur_user):
-#            learner = Learner.objects.get(user__exact = cur_user)
-#            context['cur_user'] = learner
-#            if Learner.objects.filter(user__in=cur_user.follows.all()):
-#                context['isFollowing'] = 'yes'
-#                followers = Learner.objects.filter(user__in=request.user.learner_user.follows.all()).reverse()
-#                context['followers'] = followers
-#            else:
-#                context['isFollowing'] = 'no'
-#                unfollowers = Learner.objects.exclude(user__in=request.user.learner_user.follows.all()).reverse()
-#                if unfollowers.filter(user__exact = cur_user):
-#                    unfollowers = unfollowers.exclude(user__exact = cur_user)
-#                context['unfollowers'] = unfollowers
-#            context['history'] = History.objects.filter(user = cur_user)
-#            context['scheduleForm'] = EditScheduleForm(initial={'progress_level':learner.progress_level,'progress_lesson':learner.progress_lesson})
-#
-#
-#        elif Teacher.objects.filter(user=cur_user):
-#            teacher = Teacher.objects.get(user__exact = cur_user)
-#            context['cur_user'] = teacher
-#            if Teacher.objects.filter(user__in=request.user.learner_user.follows.all()):
-#                context['isFollowing'] = 'yes'
-#                followers = Teacher.objects.filter(user__in=request.user.learner_user.follows.all()).reverse()
-#                context['followers'] = followers
-#            else:
-#                context['isFollowing'] = 'no'
-#                unfollowers = Teacher.objects.exclude(user__in=request.user.learner_user.follows.all()).reverse()
-#                if unfollowers.filter(user__exact = cur_user):
-#                    unfollowers = unfollowers.exclude(user__exact = cur_user)
-#                context['unfollowers'] = unfollowers
-#            context['history'] = History.objects.filter(user = cur_user)
-#                
-#    else:
-#        context['isLearner'] = 'no'
-#        if Learner.objects.filter(user = cur_user):
-#            learner = Learner.objects.get(user__exact = cur_user)
-#            context['cur_user'] = learner
-#            if Learner.objects.filter(user__in=learner.follows.all()):
-#                context['isFollowing'] = 'yes'
-#                print "is follwing is yes"
-#                followers = Learner.objects.filter(user__in=learner.follows.all()).reverse()
-#                context['followers'] = followers
-#            elif Teacher.objects.filter(user__in =learner.follows.all()):
-#                context['isFollowing'] = 'yes'
-#                followers = Teacher.objects.filter(user__in=learner.follows.all()).reverse()
-#                context['followers'] = followers
-#            else:
-#                context['isFollowing'] = 'no'
-#                print "is follwing is no"
-#                unfollowers = Teacher.objects.exclude(user__in=learner.follows.all()).reverse()
-#                if unfollowers.filter(user__exact = cur_user):
-#                    unfollowers = unfollowers.exclude(user__exact = cur_user)
-#                context['unfollowers'] = unfollowers
-#            context['history'] = History.objects.filter(user = cur_user)
-#            context['scheduleForm'] = EditScheduleForm(initial={'progress_level':learner.progress_level,'progress_lesson':learner.progress_lesson})
-#        
-#        
-#        elif Teacher.objects.filter(user=cur_user):
-#            teacher = Teacher.objects.get(user__exact = cur_user)
-#            context['cur_user'] = teacher
-#            if Learner.objects.filter(user__in=teacher.follows.all()):
-#                context['isFollowing'] = 'yes'
-#                followers = Learner.objects.filter(user__in=teacher.follows.all()).reverse()
-#                context['followers'] = followers
-#            elif Teacher.objects.filter(user__in=teacher.follows.all()):
-#                context['isFollowing'] = 'yes'
-#                followers = Teacher.objects.filter(user__in=teacher.follows.all()).reverse()
-#                context['followers'] = followers
-#            else:
-#                context['isFollowing'] = 'no'
-#                unfollowers = Teacher.objects.exclude(user__in=teacher.follows.all()).reverse()
-#                if unfollowers.filter(user__exact = cur_user):
-#                    unfollowers = unfollowers.exclude(user__exact = cur_user)
-#                context['unfollowers'] = unfollowers
-#            context['history'] = History.objects.filter(user = cur_user)
-
     return render(request, 'account/view_profile.html', context)
 
 def reset_password(request):
@@ -410,11 +333,38 @@ def send(request,receiver_name, sender_name):
         newmsg.save()
         count = receiver.newmsg.all().count()
         ishout_client.emit(
-            int(receiver.id),
+            receiver.id,
             'alertchannel',
-            data = {'count':count,'time':str(datetime.now()), 'text':text, 'sender':sender}
+            data = {'count':count,'time':str(datetime.now()), 'text':text, 'sender':sender, 'receiver':sender_name, 'msgid':newmsg.id}
         )
     return redirect(reverse('viewProfile', kwargs = {'uname':sender_name}))
+
+
+@login_required
+def reply(request,receiver_name, sender_name, replyid):
+    tmp = request.user.newmsg.get(id__exact = replyid)
+    tmp.isReply = True
+    tmp.save()
+    text = request.POST['textarea1']
+    sender = request.user.username
+    if len(text) > 0:
+        receiver = User.objects.get(username__exact = receiver_name)
+        newmsg = Newmsg(user=receiver, text=text, sender=sender)
+        newmsg.save()
+        count = receiver.newmsg.all().count()
+        ishout_client.emit(
+                           int(receiver.id),
+                           'alertchannel',
+                           data = {'count':count,'time':str(datetime.now()), 'text':text, 'sender':sender, 'receiver':sender_name, 'msgid':newmsg.id}
+                           )
+    return redirect(reverse('viewProfile', kwargs = {'uname':sender_name}))
+
+@login_required
+def dismiss(request, replyid):
+    tmp = request.user.newmsg.get(id__exact = replyid)
+    tmp.isReply = True
+    tmp.save()
+    return redirect(reverse('viewProfile', kwargs = {'uname':request.user.username}))
 
 
 

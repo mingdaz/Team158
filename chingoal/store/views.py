@@ -10,6 +10,8 @@ def home(request):
     cur_user = request.user.learner_user
     context['cur_user'] = cur_user
     context['username'] = request.user.username
+    context['newmsgs'] = request.user.newmsg.all().order_by('-timestamp')
+    context['msgcount'] = request.user.newmsg.all().count()
     return render(request,'store/store.html',context)
 
 @login_required
