@@ -27,10 +27,23 @@ class Test(models.Model):
 
 
 class Learn(models.Model):
-	lock = models.IntegerField()
-	question = models.ManyToManyField(Question)
+	lock = models.IntegerField(default = 1)
+	level = models.IntegerField(default = 0)
+	lesson = models.IntegerField(default = 1)
+	lnum = models.IntegerField(default = 0)
+	ltype = models.CharField(max_length=10)
+	# Two types: text or audio
+	text = models.CharField(max_length=200)
+	a = models.CharField(max_length=200, blank = True)
+	b = models.CharField(max_length=200, blank = True)
+	c = models.CharField(max_length=200, blank = True)
+	image1 = models.ImageField(blank = True)
+	image2 = models.ImageField(blank = True)
+	image3 = models.ImageField(blank = True)
+	audio = models.FileField(blank = True)
+
 	def __unicode__(self):
-		return self.text
+		return self.level + ' ' + self.lesson + ' ' + self.lid
 
 class QuestionAnswer(models.Model):
 	username = models.CharField(max_length=200)
