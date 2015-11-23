@@ -44,7 +44,13 @@ def get_learn(request,level,lesson):
 	cur_user = User.objects.get(username__exact = context['username'])
 	learner = Learner.objects.get(user = cur_user)
 	context['cur_user'] = learner
-	return render(request, 'testpage/learn.html', context)
+
+	learn_matrial = Learn.objects.get(level__exact = level, lesson__exact = lesson)
+	ltype = learn_matrial.ltype
+	if ltype == 'text':
+		return render(request, 'testpage/learn.html', context)
+	else:
+		return render(request, 'testpage/learn_audio.html', context)
 
 @login_required
 def get_result(request):
@@ -342,3 +348,37 @@ def learning_post(request):
 	context['username'] = request.user.username
 	return render(request, 'testpage/learn.html', context)
 
+
+def upload_text_learn(request):
+	learn = Learn(ltype = 'text')
+	form = UploadTextLearnForm(request.POST, request.FILES, instance = learn)
+
+	if request.method == 'GET':
+		form = UploadTextLearnForm(instance = learn)
+		context = {'form': form}
+		return render(request, 'testpage/upload_text_learn.html', context)
+
+	if not form.is_valid():
+		context = {'form': form}
+		return render(request, 'testpage/upload_text_learn.html', context)
+
+	form.save()
+
+	return render(request, 'testpage/upload_audio_learn.html', {})
+
+def upload_audio_learn(request):
+	learn = Learn(ltype = 'audio')
+	form = UploadAudioLearnForm(request.POST, request.FILES, instance = learn)
+
+	if request.method == 'GET':
+		form = UploadAudioLearnForm(instance = learn)
+		context = {'form': form}
+		return render(request, 'testpage/upload_audio_learn.html', context)
+
+	if not form.is_valid():
+		context = {'form': form}
+		return render(request, 'testpage/upload_audio_learn.html', context)
+
+	form.save()
+
+	return render(request, 'testpage/upload_text_learn.html', {})
