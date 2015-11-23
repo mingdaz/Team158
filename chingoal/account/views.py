@@ -143,6 +143,10 @@ def view_profile(request, uname):
     context = {}
     if request.user.newmsg.filter(isReply=True).count() > 10:
         request.user.newmsg.filter(isReply=True).delete()
+    if request.user.newmsg.filter(isReply=False):
+        context['hasnewmsg'] = 'yes'
+    else:
+        context['hasnewmsg'] = 'no'
     cur_user = User.objects.get(username__exact = uname)
     context['username'] = uname
     context['uid'] = cur_user.id

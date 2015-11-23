@@ -54,8 +54,12 @@
                     </li>
 
 <li class="dropdown">
-    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-        <i class="fa fa-envelope fa-fw"></i><i id="newmsg">{{msgcount}}</i><i class="fa fa-caret-down"></i>
+    {% if hasnewmsg == 'no' %}
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="msgbar">
+    {% else %}
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="msgbar" style="color:red">
+    {% endif %}
+        <i class="fa fa-envelope fa-fw" ></i><i id="newmsg">{{msgcount}}</i><i class="fa fa-caret-down"></i>
     </a>
     <ul id="msglist" class="dropdown-menu dropdown-user">
         {% for msg in newmsgs %}
