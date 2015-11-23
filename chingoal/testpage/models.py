@@ -1,12 +1,5 @@
 from django.db import models
 from django.db.models import Max
-# Create your models here.
-# class Word_Translation(models.Model):
-# 	question = models.CharField(max_length=200)
-# 	answer = models.CharField(max_length=200)
-# 	explanation = models.CharField(max_length=200)
-# 	def __unicode__(self):
-# 		return self.text
 
 class Question(models.Model):
 	level = models.IntegerField(default=0)
@@ -38,3 +31,15 @@ class Learn(models.Model):
 	question = models.ManyToManyField(Question)
 	def __unicode__(self):
 		return self.text
+
+class QuestionAnswer(models.Model):
+	username = models.CharField(max_length=200)
+	qid = models.CharField(max_length=200)
+	answer = models.CharField(max_length=200)
+	correctness = models.CharField(max_length=10)
+
+class TestAnswer(models.Model):
+	username = models.CharField(max_length=200)
+	tid = models.CharField(max_length=200)
+	question = models.ManyToManyField(QuestionAnswer)
+

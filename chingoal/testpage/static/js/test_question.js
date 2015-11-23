@@ -13,16 +13,11 @@ function getCookie(name) {
     return cookieValue;
 }
 
-function getUpdates() {
-
-    var qb = $("#pbody")
-   
+function getUpdates() {   
     var frm = $("#storedata")
+    var pb = $("#pbody")
     var max = $("#maxentry").val();
     var qnum = $("#qnum").val();
-    
-    if( qnum<0 || qnum <max){
-
        $.ajax({
       type: "POST",
       url: "/testpage/next-questions",
@@ -30,59 +25,43 @@ function getUpdates() {
       success: function (data) {
           var body = $("#pbody");
           var newitem = $(data.html);
-          qb.html(newitem);
-
-          $("#maxentry").val(data.max_entry.toString());
-          $("#qnum").val(data.qnum.toString());
-          $("#qid").val(data.id.toString());
-          $(".question-num").html(data.qnum.toString());
-          var percent = (data.qnum-1)/data.max_entry*100;
-          $("#processbar").attr("style","width: "+percent+"%;");
-          $("#processbar").html(percent+"%");
+          if(data.flag==1 && data.max_entry < data.qnum){
+            pb.html(newitem);
+            $("#maxentry").val(data.max_entry.toString());
+            $("#qnum").val(data.qnum.toString());
+            $("#qid").val(data.id.toString());
+            var percent = 100;
+            $("#processbar").attr("style","width: "+percent+"%;");
+            $("#processbar").html(percent+"%");
+            var btn = $( ".next-btn" );
+            btn.unbind( "click", getUpdates );
+            // btn.bind( "click", getResult );
+            btn.attr("type","submit");
+            btn.addClass( "btn-info" );
+            btn.removeClass( "btn-warning" );
+            btn.html("Finish");
+          }
+          else{
+            pb.html(newitem);
+            $("#maxentry").val(data.max_entry.toString());
+            $("#qnum").val(data.qnum.toString());
+            $("#qid").val(data.id.toString());
+            $(".question-num").html(data.qnum.toString());
+            var percent = (data.qnum-1)/data.max_entry*100;
+            percent = percent.toPrecision(3);
+            $("#processbar").attr("style","width: "+percent+"%;");
+            $("#processbar").html(percent+"%");           
+          }
             },
             error: function(data) {
                 alert("Something went wrong!");
             }
-        });
-
-    }
-    else{
-   $.ajax({
-      type: "POST",
-      url: "/testpage/next-questions",
-      data: frm.serialize(),
-      success: function (data) {
-          var body = $("#pbody");
-          var newitem = $(data.html);
-          // qb.html(newitem);
-          // $("#maxentry").val(data.max_entry.toString());
-          // $("#qnum").val(data.qnum.toString());
-          // $("#qid").val(data.id.toString());
-          body.html("");
-          var percent = 100;
-          $("#processbar").attr("style","width: "+percent+"%;");
-          $("#processbar").html(percent+"%");
-          var btn = $( ".next-btn" );
-          btn.unbind( "click", getUpdates );
-          btn.bind( "click", getResult );
-
-          btn.addClass( "btn-info" );
-          btn.removeClass( "btn-warning" );
-          btn.html("Finish");
-
-            },
-            error: function(data) {
-                alert("Something went wrong!");
-            }
-        });
-    }
-   
+        });   
 }
 
 
 function getResult() {
 
-   
 }
 
 $(document).ready(function () {  

@@ -35,10 +35,6 @@ def get_test(request,level):
 	cur_user = User.objects.get(username__exact = context['username'])
 	learner = Learner.objects.get(user = cur_user)
 	context['cur_user'] = learner
-	# newtest = Test.objects.filter(level = level)
-	# context['test_id'] = newtest[5].id;
-	# context['qnum'] = len(newtest[5].question.all());
-	
 	return render(request, 'testpage/test.html', context)
 
 @login_required
@@ -52,8 +48,40 @@ def get_learn(request,level,lesson):
 
 @login_required
 def get_result(request):
+	# print request.POST
 	context = {}
-	return render(request, 'testpage/learn.html', context)
+	context['username'] = request.user.username
+	cur_user = User.objects.get(username__exact = context['username'])
+	learner = Learner.objects.get(user = cur_user)
+	context['cur_user'] = learner
+	context['tid'] = request.POST['qid']
+	curtest = TestAnswer.objects.get(tid=request.POST['qid'],username=request.user.username)
+	curquestion = curtest.question.all()
+	context['questionanswer'] = curquestion
+
+	return render(request, 'testpage/test-feedback.html', context)
+
+@login_required
+def question_result(request):
+	tid = request.POST['tid']
+	qid = int(request.POST['qid'])
+	curtest = TestAnswer.objects.get(tid=tid,username=request.user.username)
+
+	curanswer = QuestionAnswer.objects.get(qid=qid,username=request.user.username)
+	question = Question.objects.get(id=qid)
+
+	qtype = question.qtype
+
+	if qtype=="tr":
+		itemTemplate = loader.get_template('fb-tr.html')
+	else:
+		itemTemplate = loader.get_template('fb-mc.html')
+	
+	print question.answer
+
+	item = itemTemplate.render({"item":question}).replace('\n','').replace('\"','\'') #More escaping might be needed
+	return render(request, 'testcontent.json', {"item":item,"id":qid,"flag":0,"qnum":0,"max":1}, content_type='application/json')
+
 
 @login_required
 def test_create(request):
@@ -64,7 +92,7 @@ def test_create(request):
 	return render(request, 'testpage/post_question.html', context)
 
 @login_required
-def test_add_question_mc(request):
+def post_add_question_mc(request):
 	itemTemplate = loader.get_template('multichoice.html')
 	new_question = Question(qtype="mc");
 	new_question.save()
@@ -74,7 +102,7 @@ def test_add_question_mc(request):
 	return render(request, 'item.json', {"item":item,"id":maxid,"flag":1}, content_type='application/json')
 	
 @login_required
-def test_add_question_tr(request):
+def post_add_question_tr(request):
 	itemTemplate = loader.get_template('translate.html')
 	new_question = Question(qtype="tr");
 	new_question.save()
@@ -83,7 +111,7 @@ def test_add_question_tr(request):
 	return render(request, 'item.json', {"item":item,"id":maxid,"flag":1}, content_type='application/json')
 
 @login_required
-def test_save_mc_question(request,id):
+def post_save_mc_question(request,id):
 	mcqform = MCQFrom(request.POST);
 	flag = 0
 	if mcqform.is_valid():
@@ -98,17 +126,17 @@ def test_save_mc_question(request,id):
 		new_question.save()
 		flag = 1
 	itemTemplate = loader.get_template('multichoice.html')
-	item = itemTemplate.render({"id":id,"form":mcqform}).replace('\n','').replace('\"','\'') #More escaping might be needed
+	item = itemTemplate.render({"id":id,"form":mcqform,"answerchoice":request.POST['optionsRadiosInline']}).replace('\n','').replace('\"','\'') #More escaping might be needed
 	return render(request, 'item.json', {"item":item,"id":id,"flag":flag}, content_type='application/json')
 
 @login_required
-def test_save_tr_question(request,id):
+def post_save_tr_question(request,id):
 	trqform = TRQFrom(request.POST);
 	flag = 0
 	if trqform.is_valid():
 		new_question = Question.objects.get(id=id)
 		new_question.question=trqform.cleaned_data['question']
-		new_question.explanation=trqform.cleaned_data['explanation']
+		new_question.answer=trqform.cleaned_data['explanation']
 		new_question.save()
 		flag = 1
 	itemTemplate = loader.get_template('translate.html')
@@ -165,23 +193,67 @@ def test_set_level(request,test_id):
 @login_required
 def next_questions(request):
 	# print request.POST
-	qid = int(request.POST['qid'])
-	qnum = int(request.POST['qnum'])
+
+	form = TestFrom(request.POST)
+	form.is_valid()
+	qid = int(form.cleaned_data['qid'])
+	qnum = int(form.cleaned_data['qnum'])
+
+	# print correctness
+	flag = 1
+	finish = 0
 	if qid==-1:
 		qnum = 0
 		learner = Learner.objects.get(user__exact = request.user)
-		newtest = Test.objects.filter(level = learner.current_level)[6]
+		newtest = Test.objects.filter(level = learner.current_level)[0]
 		qid = newtest.id
 		question = newtest.question.all()[0]
 		length = len(newtest.question.all())
+		form = TestFrom()
+		if len(TestAnswer.objects.filter(tid=qid,username=request.user.username))==0:
+			print "create new testanswer"
+			newanswer = TestAnswer(tid=qid,username=request.user.username);
+			newanswer.save()
 	else:
-		print "else"
 		newtest = Test.objects.get(id = qid)
 		length = len(newtest.question.all())
-		if qnum<length:
-			question = newtest.question.all()[qnum]
+		if form.is_valid():	
+			if qnum<length:
+				curquestion = newtest.question.all()[qnum-1]
+				question = newtest.question.all()[qnum]
+			else:
+				curquestion = newtest.question.all()[qnum-1]
+				question = newtest.question.all()[0]
+				finish = 1
+			curtest = TestAnswer.objects.get(tid=qid,username=request.user.username)
+
+			if len(QuestionAnswer.objects.filter(qid=curquestion.id,username=request.user.username))==0:
+				curquestion = newtest.question.all()[qnum-1]
+				correctness = form.cleaned_data['answer']== curquestion.answer
+				curanswer = QuestionAnswer(qid=curquestion.id,username=request.user.username,correctness=correctness)				
+			else:
+				
+				curquestion = newtest.question.all()[qnum-1]
+
+				curanswer = QuestionAnswer.objects.filter(qid=curquestion.id,username=request.user.username)[0]
+
+			print form.cleaned_data['answer']
+			print question.answer
+
+			curquestion = newtest.question.all()[qnum-1]
+			correctness = form.cleaned_data['answer']== curquestion.answer
+			
+			curanswer.answer = form.cleaned_data['answer']	
+			curanswer.correctness = correctness	
+			curanswer.save()
+			curtest.question.add(curanswer)
+			curtest.save()
+			form = TestFrom()
 		else:
-			question = newtest.question.all()[0]
+			print "has error"
+			qnum = qnum-1
+			question = newtest.question.all()[qnum]
+			flag = 0
 	qtype = question.qtype
 	qnum = qnum+1
 	if qtype=="tr":
@@ -189,8 +261,8 @@ def next_questions(request):
 	else:
 		itemTemplate = loader.get_template('test-mc.html')
 
-	item = itemTemplate.render({"item":question}).replace('\n','').replace('\"','\'') #More escaping might be needed
-	return render(request, 'testcontent.json', {"item":item,"id":qid,"flag":1,"qnum":qnum,"max":length}, content_type='application/json')
+	item = itemTemplate.render({"item":question,"form":form,"finish":finish}).replace('\n','').replace('\"','\'') #More escaping might be needed
+	return render(request, 'testcontent.json', {"item":item,"id":qid,"flag":flag,"qnum":qnum,"max":length}, content_type='application/json')
 
 @login_required
 def get_learning(request):

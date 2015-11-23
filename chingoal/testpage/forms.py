@@ -35,13 +35,13 @@ class TestLevelForm(forms.Form):
         return cleaned_data
 
 
-# class TestFrom(forms.ModelForm):
-#     # shortbio = forms.CharField( widget=forms.Textarea, required = False)
-#     class Meta:
-#         model = MyUser
-#         exclude  = ( 'user','follow' )
-#         widgets = {'myimg' : forms.FileInput(),'shortbio':forms.Textarea()}
-#     def clean(self):
-#         # Checks the validity of the form data
-#         cleaned_data = super(ProfileForm, self).clean()
-#         return cleaned_data
+class TestFrom(forms.Form):
+    answer = forms.CharField(max_length=200,widget = forms.TextInput(attrs={'class':'form-control'}))
+    max_entry = forms.CharField(widget = forms.TextInput(attrs={'type':'hidden','id':'maxentry','value':'-1'}))
+    qnum = forms.CharField(widget = forms.TextInput(attrs={'type':'hidden','id':'qnum','value':'-1'}))
+    qid = forms.CharField(widget = forms.TextInput(attrs={'type':'hidden','id':'qid','value':'-1'}))
+   
+    def clean(self):
+        # Checks the validity of the form data
+        cleaned_data = super(TestFrom, self).clean()
+        return cleaned_data
