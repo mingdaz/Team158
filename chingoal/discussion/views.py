@@ -57,6 +57,10 @@ def discussion_home(request):
     context = {'username' : request.user.username, 'posts' : post_replies,'flag':flag}
     context['newmsgs'] = request.user.newmsg.all().order_by('-timestamp')
     context['msgcount'] = request.user.newmsg.all().count()
+    if request.user.newmsg.filter(isReply=False):
+        context['hasnewmsg'] = 'yes'
+    else:
+        context['hasnewmsg'] = 'no'
     return render(request, 'discussion/discussion_board.html', context)
 
 
@@ -163,7 +167,11 @@ def index(request):
     else:
         flag = 1
     RoomObj = ChatRoom.objects.all()
-    return render(request, 'discussion/index.html', {'username': user.username, 'RoomObj': RoomObj,'flag':flag,
+    if request.user.newmsg.filter(isReply=False):
+        hasnewmsg = 'yes'
+    else:
+        hasnewmsg = 'no'
+    return render(request, 'discussion/index.html', {'username': user.username, 'hasnewmsg':hasnewmsg,'RoomObj': RoomObj,'flag':flag,
                                                      'newmsgs':user.newmsg.all().order_by('-timestamp'),
                                                      'msgcount':user.newmsg.all().count()})
 
@@ -174,7 +182,10 @@ def room(request, room_id):
         user.id,
         room_id
     )
-
+    if request.user.newmsg.filter(isReply=False):
+        hasnewmsg = 'yes'
+    else:
+        hasnewmsg = 'no'
     roomObj = ChatRoom.objects.get(id=room_id)
     chatpoolObj = ChatPool.objects.filter(roomname=roomObj)
     msglist = []
@@ -196,7 +207,7 @@ def room(request, room_id):
     userlist = []
     for i in userlObj:
         userlist.append(i.username)
-    return render(request,'discussion/room.html', {'user': user, 'roomObj': roomObj, 'userlist': userlist,'msglist':msglist,
+    return render(request,'discussion/room.html', {'user': user, 'roomObj': roomObj,'hasnewmsg':hasnewmsg, 'userlist': userlist,'msglist':msglist,
                                                        'newmsgs' :user.newmsg.all().order_by('-timestamp'),
                                                        'cur_username':user.username,'msgcount':user.newmsg.all().count()})
 
