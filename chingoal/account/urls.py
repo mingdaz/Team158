@@ -3,6 +3,7 @@ from forms import MyAuthenticationForm
 
 urlpatterns = [
 
+    url(r'^fb-login', 'account.views.fb_login'),
     url(r'^$', 'home.views.home', name='home'),
     url(r'^login$', 'django.contrib.auth.views.login', {'template_name':'account/login.html','authentication_form':MyAuthenticationForm},name='login'),
     url(r'^logout$', 'django.contrib.auth.views.logout_then_login', name = 'logout'),
