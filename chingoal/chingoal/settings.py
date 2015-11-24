@@ -111,6 +111,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'chingoal.wsgi.application'
 
+SOCIAL_AUTH_FACEBOOK_KEY = '1632003877053452'
+SOCIAL_AUTH_FACEBOOK_SECRET = 'cabf976a4e7c0aeb302f9074173e2e06'
+
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
