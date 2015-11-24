@@ -58,6 +58,8 @@ def reset(request):
 
 def register(request):
     context = {}
+    for key in request.POST:
+        print key + ":" + request.POST[key]
     if request.method == 'GET':
         context['register_form'] = RegistrationForm()
         return render(request, 'account/register.html', context)
@@ -93,6 +95,29 @@ def register(request):
     messages.add_message(request, messages.INFO, 'A confirmation email has been sent to your email address.')
     return redirect(reverse('register'))
 
+def fb_login(request):
+    name = request.POST['username'].replace(" ","")
+    if len(User.objects.filter(username = name)) > 0:
+	    print "old user"
+	    old_user = authenticate(username=name, \
+                            password=request.POST['defaultPassword'])
+        #print "username:" + request.POST['username']
+	    login(request, old_user)
+    else:
+        print "new user"
+        # Creates the new user from the valid form data
+        print "username:" + name
+        new_user = User.objects.create_user(username=name, \
+                                        password=request.POST['defaultPassword'])
+        new_user.save()
+        new_learner = Learner.objects.create(user=new_user,activation_key="123")
+        new_learner.save()
+        # Logs in the new user and redirects to his/her todo list
+        new_user = authenticate(username=name, \
+                            password=request.POST['defaultPassword'])
+        login(request, new_user)
+    print 'login success'
+    return HttpResponse("")
 
 @login_required
 def edit_profile(request):
