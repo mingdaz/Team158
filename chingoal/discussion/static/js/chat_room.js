@@ -47,11 +47,21 @@
 
 		function sendmsg(roomid, uname){
 			var msg = $('#msg').val();
+			var photo = $("#photo");
+//			var file = photo.files[0];
+//  			var path = file.getAsDataURL();
+//  			console.log(path);
 			$('#msg').val("");
             var data={text:msg, username:uname};
 			syncrequest('/discussion/send-message/'+roomid, data, 'POST', null);
 		}
-
+		function sendimage(){
+			var name = $('#smile').attr("name");
+			var text = $('#msg').val();
+			text = text + '#' +name+'#';
+			$('#msg').val(text);
+			console.log(name);
+		}
 // 		$("#sendmsg").click(function(){
 // 			sendmsg()
 // 		});

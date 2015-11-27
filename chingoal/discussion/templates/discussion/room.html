@@ -108,6 +108,8 @@
 	</div>
 			<textarea id="msg" name="text" style="border: 1px solid #000000;resize: none;margin-top: 20px;margin-left:185px;width: 550px;height: 80px;"></textarea>
 			<button type="submit" class="btn btn-primary btn-sm" onclick="sendmsg({{roomObj.id}}, '{{user.username}}')">Send</button>
+            <img src="{% static 'img/team/1.jpg' %}" id = 'smile' name = 'smile' class="img-responsive img-circle title_img" alt="no=image" onclick="sendimage()">
+
 
 	</section>
 {% endblock %} 
@@ -140,6 +142,6 @@
 {% block script-content %}
 {% load static  %}
 <script src="{% static 'js/jquery-2.1.4.min.js' %}" type="text/javascript"></script>
-<script src="{% static 'js/chat_room.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/chat_room.js' %}"></script>
 
 {% endblock %}
