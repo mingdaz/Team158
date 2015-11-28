@@ -1,4 +1,8 @@
-
+        $(document).ready(function(){
+            $("button").click(function(){
+                $("#expression-box").toggle();
+            });
+        });
 		function getCookie(name) {
 			var cookieValue = null;
 			if (document.cookie && document.cookie != '') {
@@ -58,7 +62,7 @@
 		function sendimage(){
 			var name = $('#smile').attr("name");
 			var text = $('#msg').val();
-			text = text + '#' +name+'#';
+			text = text + '[' +name+']';
 			$('#msg').val(text);
 			console.log(name);
 		}
