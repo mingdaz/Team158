@@ -86,7 +86,7 @@
  			$("#chatting").empty();
  			$.each(data, function(k,v){
  				var message = v.msg;
- 				message = message.replace(/\]/gi, ".jpg\" alt=\"Smiley face\" height=\"42\" width=\"42\"\\>");
+ 				message = message.replace(/\]/gi, ".jpg\" alt=\"Smiley face\" height=\"22\" width=\"22\"\\>");
         		message = message.replace(/\[/gi, "\<img src=\"\/static\/img\/");
  				var content = '<span style="color: green">'+ v.sender + '&nbsp' + v.time + '</span><br> <span> &nbsp'+ message + '</span></br>'
  				$("#chatting").append(content);
