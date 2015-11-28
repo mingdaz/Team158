@@ -17,6 +17,8 @@ import json
 from itertools import chain
 from drealtime import iShoutClient
 ishout_client = iShoutClient()
+from datetime import datetime
+from pytz import timezone
 
 @login_required
 # @transaction.atomic
@@ -226,6 +228,25 @@ def getmsg(request):
     return HttpResponse(json.dumps(msglist))
 
 @login_required
+def updatechat(request):
+    roomid = request.GET.get('roomid')
+    print roomid
+    roomObj = ChatRoom.objects.get(id=roomid)
+    chatpoolObj = ChatPool.objects.filter(roomname=roomObj)
+    eastern = timezone('US/Eastern')
+    fmt = '%b. %d, %Y, %I:%M %p.'
+    msglist = []
+    for i in chatpoolObj:
+        list = {}
+        list['sender'] = i.sender
+        loc_time = i.time.astimezone(eastern)
+        list['time'] = loc_time.strftime(fmt)
+        list['msg'] = i.msg
+        msglist.append(list)
+    return HttpResponse(json.dumps(msglist))
+
+
+@login_required
 def putmsg(request):
     roomid, content = request.POST.get('roomid'), request.POST.get('content')
     roomObj = ChatRoom.objects.get(id=roomid)
@@ -313,9 +334,3 @@ def send_message(request, room_id):
             data = {'text':text,'username':uname}
         )
     return HttpResponse("OK")
-
-
-# def send_face(request):
-#      face_kind = request.POST['1']
-#      print face_kind
-#      return HttpResponse("OK")
