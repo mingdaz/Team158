@@ -58,7 +58,7 @@
 		function sendimage(){
 			var name = $('#smile').attr("name");
 			var text = $('#msg').val();
-			text = text + '#' +name+'#';
+			text = text + '[' +name+']';
 			$('#msg').val(text);
 			console.log(name);
 		}
