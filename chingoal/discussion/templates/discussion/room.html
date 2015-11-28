@@ -109,9 +109,10 @@
 			<textarea id="msg" name="text" style="border: 1px solid #000000;resize: none;margin-top: 20px;margin-left:185px;width: 550px;height: 80px;"></textarea>
 			<button type="submit" class="btn btn-primary btn-sm" onclick="sendmsg({{roomObj.id}}, '{{user.username}}')">Send</button>
             <button id="btn-expression" class="btn btn-primary btn-sm">Add smile</button>
-            <div id="expression-box" style="display:none">
-            <img src="{% static 'img/smile.jpg' %}" class="img-responsive img-circle title_img" alt="no=image" onclick="sendimage('smile')">
-            <img src="{% static 'img/sad.jpg' %}" class="img-responsive img-circle title_img" alt="no=image" onclick="sendimage('sad')">
+            <div id="expression-box" style="display:none"><span>
+            <img src="{% static 'img/smile.jpg' %}" style="width: 42px;height: 42px;" class="img-responsive img-circle title_img" alt="no=image" onclick="sendimage('smile')" >
+            <img src="{% static 'img/sad.jpg' %}" style="width: 42px;height: 42px;" class="img-responsive img-circle title_img" alt="no=image" onclick="sendimage('sad')" >
+            </span>
             </div>
 
 	</section>
