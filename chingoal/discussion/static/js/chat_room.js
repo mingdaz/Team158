@@ -1,4 +1,7 @@
         $(document).ready(function(){
+        	var roomid=$("#room_id").val();
+        	var data = {roomid: roomid};
+        	syncrequest('/discussion/chatting/',data,'get',updatechatting);
             $("button").click(function(){
                 $("#expression-box").toggle();
             });
@@ -51,10 +54,6 @@
 
 		function sendmsg(roomid, uname){
 			var msg = $('#msg').val();
-			var photo = $("#photo");
-//			var file = photo.files[0];
-//  			var path = file.getAsDataURL();
-//  			console.log(path);
 			$('#msg').val("");
             var data={text:msg, username:uname};
 			syncrequest('/discussion/send-message/'+roomid, data, 'POST', null);
@@ -65,10 +64,6 @@
 			$('#msg').val(text);
 			console.log(name);
 		}
-// 		$("#sendmsg").click(function(){
-// 			sendmsg()
-// 		});
-
 		$("#msg").keyup(function(event){
 			if(event.keyCode == 13){
 			    var roomid=$("#room_id").val();
@@ -86,13 +81,17 @@
 				})
 			}
 
-// 		function updatechatting(arg){
-// 			var data = $.parseJSON(arg);
-// 			$("#chatting").empty();
-// 			$.each(data, function(k,v){
-// 				$("#chatting").append(v)
-// 			})
-// 		}
+ 		function updatechatting(arg){
+ 			var data = $.parseJSON(arg);
+ 			$("#chatting").empty();
+ 			$.each(data, function(k,v){
+ 				var message = v.msg;
+ 				message = message.replace(/\]/gi, ".jpg\" alt=\"Smiley face\" height=\"42\" width=\"42\"\\>");
+        		message = message.replace(/\[/gi, "\<img src=\"\/static\/img\/");
+ 				var content = '<span style="color: green">'+ v.sender + '&nbsp' + v.time + '</span><br> <span> &nbsp'+ message + '</span></br>'
+ 				$("#chatting").append(content);
+ 			})
+ 		}
 
 		setInterval(function () {
 			var roomid=$("#room_id").val();
