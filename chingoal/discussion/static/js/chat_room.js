@@ -59,10 +59,9 @@
             var data={text:msg, username:uname};
 			syncrequest('/discussion/send-message/'+roomid, data, 'POST', null);
 		}
-		function sendimage(){
-			var name = $('#smile').attr("name");
+		function sendimage(expression){
 			var text = $('#msg').val();
-			text = text + '[' +name+']';
+			text = text + '[' +expression+']';
 			$('#msg').val(text);
 			console.log(name);
 		}

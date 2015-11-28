@@ -110,7 +110,8 @@
 			<button type="submit" class="btn btn-primary btn-sm" onclick="sendmsg({{roomObj.id}}, '{{user.username}}')">Send</button>
             <button id="btn-expression" class="btn btn-primary btn-sm">Add smile</button>
             <div id="expression-box" style="display:none">
-            <img src="{% static 'img/smile.jpg' %}" id = 'smile' name = 'smile' class="img-responsive img-circle title_img" alt="no=image" onclick="sendimage()">
+            <img src="{% static 'img/smile.jpg' %}" class="img-responsive img-circle title_img" alt="no=image" onclick="sendimage('smile')">
+            <img src="{% static 'img/sad.jpg' %}" class="img-responsive img-circle title_img" alt="no=image" onclick="sendimage('sad')">
             </div>
 
 	</section>
