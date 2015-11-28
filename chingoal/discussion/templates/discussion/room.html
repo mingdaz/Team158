@@ -108,8 +108,10 @@
 	</div>
 			<textarea id="msg" name="text" style="border: 1px solid #000000;resize: none;margin-top: 20px;margin-left:185px;width: 550px;height: 80px;"></textarea>
 			<button type="submit" class="btn btn-primary btn-sm" onclick="sendmsg({{roomObj.id}}, '{{user.username}}')">Send</button>
-            <img src="{% static 'img/team/1.jpg' %}" id = 'smile' name = 'smile' class="img-responsive img-circle title_img" alt="no=image" onclick="sendimage()">
-
+            <button id="btn-expression" class="btn btn-primary btn-sm">Add smile</button>
+            <div id="expression-box" style="display:none">
+            <img src="{% static 'img/smile.jpg' %}" id = 'smile' name = 'smile' class="img-responsive img-circle title_img" alt="no=image" onclick="sendimage()">
+            </div>
 
 	</section>
 {% endblock %} 
