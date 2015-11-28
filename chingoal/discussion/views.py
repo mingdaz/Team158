@@ -313,3 +313,9 @@ def send_message(request, room_id):
             data = {'text':text,'username':uname}
         )
     return HttpResponse("OK")
+
+
+# def send_face(request):
+#      face_kind = request.POST['1']
+#      print face_kind
+#      return HttpResponse("OK")
