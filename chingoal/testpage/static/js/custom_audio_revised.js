@@ -1,0 +1,269 @@
+// variables
+var leftchannel = [];
+var rightchannel = [];
+var recorder = null;
+var recording = false;
+var recordingLength = 0;
+var volume = null;
+var analyserNode = null;
+var audioInput = null;
+var sampleRate = null;
+var audioContext = null;
+var context = null;
+var outputElement = document.getElementById('output');
+var outputString;
+
+var canvasHeight, canvasWidth;
+var visualizerContext = null;
+
+var blob;
+
+if (!navigator.getUserMedia)
+    navigator.getUserMedia = navigator.getUserMedia || 
+                navigator.webkitGetUserMedia ||
+                navigator.mozGetUserMedia || 
+                navigator.msGetUserMedia;
+
+navigator.getUserMedia(
+    {audio:true}, 
+    success, 
+    function(e) {
+        alert('Error capturing audio.');
+    });
+
+function initRecoding() {
+    // set recording flag
+    recoding = true;
+
+    // reset buffers and length
+    leftchannel = [];
+    rightchannel = [];
+    recodigLength = 0;
+}
+
+function encodingWAV() {
+    // set recoding flag
+    recoding = false;
+    
+    // merge buffers
+    var leftBuffer = mergeBuffers ( leftchannel, recordingLength );
+    var rightBuffer = mergeBuffers ( rightchannel, recordingLength );
+    // interleave channels
+    var interleaved = interleave(leftBuffer, rightBuffer);
+
+    // we create our wav file
+    var buffer = new ArrayBuffer(44 + interleaved.length * 2);
+    var view = new DataView(buffer);        
+    // RIFF chunk descriptor
+    writeUTFBytes(view, 0, 'RIFF');
+    view.setUint32(4, 44 + interleaved.length * 2, true);
+    writeUTFBytes(view, 8, 'WAVE');
+    // FMT sub-chunk
+    writeUTFBytes(view, 12, 'fmt ');
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true);
+    // stereo (2 channels)
+    view.setUint16(22, 2, true);
+    view.setUint32(24, sampleRate, true);
+    view.setUint32(28, sampleRate * 4, true);
+    view.setUint16(32, 4, true);
+    view.setUint16(34, 16, true);
+    // data sub-chunk
+    writeUTFBytes(view, 36, 'data');
+    view.setUint32(40, interleaved.length * 2, true);        
+    // write the PCM samples
+    var lng = interleaved.length;
+    var index = 44;
+    var volume = 1;
+    for (var i = 0; i < lng; i++){
+        view.setInt16(index, interleaved[i] * (0x7FFF * volume), true);
+        index += 2;
+    }        
+    // our final binary blob
+    blob = new Blob ( [ view ], { type : 'audio/wav' } );        
+
+    // show audio wave using left channel
+    visualizeUserWave(leftBuffer);
+
+    
+    // var url = (window.URL || window.webkitURL).createObjectURL(blob);
+    // var link = window.document.createElement('a');
+    // link.href = url;
+    // link.download = 'output.wav';
+    // var click = document.createEvent("Event");
+    // click.initEvent("click", true, true);
+    // link.dispatchEvent(click);
+
+    
+}
+
+function visualizeUserWave(buffer) {
+    var canvasUser = $('#wave_user').get(0);
+    drawBuffer( 
+        canvasUser.width, 
+        canvasUser.height, 
+        canvasUser.getContext('2d'), 
+        buffer );
+}
+
+
+
+function uploadUserAudio() {
+    console.log('Saving to s3...');
+    // TODO change file name and url for matching user level and lesson
+    var formData = {};
+    formData['key'] = 'userupload.wav';
+    formData['AWSAccessKeyId'] = 'AKIAI5ZDLT2RNFUJ4KMQ';
+    formData['acl'] = 'public-read';
+    // formData['success_action_redirect'] = 
+    formData['policy'] = 'CnsiZXhwaXJhdGlvbiI6ICIyMDE2LTAxLTAxVDAwOjAwOjAwWiIsImNvbmRpdGlvbnMiOiBbeyJidWNrZXQiOiAiY2hpbmdvYWwifSwgWyJzdGFydHMtd2l0aCIsICIka2V5IiwgInVzZXJ1cGxvYWQvIl0seyJhY2wiOiAicHVibGljLXJlYWQifSxbInN0YXJ0cy13aXRoIiwgIiRDb250ZW50LVR5cGUiLCAiIl0sWyJjb250ZW50LWxlbmd0aC1yYW5nZSIsIDAsIDEwNDg1NzZdXX0='
+    formData['signature'] = 'yaDhcXDeu9KpZodql2tRCNlKUbA=';
+    formData['Content-type'] = 'audio/wav';
+    formData['file'] = blob;
+
+    $.ajax({
+        url: 'http://s3.amazonaws.com/chingoal/audio/',
+        type: "POST",
+        data: formData,
+        success: function(data) {
+            console.log('upload success');
+        }
+    });
+}
+
+
+function interleave(leftChannel, rightChannel){
+  var length = leftChannel.length + rightChannel.length;
+  var result = new Float32Array(length);
+
+  var inputIndex = 0;
+
+  for (var index = 0; index < length; ){
+    result[index++] = leftChannel[inputIndex];
+    result[index++] = rightChannel[inputIndex];
+    inputIndex++;
+  }
+  return result;
+}
+
+function mergeBuffers(channelBuffer, recordingLength){
+  var result = new Float32Array(recordingLength);
+  var offset = 0;
+  var lng = channelBuffer.length;
+  for (var i = 0; i < lng; i++){
+    var buffer = channelBuffer[i];
+    result.set(buffer, offset);
+    offset += buffer.length;
+  }
+  return result;
+}
+
+function writeUTFBytes(view, offset, string){ 
+  var lng = string.length;
+  for (var i = 0; i < lng; i++){
+    view.setUint8(offset + i, string.charCodeAt(i));
+  }
+}
+
+
+function updateVisualizer(time) {
+
+    if (!visualizerContext) {
+
+        var visualizerCanvas = $('#visualizer').get(0);
+        canvasHeight = visualizerCanvas.height;
+        canvasWidth = visualizerCanvas.width;
+        visualizerContext = visualizerCanvas.getContext('2d');
+    }
+
+    var SPACING = 3;
+    var BAR_WIDTH = 1;
+    var numBars = Math.round(canvasWidth / SPACING);
+    var freqByteData = new Uint8Array(analyserNode.frequencyBinCount);
+
+    analyserNode.getByteFrequencyData(freqByteData); 
+
+    visualizerContext.clearRect(0, 0, canvasWidth, canvasHeight);
+    visualizerContext.fillStyle = '#F6D565';
+    visualizerContext.lineCap = 'round';
+    var multiplier = analyserNode.frequencyBinCount / numBars;
+    // Draw rectangle for each frequency bin.
+    for (var i = 0; i < numBars; ++i) {
+        var magnitude = 0;
+        var offset = Math.floor( i * multiplier );
+        // gotta sum/average the block, or we miss narrow-bandwidth spikes
+        for (var j = 0; j< multiplier; j++)
+            magnitude += freqByteData[offset + j];
+        magnitude = magnitude / multiplier / 2;
+        // magnitude = magnitude / multiplier;
+        var magnitude2 = freqByteData[i * multiplier];
+        visualizerContext.fillStyle = "hsl( " + Math.round((i*360)/numBars) + ", 100%, 50%)";
+        visualizerContext.fillRect(i * SPACING, canvasHeight, BAR_WIDTH, -magnitude);
+    }
+
+    window.requestAnimationFrame(updateVisualizer);
+}
+
+function success(e){
+    // creates the audio context
+    audioContext = window.AudioContext || window.webkitAudioContext;
+    context = new audioContext();
+
+    // we query the context sample rate (varies depending on platforms)
+    sampleRate = context.sampleRate;
+
+    console.log('succcess');
+    
+    // creates a gain node
+    volume = context.createGain();
+
+    analyserNode = context.createAnalyser();
+    analyserNode.fftSize = 2048;
+    volume.connect(analyserNode);
+
+    // creates an audio node from the microphone incoming stream
+    audioInput = context.createMediaStreamSource(e);
+
+    // connect the stream to the gain node
+    audioInput.connect(volume);
+
+    // on audio process
+    var bufferSize = 2048;
+    recorder = context.createScriptProcessor(bufferSize, 2, 2);
+
+    recorder.onaudioprocess = function(e){
+        if (!recording) return;
+        var left = e.inputBuffer.getChannelData (0);
+        var right = e.inputBuffer.getChannelData (1);
+        // we clone the samples
+        leftchannel.push (new Float32Array (left));
+        rightchannel.push (new Float32Array (right));
+        recordingLength += bufferSize;
+        console.log('recording');
+    }
+
+    // we connect the recorder
+    volume.connect (recorder);
+    recorder.connect (context.destination); 
+
+    // update visualizer
+    updateVisualizer();
+}
+
+$(document).ready(function() {
+    $('#startButton').on('click', function() {
+        if (recording) {
+            recording = false;
+            $('#startButton').removeClass('fa-stop')
+                .addClass('fa-microphone');
+            encodingWAV();
+        } else {
+            recording = true;
+            $('#startButton').removeClass('fa-microphone')
+                .addClass('fa-stop');
+            initRecoding();
+        }
+    })
+
+    $('#playUserAudioButton').on('click', uploadUserAudio);
+})
