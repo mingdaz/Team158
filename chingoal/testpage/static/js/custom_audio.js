@@ -11,6 +11,8 @@ var analyserContext = null;
 var canvasWidth, canvasHeight;
 var recIndex = 0;
 
+var analyserNode = null;
+
 function saveAudio() {
     audioRecorder.exportWAV( doneEncoding );
 }
@@ -169,8 +171,10 @@ function initAudio() {
                     "googNoiseSuppression": "false",
                     "googHighpassFilter": "false"
                 },
+                
                 "optional": []
-            },
+            }            
+
         }, 
         gotStream,
         function(e) {
