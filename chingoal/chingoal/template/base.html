@@ -61,6 +61,10 @@
           var d = new Date();
           var n = month[d.getMonth()];
         var msg=data.text;
+
+        msg = msg.replace(/\]/gi, ".jpg\" alt=\"Smiley face\" height=\"22\" width=\"22\"\\>");
+        msg = msg.replace(/\[/gi, "\<img src=\"\/static\/img\/");
+
         var name = data.username;
         var content = "<span style='color: green'>"+name+"&nbsp;"+n+sendTime+"</span><br><span>"+"&nbsp;"+msg+"</span></br>";
         $('#msg').val("");
