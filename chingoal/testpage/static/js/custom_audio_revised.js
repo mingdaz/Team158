@@ -1,3 +1,9 @@
+
+
+// user file format
+// userupload_{% current_level %}_{% current_lesson %}_{% current_chapter %}_{% user attempt %}
+
+
 // variables
 var leftchannel = [];
 var rightchannel = [];
@@ -17,6 +23,7 @@ var canvasHeight, canvasWidth;
 var visualizerContext = null;
 
 var blob;
+
 
 if (!navigator.getUserMedia)
     navigator.getUserMedia = navigator.getUserMedia || 
@@ -41,7 +48,7 @@ function initRecoding() {
     recodigLength = 0;
 }
 
-function encodingWAV() {
+function finishRecoding() {
     // set recoding flag
     recoding = false;
     
@@ -82,18 +89,10 @@ function encodingWAV() {
     // our final binary blob
     blob = new Blob ( [ view ], { type : 'audio/wav' } );        
 
-    // show audio wave using left channel
+
     visualizeUserWave(leftBuffer);
-
     
-    // var url = (window.URL || window.webkitURL).createObjectURL(blob);
-    // var link = window.document.createElement('a');
-    // link.href = url;
-    // link.download = 'output.wav';
-    // var click = document.createEvent("Event");
-    // click.initEvent("click", true, true);
-    // link.dispatchEvent(click);
-
+    uploadUserAudio();
     
 }
 
@@ -110,26 +109,31 @@ function visualizeUserWave(buffer) {
 
 function uploadUserAudio() {
     console.log('Saving to s3...');
+
     // TODO change file name and url for matching user level and lesson
-    var formData = {};
-    formData['key'] = 'userupload.wav';
-    formData['AWSAccessKeyId'] = 'AKIAI5ZDLT2RNFUJ4KMQ';
-    formData['acl'] = 'public-read';
-    // formData['success_action_redirect'] = 
-    formData['policy'] = 'CnsiZXhwaXJhdGlvbiI6ICIyMDE2LTAxLTAxVDAwOjAwOjAwWiIsImNvbmRpdGlvbnMiOiBbeyJidWNrZXQiOiAiY2hpbmdvYWwifSwgWyJzdGFydHMtd2l0aCIsICIka2V5IiwgInVzZXJ1cGxvYWQvIl0seyJhY2wiOiAicHVibGljLXJlYWQifSxbInN0YXJ0cy13aXRoIiwgIiRDb250ZW50LVR5cGUiLCAiIl0sWyJjb250ZW50LWxlbmd0aC1yYW5nZSIsIDAsIDEwNDg1NzZdXX0='
-    formData['signature'] = 'yaDhcXDeu9KpZodql2tRCNlKUbA=';
-    formData['Content-type'] = 'audio/wav';
-    formData['file'] = blob;
+
+
+    var formData = new FormData();
+    formData.append('key', 'audio/userupload.wav');
+    formData.append('AWSAccessKeyId', 'AKIAI5ZDLT2RNFUJ4KMQ');
+    formData.append('acl', 'public-read');
+    formData.append('policy', 'CnsiZXhwaXJhdGlvbiI6ICIyMDE2LTAxLTAxVDAwOjAwOjAwWiIsImNvbmRpdGlvbnMiOiBbeyJidWNrZXQiOiAiY2hpbmdvYWwifSwgWyJzdGFydHMtd2l0aCIsICIka2V5IiwgImF1ZGlvLyJdLHsiYWNsIjogInB1YmxpYy1yZWFkIn0sWyJzdGFydHMtd2l0aCIsICIkQ29udGVudC1UeXBlIiwgIiJdLFsiY29udGVudC1sZW5ndGgtcmFuZ2UiLCAwLCAxMDQ4NTc2MDBdXX0=');
+    formData.append('signature', '2qKR3sLhsLD0lwjK7+QEVOaMWAM=');
+    formData.append('Content-Type', 'multipart/form-data');
+    formData.append('file', blob);
 
     $.ajax({
-        url: 'http://s3.amazonaws.com/chingoal/audio/',
+        url: 'http://s3.amazonaws.com/chingoal',
         type: "POST",
         data: formData,
-        success: function(data) {
-            console.log('upload success');
-        }
-    });
+        cache: false,
+        contentType: false,        
+        processData: false,
+        }).done(function() {
+            alert('Audio saved....')
+        });
 }
+
 
 
 function interleave(leftChannel, rightChannel){
@@ -256,7 +260,7 @@ $(document).ready(function() {
             recording = false;
             $('#startButton').removeClass('fa-stop')
                 .addClass('fa-microphone');
-            encodingWAV();
+            finishRecoding();            
         } else {
             recording = true;
             $('#startButton').removeClass('fa-microphone')
@@ -265,5 +269,8 @@ $(document).ready(function() {
         }
     })
 
-    $('#playUserAudioButton').on('click', uploadUserAudio);
+    // $('#uploadUserAudioButton').on('click', uploadUserAudio);
+
+    
+
 })
