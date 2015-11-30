@@ -23,6 +23,8 @@ from account.models import *
 from forms import * 
 from models import * 
 
+import urllib2
+
 @login_required
 def homepage(request):
 	context = {}
@@ -392,12 +394,17 @@ def upload_audio_learn(request):
 
 	return render(request, 'testpage/upload_text_learn.html', {})
 
+
 def learn_audio(request):
 	context = {}
 	context['username'] = request.user.username
 	cur_user = User.objects.get(username__exact = context['username'])
 	learner = Learner.objects.get(user = cur_user)
 	context['cur_user'] = learner
+
+	
+
+
 	return render(request, 'testpage/learn_audio.html', context)
 
 
