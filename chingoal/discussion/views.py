@@ -18,7 +18,7 @@ from itertools import chain
 from drealtime import iShoutClient
 ishout_client = iShoutClient()
 from datetime import datetime
-from pytz import timezone
+# from pytz import timezone
 
 @login_required
 # @transaction.atomic
