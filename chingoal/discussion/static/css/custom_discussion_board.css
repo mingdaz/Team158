@@ -24,3 +24,13 @@
 .delete-btn {
     margin-top: 15px;
 }
+.post_btn{
+    position:relative;
+    left:-180px;
+    top:20px;
+}
+.bt1 {
+    position:relative;
+    left:100px;
+    top:-25px;
+}
