@@ -3,6 +3,8 @@
 
 <head>
 
+    {% block metahead %}
+    {% endblock %}
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -62,7 +64,7 @@
           var n = month[d.getMonth()];
         var msg=data.text;
 
-        msg = msg.replace(/\]/gi, ".jpg\" alt=\"Smiley face\" height=\"42\" width=\"42\"\\>");
+        msg = msg.replace(/\]/gi, ".jpg\" alt=\"Smiley face\" height=\"22\" width=\"22\"\\>");
         msg = msg.replace(/\[/gi, "\<img src=\"\/static\/img\/");
 
         var name = data.username;
