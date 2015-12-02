@@ -24,6 +24,7 @@ from forms import *
 from models import *
 
 import urllib2
+import random
 
 @login_required
 def homepage(request):
@@ -217,7 +218,9 @@ def next_questions(request):
 	if qid==-1:
 		qnum = 0
 		learner = Learner.objects.get(user__exact = request.user)
-		newtest = Test.objects.filter(level = learner.current_level)[1]
+		numtest = len(Test.objects.filter(level = learner.current_level))
+		testindex = random.randint(0,numtest-1)
+		newtest = Test.objects.filter(level = learner.current_level)[testindex]
 		qid = newtest.id
 		question = newtest.question.all()[0]
 		length = len(newtest.question.all())
