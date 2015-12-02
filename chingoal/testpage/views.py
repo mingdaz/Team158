@@ -85,9 +85,9 @@ def question_result(request):
 	qtype = question.qtype
 
 	if qtype=="tr":
-		itemTemplate = loader.get_template('fb-tr.html')
+		itemTemplate = loader.get_template('testpage/fb-tr.html')
 	else:
-		itemTemplate = loader.get_template('fb-mc.html')
+		itemTemplate = loader.get_template('testpage/fb-mc.html')
 
 	print question.answer
 
@@ -115,7 +115,7 @@ def post_add_question_mc(request):
 
 @login_required
 def post_add_question_tr(request):
-	itemTemplate = loader.get_template('translate.html')
+	itemTemplate = loader.get_template('testpage/translate.html')
 	new_question = Question(qtype="tr");
 	new_question.save()
 	maxid = new_question.id
@@ -151,7 +151,7 @@ def post_save_tr_question(request,id):
 		new_question.answer=trqform.cleaned_data['explanation']
 		new_question.save()
 		flag = 1
-	itemTemplate = loader.get_template('translate.html')
+	itemTemplate = loader.get_template('testpage/translate.html')
 	item = itemTemplate.render({"id":id,"form":trqform}).replace('\n','').replace('\"','\'') #More escaping might be needed
 	return render(request, 'testpage/item.json', {"item":item,"id":id,"flag":flag}, content_type='application/json')
 
@@ -217,7 +217,7 @@ def next_questions(request):
 	if qid==-1:
 		qnum = 0
 		learner = Learner.objects.get(user__exact = request.user)
-		newtest = Test.objects.filter(level = learner.current_level)[0]
+		newtest = Test.objects.filter(level = learner.current_level)[1]
 		qid = newtest.id
 		question = newtest.question.all()[0]
 		length = len(newtest.question.all())
