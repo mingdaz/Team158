@@ -203,7 +203,7 @@ def newVideoRoom(request):
     if error:
         return render(request, 'discussion/video_home.html', {'error':error})
     name = request.POST['roomname']
-    new_room = ChatRoom(roomname=name+" "+time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())),owner=request.user.username)
+    new_room = VideoRoom(roomname=name+" "+time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())),owner=request.user.username)
     new_room.save()
     return redirect("/discussion/video")
 
