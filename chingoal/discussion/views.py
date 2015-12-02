@@ -177,6 +177,37 @@ def index(request):
                                                      'newmsgs':user.newmsg.all().order_by('-timestamp'),
                                                      'msgcount':user.newmsg.all().count()})
 
+
+@login_required
+def video_home(request):
+    user = request.user
+    if Learner.objects.filter(user__exact=user):
+        flag = 0
+    else:
+        flag = 1
+    VedioObj = VideoRoom.objects.all()
+    if request.user.newmsg.filter(isReply=False):
+        hasnewmsg = 'yes'
+    else:
+        hasnewmsg = 'no'
+    return render(request, 'discussion/video_home.html', {'username': user.username, 'hasnewmsg':hasnewmsg,'RoomObj': VedioObj,'flag':flag,
+                                                     'newmsgs':user.newmsg.all().order_by('-timestamp'),
+                                                     'msgcount':user.newmsg.all().count()})
+
+
+@login_required
+def newVideoRoom(request):
+    error = []
+    if not 'roomname' in request.POST or not request.POST['roomname']:
+        error.append('Room name is required.')
+    if error:
+        return render(request, 'discussion/video_home.html', {'error':error})
+    name = request.POST['roomname']
+    new_room = ChatRoom(roomname=name+" "+time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())),owner=request.user.username)
+    new_room.save()
+    return redirect("/discussion/video")
+
+
 @login_required
 def room(request, room_id):
     user = request.user
