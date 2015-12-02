@@ -92,7 +92,7 @@
         {% if error %}
         <p>{{error}}</p>
         {% endif %}
-        <form role="form" action="/discussion/videoRoom" method="post">
+        <form role="form" action="/discussion/videoRoom/" method="post">
         <div style="margin-left:70px;">
             <input type="text" name="roomname" spellcheck="false">
             <input type="submit" value="Create a new room">
@@ -179,26 +179,4 @@
  {% block script-content %}
 <script src="/../static/js/jquery-1.11.2.js" type="text/javascript"></script>
 
-<script>
-function updaterooms() {
-		$.get("/discussion/update", function(data){
-		    $("#roomlist").empty();
-		    var rooms = data['rooms'];
-            for (num in rooms) {
-                var room = rooms[num];
-                var roomc = parseInt(num)+1
-                var html = '<tr><th>'+roomc+'</th><th><a href="/discussion/goRoom/'+room.id+'">'+room.roomname+'</a></th>\
-                <th>'+room.owner+'</th>';
-              if (room.owner == data['cur_username']) {
-                html += '<th><a href="/discussion/delete/'+room.id+'">X</a></th></tr>';
-              }
-                $('#roomlist').append(html);   
-            }          
-        });
-}
-$(document).ready(function () {
-    setInterval(updaterooms, 2000);
-});		
-
-</script>
 {%endblock%}
