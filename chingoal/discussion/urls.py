@@ -26,4 +26,5 @@ urlpatterns = [
     url(r'^delete/(?P<rid>\d+)$','discussion.views.deleteRoom',name='deleteRoom'),
     url(r'^send-message/(?P<room_id>\d+)$', 'discussion.views.send_message', name = 'send-message'),
     url(r'^chatting/$', 'discussion.views.updatechat'),
+    url(r'^video$','discussion.views.video_home',name ='video'),
    ]
