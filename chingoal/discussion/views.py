@@ -209,6 +209,19 @@ def newVideoRoom(request):
 
 
 @login_required
+def deleteVideoRoom(request,rid):
+    if len(ChatRoom.objects.filter(id = rid))>0:
+        roomObj = VideoRoom.objects.get(id__exact= rid)
+        # ishout_client.broadcast_group(
+        #     rid,
+        #     'deletechannel',
+        #     data = {'roomname':roomObj.roomname}
+        # )
+        roomObj.delete()
+    return redirect("/discussion/video")
+
+
+@login_required
 def room(request, room_id):
     user = request.user
     ishout_client.register_group(
