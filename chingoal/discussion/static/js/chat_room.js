@@ -2,7 +2,7 @@
         	var roomid=$("#room_id").val();
         	var data = {roomid: roomid};
         	syncrequest('/discussion/chatting/',data,'get',updatechatting);
-            $("button").click(function(){
+            $("#btn-expression").click(function(){
                 $("#expression-box").toggle();
             });
         });

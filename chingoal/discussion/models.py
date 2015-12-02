@@ -87,3 +87,9 @@ class ChatPool(models.Model):
     sender = models.CharField(max_length=1024)
     def __unicode__(self):
         return unicode(self.roomname)
+
+class VideoRoom(models.Model):
+    roomname = models.CharField(max_length=100, unique=True)
+    owner = models.CharField(max_length=100)
+    def __unicode__(self):
+        return self.roomname
