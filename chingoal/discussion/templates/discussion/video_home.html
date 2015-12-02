@@ -88,12 +88,11 @@
     </nav>
 
 	<section id="portfolio" class="bg-light-gray">
-         <a href="http://localhost:3000/#11">video</a>
-		<h2 style="margin-left:70px;">{{ username }},welcome to chat rooms!</h2>
+		<h2 style="margin-left:70px;">{{ username }},welcome to video rooms!</h2>
         {% if error %}
         <p>{{error}}</p>
         {% endif %}
-        <form role="form" action="/discussion/createRoom" method="post">
+        <form role="form" action="/discussion/videoRoom" method="post">
         <div style="margin-left:70px;">
             <input type="text" name="roomname" spellcheck="false">
             <input type="submit" value="Create a new room">
@@ -112,10 +111,9 @@
 				{% for item in RoomObj %}
 					<tr>
 						<th>{{ forloop.counter }}</th>
-						<th><a href="{% url 'room' item.id %}">{{ item }}</a></th>
+						<th><a href="http://localhost:3000/#{{RoomObj.id}}">{{ item }}</a></th>
 						<th>{{item.owner}}</th>
                         {% if item.owner == username %}
-						<th><a href="{% url 'deleteRoom' item.id %}">X</a></th>
                         {% endif %}
 					</tr>
 				{% endfor %}
