@@ -114,6 +114,7 @@
 						<th><a href="http://localhost:3000/#{{item.id}}">{{ item }}</a></th>
 						<th>{{item.owner}}</th>
                         {% if item.owner == username %}
+                        <th><a href="{% url 'deleteVideoRoom' item.id %}">X</a></th>
                         {% endif %}
 					</tr>
 				{% endfor %}
