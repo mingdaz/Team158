@@ -17,6 +17,7 @@ class Question(models.Model):
 class Test(models.Model):
 	level = models.IntegerField(default=0)
 	question = models.ManyToManyField(Question)
+	postflag = model.CharField(max_length=10)
 	def __unicode__(self):
 		return self.text
 
@@ -55,4 +56,3 @@ class TestAnswer(models.Model):
 	username = models.CharField(max_length=200)
 	tid = models.CharField(max_length=200)
 	question = models.ManyToManyField(QuestionAnswer)
-
