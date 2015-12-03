@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>SkyRTC聊天室Demo</title>
+  <title>Chingoal-Videoroom</title>
   <style type="text/css">
     html, body {
       width: 100%;
@@ -75,10 +75,8 @@
   <div id="chat">
     <div class="msgs" id="msgs"></div>
     <input type="file" id="fileIpt" class="fileIpt">
-    <button id="sendFileBtn" class="sendFileBtn">发送文件</button>
-    <input type="text" id="msgIpt" class="msgIpt">
-    <button id="sendBtn" class="sendBtn">发送</button>
-    <button onclick="window.location.href='http://127.0.0.1:8000/discussion/video/';">Leave</button>
+    <button id="sendFileBtn" class="sendFileBtn">Send File</button>
+    <button onclick="window.location.href='http://54.164.42.224/discussion/video/';">Leave</button>
   </div>
   <div id="videos">
     <video id="me" autoplay></video>
@@ -96,16 +94,6 @@
   var rtc = SkyRTC();
 
   /**********************************************************/
-  sendBtn.onclick = function(event){
-    var msgIpt = document.getElementById("msgIpt"),
-        msg = msgIpt.value,
-        p = document.createElement("p");
-    p.innerText = "me: " + msg;
-    //广播消息
-    rtc.broadcast(msg);
-    msgIpt.value = "";
-    msgs.appendChild(p);
-  };
 
   sendFileBtn.onclick = function(event){
     //分享文件
@@ -118,18 +106,18 @@
   //对方同意接收文件
   rtc.on("send_file_accepted", function(sendId, socketId, file){
     var p = document.getElementById("sf-" + sendId);
-    p.innerText = "对方接收" + file.name + "文件，等待发送";
+    p.innerText = "Have Received" + file.name + "File，Waiting Send";
 
   });
   //对方拒绝接收文件
   rtc.on("send_file_refused", function(sendId, socketId, file){
     var p = document.getElementById("sf-" + sendId);
-    p.innerText = "对方拒绝接收" + file.name + "文件";
+    p.innerText = "Refused:" + file.name + "File";
   });
   //请求发送文件
   rtc.on('send_file', function(sendId, socketId, file){
     var p = document.createElement("p");
-    p.innerText = "请求发送" + file.name + "文件";
+    p.innerText = "Sending Request" + file.name + "File";
     p.id = "sf-" + sendId;
     files.appendChild(p);
   });
@@ -141,12 +129,12 @@
   //发送文件碎片
   rtc.on('send_file_chunk', function(sendId, socketId, percent, file){
     var p = document.getElementById("sf-" + sendId);
-    p.innerText = file.name + "文件正在发送: " + Math.ceil(percent) + "%";
+    p.innerText = file.name + "File is sending: " + Math.ceil(percent) + "%";
   });
   //接受文件碎片
   rtc.on('receive_file_chunk', function(sendId, socketId, fileName, percent){
     var p = document.getElementById("rf-" + sendId);
-    p.innerText = "正在接收" + fileName + "文件：" +  Math.ceil(percent) + "%";
+    p.innerText = "Receiving" + fileName + "file：" +  Math.ceil(percent) + "%";
   });
   //接收到文件
   rtc.on('receive_file', function(sendId, socketId, name){
@@ -164,10 +152,10 @@
   //接受到文件发送请求
   rtc.on('receive_file_ask', function(sendId, socketId, fileName, fileSize){
     var p;
-    if (window.confirm(socketId + "用户想要给你传送" + fileName + "文件，大小" + fileSize + "KB,是否接受？")) {
+    if (window.confirm(socketId + "User want to send file to you" + fileName + "file，size" + fileSize + "KB, accept？")) {
       rtc.sendFileAccept(sendId);
       p = document.createElement("p");
-      p.innerText = "准备接收" + fileName + "文件";
+      p.innerText = "Ready to receive file" + fileName;
       p.id = "rf-" + sendId;
       files.appendChild(p);
     } else {

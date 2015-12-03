@@ -10,7 +10,7 @@ server.listen(port);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', function(req, res) {
-	res.sendfile(__dirname + '/index.html');
+	res.sendfile(__dirname + '/chingoal/discussion/templates/discussion/video_room.html');
 });
 
 SkyRTC.rtc.on('new_connect', function(socket) {

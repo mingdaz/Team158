@@ -122,7 +122,6 @@
                             <div class="facebook-this">
     <a href="{{ facebook_url }}" target="_blank">{{link_text}}</a>
 </div>
-                <button onclick="postToFB()">PostToFB</button>
 
                 <div class="col-lg-4 text-center">
                     {% if flag == 0 %}
@@ -311,7 +310,7 @@
                     <ul class="list-inline social-buttons">
                         <li><a href="http://www.twitter.com"><i class="fa fa-twitter"></i></a>
                         </li>
-                        <li><a href="http://www.facebook.com"><i class="fa fa-facebook"></i></a>
+                        <li><a onclick="postToFB()"><i class="fa fa-facebook"></i></a>
                         </li>
                         <li><a href="http://www.linkedin.com"><i class="fa fa-linkedin"></i></a>
                         </li>
