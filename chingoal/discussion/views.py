@@ -382,4 +382,4 @@ def send_message(request, room_id):
 
 @login_required
 def testVideoRoom(request,rid):
-    return render(request, 'discussion/video_room.html', {'rid':rid})
+    return render(request, 'discussion/video_room.html', {'rid':rid,'username':request.user.username})
