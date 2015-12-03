@@ -378,3 +378,8 @@ def send_message(request, room_id):
             data = {'text':text,'username':uname}
         )
     return HttpResponse("OK")
+
+
+@login_required
+def testVideoRoom(request,rid):
+    return render(request, 'discussion/video_room.html', {'rid':rid})

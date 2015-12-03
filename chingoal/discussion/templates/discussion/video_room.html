@@ -83,7 +83,8 @@
   <div id="files">
   </div>
 </body>
-<script type="text/javascript" src="/SkyRTC-client.js"></script>
+{% load static %}
+<script type="text/javascript" src="{% static "js/SkyRTC-client.js"%}"></script>
 <script type="text/javascript">
   var videos = document.getElementById("videos");
   var sendBtn = document.getElementById("sendBtn");
@@ -202,6 +203,8 @@
     msgs.appendChild(p);
   });
   //连接WebSocket服务器
-  rtc.connect("wss:" + window.location.href.substring(window.location.protocol.length).split('#')[0], window.location.hash.slice(1));
+  // rtc.connect("wss:" + window.location.href.substring(window.location.protocol.length).split('#')[0], window.location.hash.slice(1));
+  rtc.connect("wss://54.164.42.224:3000/", {{rid}});
+
 </script>
 </html>
