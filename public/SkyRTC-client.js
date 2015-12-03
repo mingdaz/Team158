@@ -1,7 +1,8 @@
 var SkyRTC = function() {
     var PeerConnection = (window.PeerConnection || window.webkitPeerConnection00 || window.webkitRTCPeerConnection || window.mozRTCPeerConnection);
     var URL = (window.URL || window.webkitURL || window.msURL || window.oURL);
-    var getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
+    var getUserMedia = ( navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
+
     var nativeRTCIceCandidate = (window.mozRTCIceCandidate || window.RTCIceCandidate);
     var nativeRTCSessionDescription = (window.mozRTCSessionDescription || window.RTCSessionDescription); // order is very important: "RTCSessionDescription" defined in Nighly but useless
     var moz = !!navigator.mozGetUserMedia;
@@ -195,6 +196,31 @@ var SkyRTC = function() {
 
         options.video = !!options.video;
         options.audio = !!options.audio;
+
+// var constraints = { audio: true, video: { width: 1280, height: 720 } };
+// if (getUserMedia) {
+// getUserMedia.getUserMedia(constraints)
+// .then(function(stream) {
+// //   var video = document.querySelector('video');
+// //   video.src = window.URL.createObjectURL(stream);
+// //   video.onloadedmetadata = function(e) {
+// //     video.play();
+// //   };
+// that.localMediaStream = stream;
+//                     that.initializedStreams++;
+//                     that.emit("stream_created", stream);
+//                     if (that.initializedStreams === that.numStreams) {
+//                         that.emit("ready");
+//                     }
+// })
+// .catch(function(err) {
+//   that.emit("stream_create_error", err);
+// });
+// }else {
+//              that.emit("stream_create_error", new Error('WebRTC is not yet supported in this browser.'));
+//         }
+
+
 
         if (getUserMedia) {
             this.numStreams++;
