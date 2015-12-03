@@ -210,7 +210,7 @@ def newVideoRoom(request):
 
 @login_required
 def deleteVideoRoom(request,rid):
-    if len(ChatRoom.objects.filter(id = rid))>0:
+    if len(VideoRoom.objects.filter(id = rid))>0:
         roomObj = VideoRoom.objects.get(id__exact= rid)
         # ishout_client.broadcast_group(
         #     rid,

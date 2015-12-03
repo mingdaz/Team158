@@ -111,7 +111,7 @@
 				{% for item in RoomObj %}
 					<tr>
 						<th>{{ forloop.counter }}</th>
-						<th><a href="http://localhost:3000/#{{item.id}}">{{ item }}</a></th>
+						<th><a href="http://54.164.42.224:3000/#{{item.id}}">{{ item }}</a></th>
 						<th>{{item.owner}}</th>
                         {% if item.owner == username %}
                         <th><a href="{% url 'deleteVideoRoom' item.id %}">X</a></th>
