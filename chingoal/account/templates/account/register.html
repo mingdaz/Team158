@@ -71,7 +71,10 @@
                         {{error}} <br>
                         <br>
                         {% endfor %}
-                        <form role="form" action="{% url 'register' %}" method="post" id="registration_form">
+                        {% if judge == '1'%}
+                            {{hint}}
+                        {% endif %}
+                        <form role="form" action="{% url 'register' parameter %}" method="post" id="registration_form">
                             <fieldset>
                                 <div class="form-group">
                                     <label>Indentification Choose</label>
