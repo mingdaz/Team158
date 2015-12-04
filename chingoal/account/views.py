@@ -202,7 +202,7 @@ def view_profile(request, uname):
     context['msgcount'] = request.user.newmsg.all().count()
 
     if History.objects.filter(user__exact = cur_user):
-        context['history'] = History.objects.filter(user__exact = cur_user)
+        context['historys'] = History.objects.filter(user__exact = cur_user).order_by('-timestamp')
 
     if Learner.objects.filter(user__exact = request.user):
         
