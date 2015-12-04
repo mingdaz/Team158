@@ -318,9 +318,10 @@ def register_confirm(request, activation_key):
     # check if there is UserProfile which matches the activation key (if not then display 404)
     if Teacher.objects.filter(activation_key=activation_key):
         new_user = Teacher.objects.get(activation_key__exact=activation_key)
-    else:
+    elif Learner.objects.filter(activation_key=activation_key):
         new_user = Learner.objects.get(activation_key__exact=activation_key)
-
+    else:
+        return redirect(reverse('register'))
     #if the key hasn't expired save user and set him as active and render some template to confirm activation
     user = new_user.user
     user.is_active = True
