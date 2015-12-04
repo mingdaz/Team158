@@ -88,8 +88,8 @@ def register(request):
         new_teacher = Teacher.objects.create(user=new_user,activation_key=activation_key)
         new_teacher.save()
     email_subject = 'Account confirmation'
-    email_body = "Hey %s, thanks for signing up. To activate your account, click this link within \
-            48hours http://54.164.42.224//account/confirm/%s" % (register_form.cleaned_data['username'], activation_key)
+    email_body = "Hey %s, thanks for signing up. To activate your account, click this link\
+                http://chingoal.us//account/confirm/%s" % (register_form.cleaned_data['username'], activation_key)
             
     send_mail(email_subject, email_body, '15637test@gmail.com', [register_form.cleaned_data['email']], fail_silently=False)
     messages.add_message(request, messages.INFO, 'A confirmation email has been sent to your email address.')
@@ -176,10 +176,14 @@ def view_profile(request, uname):
     context['username'] = uname
     context['uid'] = cur_user.id
     context['cur_username'] = request.user.username
+
     context['cur_uid'] = request.user.id
     context['newmsgs'] = request.user.newmsg.all().order_by('-timestamp')
     context['msgcount'] = request.user.newmsg.all().count()
-    
+
+    if History.objects.filter(user__exact = cur_user):
+        context['history'] = History.objects.filter(user__exact = cur_user)
+
     if Learner.objects.filter(user__exact = request.user):
         
         request_user_learner = Learner.objects.get(user__exact = request.user)
@@ -204,17 +208,6 @@ def view_profile(request, uname):
         follow_users = cur_user_learner.follows.all()
         context['cur_user'] = cur_user_learner
         context['isLearner'] = 'yes'
-#        if follow_users.objects.filter(user__in = Learner.objects.all()):
-#            follow_users_learner = follow_users.objects.filter(user__in = Learner.objects.all())
-#            followers_learner = Learner.objects.filter(user__in=follow_users_learner.learner_user.follows.all())
-#        
-#        if follow_users.objects.filter(user__in = Teacher.objects.all()):
-#            follow_users_teacher = follow_users.objects.filter(user__in = Teacher.objects.all())
-#            followers_teacher = Teacher.objects.filter(user__in=follow_users_learner.teacher.follows.all())
-#        
-#        followers = [followers_learner, followers_teacher]
-#        context['followers'] = followers
-
     else:
         cur_user_teacher = Teacher.objects.get(user__exact = cur_user)
         follow_users = cur_user_teacher.follows.all()
