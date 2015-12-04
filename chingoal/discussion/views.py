@@ -210,7 +210,7 @@ def newVideoRoom(request):
 
 @login_required
 def deleteVideoRoom(request,rid):
-    if len(ChatRoom.objects.filter(id = rid))>0:
+    if len(VideoRoom.objects.filter(id = rid))>0:
         roomObj = VideoRoom.objects.get(id__exact= rid)
         # ishout_client.broadcast_group(
         #     rid,
@@ -378,3 +378,8 @@ def send_message(request, room_id):
             data = {'text':text,'username':uname}
         )
     return HttpResponse("OK")
+
+
+@login_required
+def testVideoRoom(request,rid):
+    return render(request, 'discussion/video_room.html', {'rid':rid,'username':request.user.username})

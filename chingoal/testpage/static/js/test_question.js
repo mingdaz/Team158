@@ -1,4 +1,4 @@
-function getCookie(name) {  
+function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {
         var cookies = document.cookie.split(';');
@@ -13,7 +13,7 @@ function getCookie(name) {
     return cookieValue;
 }
 
-function getUpdates() {   
+function getUpdates() {
     var frm = $("#storedata")
     var pb = $("#pbody")
     var max = $("#maxentry").val();
@@ -50,13 +50,13 @@ function getUpdates() {
             var percent = (data.qnum-1)/data.max_entry*100;
             percent = percent.toPrecision(3);
             $("#processbar").attr("style","width: "+percent+"%;");
-            $("#processbar").html(percent+"%");           
+            $("#processbar").html(percent+"%");
           }
             },
             error: function(data) {
                 alert("Something went wrong!");
             }
-        });   
+        });
 }
 
 
@@ -64,8 +64,19 @@ function getResult() {
 
 }
 
-$(document).ready(function () {  
+function blockdefault(e) {
+    e.which = e.which || e.keyCode;
+    if(e.which == 13) {
+      e.preventDefault();
+      return false;
+        // submit
+    }
+}
+
+
+$(document).ready(function () {
   $( ".next-btn" ).bind( "click", getUpdates );
+  $(window).on('keydown',blockdefault);
   getUpdates();
   var csrftoken = getCookie('csrftoken');
   $(".needcsrf").val(csrftoken);
@@ -75,4 +86,3 @@ $(document).ready(function () {
     }
   });
 });
-

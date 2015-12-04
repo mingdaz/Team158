@@ -13,17 +13,18 @@ from django.db.models import Count
 from django.db import transaction
 from django.template import loader, Context
 # from grumblr.models import *
-from datetime import datetime	
+from datetime import datetime
 # from forms import *
 from mimetypes import guess_type
 from django.core.mail import send_mail
 from django.conf import settings
 from django.core import serializers
 from account.models import *
-from forms import * 
-from models import * 
+from forms import *
+from models import *
 
 import urllib2
+import random
 
 @login_required
 def homepage(request):
@@ -47,7 +48,7 @@ def get_learn(request,level,lesson):
 	learner = Learner.objects.get(user = cur_user)
 	context['cur_user'] = learner
 
-	# learn_matrial = Learn.objects.filter(level__exact = level, lesson__exact = lesson)	
+	# learn_matrial = Learn.objects.filter(level__exact = level, lesson__exact = lesson)
 	# ltype = learn_matrial.ltype
 	# if ltype == 'text':
 	# 	return render(request, 'testpage/learn.html', context)
@@ -85,14 +86,14 @@ def question_result(request):
 	qtype = question.qtype
 
 	if qtype=="tr":
-		itemTemplate = loader.get_template('fb-tr.html')
+		itemTemplate = loader.get_template('testpage/fb-tr.html')
 	else:
-		itemTemplate = loader.get_template('fb-mc.html')
-	
+		itemTemplate = loader.get_template('testpage/fb-mc.html')
+
 	print question.answer
 
 	item = itemTemplate.render({"item":question}).replace('\n','').replace('\"','\'') #More escaping might be needed
-	return render(request, 'testcontent.json', {"item":item,"id":qid,"flag":0,"qnum":0,"max":1}, content_type='application/json')
+	return render(request, 'testpage/testcontent.json', {"item":item,"id":qid,"flag":0,"qnum":0,"max":1}, content_type='application/json')
 
 
 @login_required
@@ -105,22 +106,22 @@ def test_create(request):
 
 @login_required
 def post_add_question_mc(request):
-	itemTemplate = loader.get_template('multichoice.html')
+	itemTemplate = loader.get_template('testpage/multichoice.html')
 	new_question = Question(qtype="mc");
 	new_question.save()
 	maxid = new_question.id
 	print maxid
 	item = itemTemplate.render({"id":maxid,"form":MCQFrom()}).replace('\n','').replace('\"','\'') #More escaping might be needed
-	return render(request, 'item.json', {"item":item,"id":maxid,"flag":1}, content_type='application/json')
-	
+	return render(request, 'testpage/item.json', {"item":item,"id":maxid,"flag":1}, content_type='application/json')
+
 @login_required
 def post_add_question_tr(request):
-	itemTemplate = loader.get_template('translate.html')
+	itemTemplate = loader.get_template('testpage/translate.html')
 	new_question = Question(qtype="tr");
 	new_question.save()
 	maxid = new_question.id
 	item = itemTemplate.render({"id":maxid,"form":TRQFrom()}).replace('\n','').replace('\"','\'') #More escaping might be needed
-	return render(request, 'item.json', {"item":item,"id":maxid,"flag":1}, content_type='application/json')
+	return render(request, 'testpage/item.json', {"item":item,"id":maxid,"flag":1}, content_type='application/json')
 
 @login_required
 def post_save_mc_question(request,id):
@@ -137,9 +138,9 @@ def post_save_mc_question(request,id):
 		new_question.explanation=mcqform.cleaned_data['explanation']
 		new_question.save()
 		flag = 1
-	itemTemplate = loader.get_template('multichoice.html')
+	itemTemplate = loader.get_template('testpage/multichoice.html')
 	item = itemTemplate.render({"id":id,"form":mcqform,"answerchoice":request.POST['optionsRadiosInline']}).replace('\n','').replace('\"','\'') #More escaping might be needed
-	return render(request, 'item.json', {"item":item,"id":id,"flag":flag}, content_type='application/json')
+	return render(request, 'testpage/item.json', {"item":item,"id":id,"flag":flag}, content_type='application/json')
 
 @login_required
 def post_save_tr_question(request,id):
@@ -151,9 +152,9 @@ def post_save_tr_question(request,id):
 		new_question.answer=trqform.cleaned_data['explanation']
 		new_question.save()
 		flag = 1
-	itemTemplate = loader.get_template('translate.html')
+	itemTemplate = loader.get_template('testpage/translate.html')
 	item = itemTemplate.render({"id":id,"form":trqform}).replace('\n','').replace('\"','\'') #More escaping might be needed
-	return render(request, 'item.json', {"item":item,"id":id,"flag":flag}, content_type='application/json')
+	return render(request, 'testpage/item.json', {"item":item,"id":id,"flag":flag}, content_type='application/json')
 
 @login_required
 def test_edit_question(request):
@@ -168,7 +169,7 @@ def test_delete_question(request,id):
 		x.delete()
 	except Question.DoesNotExist:
 		x = None
-	return render(request, 'item.json', {"item":"","id":id,"flag":1}, content_type='application/json')
+	return render(request, 'testpage/item.json', {"item":"","id":id,"flag":1}, content_type='application/json')
 
 @login_required
 def get_test_post_id(request):
@@ -176,7 +177,7 @@ def get_test_post_id(request):
 	newtest.save()
 	id = newtest.id
 	print id
-	return render(request, 'item.json', {"item":"","id":id,"flag":1}, content_type='application/json')
+	return render(request, 'testpage/item.json', {"item":"","id":id,"flag":1}, content_type='application/json')
 
 @login_required
 def test_post(request,test_id,question_id):
@@ -187,7 +188,7 @@ def test_post(request,test_id,question_id):
 		flag = 1
 	except Question.DoesNotExist:
 		flag=0
-	return render(request, 'item.json', {"item":"","id":0,"flag":flag}, content_type='application/json')
+	return render(request, 'testpage/item.json', {"item":"","id":0,"flag":flag}, content_type='application/json')
 
 @login_required
 def test_set_level(request,test_id):
@@ -200,7 +201,7 @@ def test_set_level(request,test_id):
 		print "valid"
 	else:
 		flag = 0
-	return render(request, 'item.json', {"item":"","id":0,"flag":flag}, content_type='application/json')
+	return render(request, 'testpage/item.json', {"item":"","id":0,"flag":flag}, content_type='application/json')
 
 @login_required
 def next_questions(request):
@@ -217,7 +218,9 @@ def next_questions(request):
 	if qid==-1:
 		qnum = 0
 		learner = Learner.objects.get(user__exact = request.user)
-		newtest = Test.objects.filter(level = learner.current_level)[0]
+		numtest = len(Test.objects.filter(level = learner.current_level))
+		testindex = random.randint(0,numtest-1)
+		newtest = Test.objects.filter(level = learner.current_level)[testindex]
 		qid = newtest.id
 		question = newtest.question.all()[0]
 		length = len(newtest.question.all())
@@ -229,7 +232,7 @@ def next_questions(request):
 	else:
 		newtest = Test.objects.get(id = qid)
 		length = len(newtest.question.all())
-		if form.is_valid():	
+		if form.is_valid():
 			if qnum<length:
 				curquestion = newtest.question.all()[qnum-1]
 				question = newtest.question.all()[qnum]
@@ -242,9 +245,9 @@ def next_questions(request):
 			if len(QuestionAnswer.objects.filter(qid=curquestion.id,username=request.user.username))==0:
 				curquestion = newtest.question.all()[qnum-1]
 				correctness = form.cleaned_data['answer']== curquestion.answer
-				curanswer = QuestionAnswer(qid=curquestion.id,username=request.user.username,correctness=correctness)				
+				curanswer = QuestionAnswer(qid=curquestion.id,username=request.user.username,correctness=correctness)
 			else:
-				
+
 				curquestion = newtest.question.all()[qnum-1]
 
 				curanswer = QuestionAnswer.objects.filter(qid=curquestion.id,username=request.user.username)[0]
@@ -254,9 +257,9 @@ def next_questions(request):
 
 			curquestion = newtest.question.all()[qnum-1]
 			correctness = form.cleaned_data['answer']== curquestion.answer
-			
-			curanswer.answer = form.cleaned_data['answer']	
-			curanswer.correctness = correctness	
+
+			curanswer.answer = form.cleaned_data['answer']
+			curanswer.correctness = correctness
 			curanswer.save()
 			curtest.question.add(curanswer)
 			curtest.save()
@@ -269,12 +272,12 @@ def next_questions(request):
 	qtype = question.qtype
 	qnum = qnum+1
 	if qtype=="tr":
-		itemTemplate = loader.get_template('test-tr.html')
+		itemTemplate = loader.get_template('testpage/test-tr.html')
 	else:
-		itemTemplate = loader.get_template('test-mc.html')
+		itemTemplate = loader.get_template('testpage/test-mc.html')
 
 	item = itemTemplate.render({"item":question,"form":form,"finish":finish}).replace('\n','').replace('\"','\'') #More escaping might be needed
-	return render(request, 'testcontent.json', {"item":item,"id":qid,"flag":flag,"qnum":qnum,"max":length}, content_type='application/json')
+	return render(request, 'testpage/testcontent.json', {"item":item,"id":qid,"flag":flag,"qnum":qnum,"max":length}, content_type='application/json')
 
 @login_required
 def learn_audio(request):
@@ -402,9 +405,4 @@ def learn_audio(request):
 	learner = Learner.objects.get(user = cur_user)
 	context['cur_user'] = learner
 
-	
-
-
 	return render(request, 'testpage/learn_audio.html', context)
-
-
