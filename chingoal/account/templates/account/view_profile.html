@@ -266,7 +266,7 @@
                     {% for history in historys %}
                         <li class="timeline-inverted">
                             <div class="timeline-image">
-                                <img class="img-circle img-responsive" src="{% static "img/about/2.jpg"%}" alt="">
+                                <img class="img-circle img-responsive" src="{{cur_user.photo.url}}" alt="">
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">

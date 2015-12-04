@@ -221,3 +221,7 @@ body
 .timeline-body{
 	margin-left:20px;
 }
+.img-responsive{
+    height:160px;
+    width:200px;
+}
