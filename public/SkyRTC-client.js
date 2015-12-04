@@ -224,7 +224,6 @@ var SkyRTC = function() {
 
         if (getUserMedia) {
             this.numStreams++;
-            navigator.getUserMedia({ audio: true, video: { width: 1280, height: 720 } },
             getUserMedia.call(navigator, options, function(stream) {
                     that.localMediaStream = stream;
                     that.initializedStreams++;
