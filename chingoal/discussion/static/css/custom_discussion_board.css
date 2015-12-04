@@ -26,11 +26,16 @@
 }
 .post_btn{
     position:relative;
-    left:-180px;
+    left:-350px;
     top:20px;
 }
 .bt1 {
     position:relative;
-    left:100px;
+	left:-50px;
     top:-25px;
+}
+.bt2 {
+    position:relative;
+    left:340px;
+    top:-70px;
 }
