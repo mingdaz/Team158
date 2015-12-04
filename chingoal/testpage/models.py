@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Max
+from account import teacher
 
 class Question(models.Model):
 	level = models.IntegerField(default=0)
@@ -11,13 +12,15 @@ class Question(models.Model):
 	d = models.CharField(max_length=200)
 	answer = models.CharField(max_length=200)
 	explanation = models.CharField(max_length=200)
+	saveflag = models.CharField(max_length=10)
 	def __unicode__(self):
 		return self.text
 
 class Test(models.Model):
 	level = models.IntegerField(default=0)
 	question = models.ManyToManyField(Question)
-	postflag = model.CharField(max_length=10)
+	postflag = models.CharField(max_length=10)
+	teacher = models.ManyToManyField(teacher)
 	def __unicode__(self):
 		return self.text
 
