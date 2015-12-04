@@ -10,7 +10,7 @@
 }
 .coordinates {
   position: absolute;
-  counter-reset: line 18;
+  counter-reset: line 25;
 }
 .coordinates span {
   display: inline-block;
@@ -19,7 +19,7 @@
   width: 270px;
 }
 .coordinates span:before {
-  counter-increment: line -3;
+  counter-increment: line -5;
   content: counter(line);
   display: inline-block;
   color: #4a4a4a;
