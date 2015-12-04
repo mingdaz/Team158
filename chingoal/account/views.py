@@ -13,7 +13,7 @@ from django.contrib.auth.views import password_reset, password_reset_confirm,pas
 import json
 import hashlib, random
 from django.contrib import messages
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from models import *
 from forms import *
@@ -203,13 +203,25 @@ def view_profile(request, uname):
 
     if History.objects.filter(user__exact = cur_user):
         context['historys'] = History.objects.filter(user__exact = cur_user).order_by('-timestamp')
+        last1hour = datetime.today() - timedelta(hours = 1)
+        last2hour = datetime.today() - timedelta(hours = 2)
+        last3hour = datetime.today() - timedelta(hours = 3)
+        last4hour = datetime.today() - timedelta(hours = 4)
+        last5hour = datetime.today() - timedelta(hours = 5)
+        last6hour = datetime.today() - timedelta(hours = 6)
+        count1 = History.objects.filter(user__exact = cur_user, type='title',timestamp__gt=last1hour).count()
+        count2 = History.objects.filter(user__exact = cur_user, type='learn',timestamp__gt=last2hour, timestamp__lt=last1hour).count()
+        count3 = History.objects.filter(user__exact = cur_user, type='learn',timestamp__gt=last3hour, timestamp__lt=last2hour).count()
+        count4 = History.objects.filter(user__exact = cur_user, type='learn',timestamp__gt=last4hour, timestamp__lt=last3hour).count()
+        count5 = History.objects.filter(user__exact = cur_user, type='learn',timestamp__gt=last5hour, timestamp__lt=last4hour).count()
+        count6 = History.objects.filter(user__exact = cur_user, type='learn',timestamp__gt=last6hour, timestamp__lt=last5hour).count()
         points = {}
-        points['1']=90
-        points['2']=105
-        points['3']=97
-        points['4']=89
-        points['5']=82
-        points['6']=74
+        points['1']=105-8*count1
+        points['2']=105-8*count2
+        points['3']=105-8*count3
+        points['4']=105-8*count4
+        points['5']=105-8*count5
+        points['6']=105-8*count6
         context['points'] = points
 
     if Learner.objects.filter(user__exact = request.user):
