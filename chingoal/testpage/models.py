@@ -1,6 +1,12 @@
 from django.db import models
 from django.db.models import Max
 from account.models import Teacher
+from django.template import loader, Context
+from forms import TRQFrom,MCQFrom
+from django import forms
+from models import *
+
+
 
 class Question(models.Model):
 	level = models.IntegerField(default=0)
@@ -16,11 +22,26 @@ class Question(models.Model):
 	def __unicode__(self):
 		return self.text
 
+	@property
+	def html(self):
+	
+		# itemTemplate = loader.get_template('item.html')
+		# context = Context({'item':self,'commentform':CommentForm()})
+		# return itemTemplate.render(context).replace('\n','').replace('\"','\'') #More escaping might be needed
+		if self.qtype=="mc":
+			itemTemplate = loader.get_template('testpage/unpost_mc.html')
+			item = itemTemplate.render({"id":self.id,"form":MCQFrom()}).replace('\n','').replace('\"','\'') #More escaping might be needed
+		else:
+			itemTemplate = loader.get_template('testpage/unpost_tr.html')	
+			item = itemTemplate.render({"id":self.id,"form":TRQFrom()}).replace('\n','').replace('\"','\'') #More escaping might be needed
+		return item
+
+
 class Test(models.Model):
 	level = models.IntegerField(default=0)
 	question = models.ManyToManyField(Question)
 	postflag = models.CharField(max_length=10)
-	teacher = models.ManyToManyField(Teacher)
+	teacher = models.ForeignKey(Teacher)
 	def __unicode__(self):
 		return self.text
 
@@ -59,3 +80,18 @@ class TestAnswer(models.Model):
 	username = models.CharField(max_length=200)
 	tid = models.CharField(max_length=200)
 	question = models.ManyToManyField(QuestionAnswer)
+
+
+class UploadTextLearnForm(forms.ModelForm):
+    class Meta:
+        model = Learn
+        exclude = ('audio', 'ltype', 'lock')
+        widgets = {'image1' : forms.FileInput(),
+                'image2' : forms.FileInput(),
+                'image3' : forms.FileInput(),}
+
+class UploadAudioLearnForm(forms.ModelForm):
+    class Meta:
+        model = Learn
+        exclude = ('a', 'b', 'c', 'image1', 'image2', 'image3', 'ltype', 'lock')
+        widgets = {'audio': forms.FileInput(), }

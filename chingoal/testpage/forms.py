@@ -1,7 +1,5 @@
 from django import forms
 
-from models import *
-
 class MCQFrom(forms.Form):
     question = forms.CharField(max_length=200,widget = forms.TextInput(attrs={'class':'form-control','placeholder':'Choice Text'}))
     a = forms.CharField(max_length=200,widget = forms.TextInput(attrs={'class':'form-control','placeholder':'Choice Text'}))
@@ -48,17 +46,3 @@ class TestFrom(forms.Form):
         cleaned_data = super(TestFrom, self).clean()
         return cleaned_data
 
-
-class UploadTextLearnForm(forms.ModelForm):
-    class Meta:
-        model = Learn
-        exclude = ('audio', 'ltype', 'lock')
-        widgets = {'image1' : forms.FileInput(),
-                'image2' : forms.FileInput(),
-                'image3' : forms.FileInput(),}
-
-class UploadAudioLearnForm(forms.ModelForm):
-    class Meta:
-        model = Learn
-        exclude = ('a', 'b', 'c', 'image1', 'image2', 'image3', 'ltype', 'lock')
-        widgets = {'audio': forms.FileInput(), }
