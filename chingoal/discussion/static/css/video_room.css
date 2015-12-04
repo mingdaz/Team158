@@ -7,9 +7,9 @@
     }
 
     #videos {
-      position: absolute;
-      left: 30%;
-      top: 0;
+      position: positive;
+      left: 100px;
+      top:100px;
       bottom: 0;
       right: 0;
       overflow: auto;
@@ -17,9 +17,14 @@
 
     #videos video {
       display: inline-block;
-      width: 32%;
+      width: 150px;
+      height:150px;
     }
-
+    #me {
+	margin-left:30px;
+	width:20px;
+	height:20px;
+}
     #chat {
       position: absolute;
       left: 0;
