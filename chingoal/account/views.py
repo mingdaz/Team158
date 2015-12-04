@@ -56,17 +56,24 @@ def reset(request):
             post_reset_redirect=reverse('reset'))
 
 
-def register(request):
+def register(request,flag):
     context = {}
     for key in request.POST:
         print key + ":" + request.POST[key]
+    if flag == '1':
+        context['register_form'] = RegistrationForm()
+        context['hint'] = 'The Activation link is invalid, please double check it' 
+        context['judge'] = '1'
+        context['parameter']='0'
+        return render(request, 'account/register.html', context)
     if request.method == 'GET':
         context['register_form'] = RegistrationForm()
+        context['judge']='0'
+        context['parameter']='0'
         return render(request, 'account/register.html', context)
     
     register_form = RegistrationForm(request.POST)
     context['register_form'] = register_form
-    print context
     if not register_form.is_valid():
         return render(request, 'account/register.html', context)
     register_form.save()
@@ -93,10 +100,12 @@ def register(request):
             
     send_mail(email_subject, email_body, '15637test@gmail.com', [register_form.cleaned_data['email']], fail_silently=False)
     messages.add_message(request, messages.INFO, 'A confirmation email has been sent to your email address.')
-    return redirect(reverse('register'))
+    context['parameter']='0'
+    return render(request, 'account/register.html', context)
 
 def login_user(request):
     username = password = ''
+    context = {}
     if request.POST:
         username = request.POST['username']
         password = request.POST['password']
@@ -109,11 +118,14 @@ def login_user(request):
             else:
                 context = {}
                 context['error'] = "User is not activated"
+                context['parameter']='0'
                 return render(request,'account/login.html',context)
         context={}
         context['error'] = "Wrong username or password"
+        context['parameter']='0'
         return render(request,'account/login.html',context)
-    return render(request,'account/login.html')
+    context['parameter']='0'
+    return render(request,'account/login.html',context)
 
 def fb_login(request):
     name = request.POST['username'].replace(" ","")
@@ -349,7 +361,8 @@ def register_confirm(request, activation_key):
     elif Learner.objects.filter(activation_key=activation_key):
         new_user = Learner.objects.get(activation_key__exact=activation_key)
     else:
-        return redirect(reverse('register'))
+        flag = '1'
+        return register(request,flag)
     #if the key hasn't expired save user and set him as active and render some template to confirm activation
     user = new_user.user
     user.is_active = True
