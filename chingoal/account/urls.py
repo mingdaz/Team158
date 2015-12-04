@@ -5,7 +5,7 @@ urlpatterns = [
 
     url(r'^fb-login', 'account.views.fb_login'),
     url(r'^$', 'home.views.home', name='home'),
-    url(r'^login$', 'django.contrib.auth.views.login', {'template_name':'account/login.html','authentication_form':MyAuthenticationForm},name='login'),
+    url(r'^login$', 'account.views.login_user', name='login'),
     url(r'^logout$', 'django.contrib.auth.views.logout_then_login', name = 'logout'),
     url(r'^register$', 'account.views.register', name = 'register'),
     url(r'^edit-profile$', 'account.views.edit_profile', name= 'editProfile'),
