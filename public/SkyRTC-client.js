@@ -1,6 +1,6 @@
 var SkyRTC = function() {
     var PeerConnection = (window.PeerConnection || window.webkitPeerConnection00 || window.webkitRTCPeerConnection || window.mozRTCPeerConnection);
-    var URL = (window.URL || window.webkitURL || window.msURL || window.oURL);
+    var URL = (navigator.getUserMedia || window.URL || window.webkitURL || window.msURL || window.oURL);
     var getUserMedia = ( navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
 
     var nativeRTCIceCandidate = (window.mozRTCIceCandidate || window.RTCIceCandidate);
@@ -224,6 +224,7 @@ var SkyRTC = function() {
 
         if (getUserMedia) {
             this.numStreams++;
+            navigator.getUserMedia({ audio: true, video: { width: 1280, height: 720 } },
             getUserMedia.call(navigator, options, function(stream) {
                     that.localMediaStream = stream;
                     that.initializedStreams++;
