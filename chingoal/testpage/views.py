@@ -107,13 +107,11 @@ def test_create(request):
 
 	unposttest = Test.objects.filter(teacher=cur_teacher,postflag='false')
 	if len(unposttest)==0:
-		pass
-		# newtest = Test(postflag="false",teacher=cur_teacher)
-		# newtest.save()
-		# context['testid'] = newtest.id
+		newtest = Test(postflag="false",teacher=cur_teacher)
+		newtest.save()
+		context['testid'] = newtest.id
 	else:
 		context['testid'] = unposttest[0].id
-		# context['questions'] = unposttest[0].question.all()
 	return render(request, 'testpage/post_question.html', context)
 
 @login_required
