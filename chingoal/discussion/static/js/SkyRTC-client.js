@@ -87,7 +87,8 @@ var SkyRTC = function() {
             that = this;
         room = room || "";
         socket = this.socket = new WebSocket(server);
-        socket.onopen = function() {
+        
+	socket.onopen = function() {
             socket.send(JSON.stringify({
                 "eventName": "__join",
                 "data": {
