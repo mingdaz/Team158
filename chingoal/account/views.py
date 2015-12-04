@@ -203,6 +203,14 @@ def view_profile(request, uname):
 
     if History.objects.filter(user__exact = cur_user):
         context['historys'] = History.objects.filter(user__exact = cur_user).order_by('-timestamp')
+        points = {}
+        points['1']=90
+        points['2']=105
+        points['3']=97
+        points['4']=89
+        points['5']=82
+        points['6']=74
+        context['points'] = points
 
     if Learner.objects.filter(user__exact = request.user):
         
