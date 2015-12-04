@@ -95,6 +95,26 @@ def register(request):
     messages.add_message(request, messages.INFO, 'A confirmation email has been sent to your email address.')
     return redirect(reverse('register'))
 
+def login_user(request):
+    username = password = ''
+    if request.POST:
+        username = request.POST['username']
+        password = request.POST['password']
+        
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return HttpResponseRedirect('/home')
+            else:
+                context = {}
+                context['error'] = "User is not activated"
+                return render(request,'account/login.html',context)
+        context={}
+        context['error'] = "Wrong username or password"
+        return render(request,'account/login.html',context)
+    return render(request,'account/login.html')
+
 def fb_login(request):
     name = request.POST['username'].replace(" ","")
     if len(User.objects.filter(username = name)) > 0:
@@ -318,9 +338,10 @@ def register_confirm(request, activation_key):
     # check if there is UserProfile which matches the activation key (if not then display 404)
     if Teacher.objects.filter(activation_key=activation_key):
         new_user = Teacher.objects.get(activation_key__exact=activation_key)
-    else:
+    elif Learner.objects.filter(activation_key=activation_key):
         new_user = Learner.objects.get(activation_key__exact=activation_key)
-
+    else:
+        return redirect(reverse('register'))
     #if the key hasn't expired save user and set him as active and render some template to confirm activation
     user = new_user.user
     user.is_active = True
