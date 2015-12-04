@@ -60,20 +60,20 @@
         <div class="container">
     	<br><br>
             <div class="intro-text">
-                        {% if form.errors %}
+                        {% if error %}
                         <p>
-                        Incorrect email and password.
+                        {{error}}
                         </p>
                         {% endif %}
                         <form role="form" action="{% url 'login' %}" method="post" id="registration_form">
                             <fieldset>
                                 <div class="form-group">
                                      <!-- {{ form.username.label_tag }} -->
-                                        {{ form.username}}
+                                        <input type="text" id="username" name="username" class="form-control"  placeholder="Username">
                                 </div>
                                 <div class="form-group">
                                     <!-- {{ form.password.label_tag }} -->
-                                        {{ form.password}}
+                                        <input type="password" name="password" id="password" class="form-control" placeholder="Password">
                                 </div>
                                 <div class="checkbox login-style">
                                     <label>

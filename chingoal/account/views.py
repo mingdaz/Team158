@@ -95,6 +95,26 @@ def register(request):
     messages.add_message(request, messages.INFO, 'A confirmation email has been sent to your email address.')
     return redirect(reverse('register'))
 
+def login_user(request):
+    username = password = ''
+    if request.POST:
+        username = request.POST['username']
+        password = request.POST['password']
+        
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return HttpResponseRedirect('/home')
+            else:
+                context = {}
+                context['error'] = "User is not activated"
+                return render(request,'account/login.html',context)
+        context={}
+        context['error'] = "Wrong username or password"
+        return render(request,'account/login.html',context)
+    return render(request,'account/login.html')
+
 def fb_login(request):
     name = request.POST['username'].replace(" ","")
     if len(User.objects.filter(username = name)) > 0:
