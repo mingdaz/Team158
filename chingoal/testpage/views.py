@@ -103,11 +103,39 @@ def test_create(request):
 	context['flag'] = 1
 	context['chooselevel'] = TestLevelForm()
 
-	newtest = Test(postflag="false")
-	newtest.save()
-	context['testid'] = newtest.id
+	cur_teacher = Teacher.objects.get(user=request.user)
 
+	unposttest = Test.objects.filter(teacher=cur_teacher,postflag='false')
+	if len(unposttest)==0:
+		pass
+		# newtest = Test(postflag="false",teacher=cur_teacher)
+		# newtest.save()
+		# context['testid'] = newtest.id
+	else:
+		context['testid'] = unposttest[0].id
+		# context['questions'] = unposttest[0].question.all()
 	return render(request, 'testpage/post_question.html', context)
+
+@login_required
+def test_unpost_question(request,id):
+	# mc
+	x = Question.objects.get(id=id)
+	
+	if x.qtype=="mc":
+		itemTemplate = loader.get_template('testpage/unpost_mc.html')
+		item = itemTemplate.render({"id":id,"form":MCQFrom()}).replace('\n','').replace('\"','\'') #More escaping might be needed
+	else:
+		itemTemplate = loader.get_template('testpage/unpost_tr.html')	
+		item = itemTemplate.render({"id":id,"form":TRQFrom()}).replace('\n','').replace('\"','\'') #More escaping might be needed
+	return render(request, 'testpage/item.json', {"item":item,"id":id,"flag":1}, content_type='application/json')
+
+@login_required
+def get_items(request,id):
+	max_globalentry = 1;
+	items = Test.objects.get(id=id).question.all()
+	context = {"max_entry":max_globalentry, "items":items}
+	return render(request, 'testpage/items.json', context, content_type='application/json')
+
 
 @login_required
 def get_test_post_id(request):
@@ -182,10 +210,13 @@ def post_save_tr_question(request,id):
 	return render(request, 'testpage/item.json', {"item":item,"id":id,"flag":flag}, content_type='application/json')
 
 @login_required
-def test_edit_question(request):
+def test_edit_question(request,id):
 	context = {}
-	context['username'] = request.user.username
-	return render(request, 'testpage/post_question.html', context)
+	new_question = Question.objects.get(id=id)
+	new_question.saveflag="false"
+	new_question.save()
+	return render(request, 'testpage/item.json', {"item":"","id":id,"flag":1}, content_type='application/json')
+
 
 @login_required
 def test_delete_question(request,id):

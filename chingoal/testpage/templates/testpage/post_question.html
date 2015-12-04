@@ -93,7 +93,24 @@
                         </div>
                         </form>
                             <ul style="list-style: none;" id="question">
-
+                <!-- this for loop could be deleted -->
+                                {% for question in questions %} 
+                                <li>
+<form action="{% url 'testsavemcquestion' id %}" method="post">
+<div class="panel panel-success">
+<div class="panel-heading">
+Question <p class="question-num" style="display:inline">{{question.id}}</p> (Multiple Choice)
+</div>
+<div class="panel-body">
+</div>
+<div class="panel-footer">
+<button type="button" class="btn btn-info save-btn">Save</button>
+<button type="button" class="btn btn-danger delete-btn">Delete</button>
+</div>
+</div>
+</form>
+</li>  
+                                {% endfor %}     
                            </ul>                             
                         </div>
                         <div class="panel-footer">

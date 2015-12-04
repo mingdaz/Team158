@@ -20,13 +20,55 @@ function update(){
         var tmp = $(array[i-1]);
         tmp.find(".question-num").html(i);
     }
-    // list.data("max-entry",array.length);
 }
+
+function unpost(){
+    var list = $("#question");
+    var array = list.find("li");
+    for ( var i = 1; i <= array.length; i++ ) {
+      item = $(array[i-1]);
+      id = item.find(".question-num").text();
+      item.data("item-id", id);
+          
+      $.ajax({
+        type: "POST",
+        url: "/testpage/test-unpost-question/"+id,
+        success: function (data) {
+          item = $(array[i-1]);
+          item.html(data.html)
+          item.find('.save-btn').click(btnsave);
+          item.find('.delete-btn').click(btndelete);
+          console.log("success")
+          // update();
+        },
+        error: function(data) {
+          flag = 0;
+          console.log("error")
+        }
+      });                    
+    }
+}
+
+function populateList() {
+    var testid = $("#testid").val();
+    $.get("/testpage/get-items/"+testid)
+      .done(function(data) {
+          var list = $("#question");
+          list.html('')
+          for (var i = 0; i < data.items.length; i++) {
+              item = data.items[i];
+              var new_item = $(item.html);
+              new_item.data("item-id", item.id);
+              list.append(new_item);
+          }
+            // $(".addbtn").click(commentPost);
+      });
+}
+
 
 function postmytest(){
     var list = $("#question");
     var array = list.find("li");
-    
     if(array.length==0){
       alert("You don't have any question, create some questions")
       return
@@ -91,8 +133,6 @@ $.ajax({
                 alert("Something went wrong!");
             }
     });
-
-
                 if(flag==1){
                   var tmp = list.parent();
                   list.remove();
@@ -102,7 +142,6 @@ $.ajax({
         
     }
 
-
 function getMultipleChoice() {
     var list = $("#question"); 
    $.ajax({
@@ -111,17 +150,13 @@ function getMultipleChoice() {
     data: $("#testidform").serialize(),
     success: function (data) {
       console.log("success")
-
               item = data.html;
               var new_item = $(item);
-              
               new_item.find('.save-btn').click(btnsave);
               new_item.find('.delete-btn').click(btndelete);
-              
               new_item.data("item-id", data.id);
               list.append(new_item);
               update()
-      
     },
     error: function(data) {
       flag = 0;
@@ -216,6 +251,7 @@ function btnsave()
 
 function btnedit()
 {
+    var id = $(event.target).parent().parent().parent().parent().data("item-id");
     var btn = $(event.target);
     var frm = $(event.target).parent().parent().parent();
     btn.removeClass( "edit-btn" );
@@ -226,6 +262,16 @@ function btnedit()
     btn.unbind("click",btnedit);
     btn.click(btnsave);
     frm.find("input").prop('disabled', false);
+    $.ajax({
+            type: 'POST',
+            url: '/testpage/test-edit-question/'+id,
+            success: function (data) {
+              update();
+            },
+            error: function(data) {
+                alert("Something went wrong!");
+            }
+        });
 }
 
 function btndelete()
@@ -253,7 +299,6 @@ $(document).ready(function () {
   $("#question-tr").click(getTranslate);
   $("#posttest").click(postmytest);
 
-
   var csrftoken = getCookie('csrftoken');
   $(".needcsrf").val(csrftoken);
   $.ajaxSetup({
@@ -261,5 +306,8 @@ $(document).ready(function () {
         xhr.setRequestHeader("X-CSRFToken", csrftoken);
     }
   });
+
+  populateList();
+
 });
 
