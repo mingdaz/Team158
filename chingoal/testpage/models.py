@@ -28,12 +28,32 @@ class Question(models.Model):
 		# itemTemplate = loader.get_template('item.html')
 		# context = Context({'item':self,'commentform':CommentForm()})
 		# return itemTemplate.render(context).replace('\n','').replace('\"','\'') #More escaping might be needed
+		answerchoice = "A"
 		if self.qtype=="mc":
-			itemTemplate = loader.get_template('testpage/unpost_mc.html')
-			item = itemTemplate.render({"id":self.id,"form":MCQFrom()}).replace('\n','').replace('\"','\'') #More escaping might be needed
+			form = MCQFrom()
+			if len(self.a)>0:
+				form.fields["a"].initial = self.a
+			if len(self.b)>0:
+				form.fields["b"].initial = self.b
+			if len(self.c)>0:
+				form.fields["c"].initial = self.c
+			if len(self.d)>0:
+				form.fields["d"].initial = self.d
+			if len(self.question)>0:
+				form.fields["question"].initial = self.question
+			if len(self.explanation)>0:
+				form.fields["explanation"].initial = self.explanation
+			answerchoice = self.answer
+			
+			itemTemplate = loader.get_template('testpage/base_mc.html')
 		else:
-			itemTemplate = loader.get_template('testpage/unpost_tr.html')	
-			item = itemTemplate.render({"id":self.id,"form":TRQFrom()}).replace('\n','').replace('\"','\'') #More escaping might be needed
+			form = TRQFrom()
+			if len(self.question)>0:
+				form.fields["question"].initial = self.question
+			if len(self.answer)>0:
+				form.fields["explanation"].initial = self.answer
+			itemTemplate = loader.get_template('testpage/base_tr.html')	
+		item = itemTemplate.render({"id":self.id,"form":form,"answerchoice":answerchoice,"save":self.saveflag}).replace('\n','').replace('\"','\'') #More escaping might be needed
 		return item
 
 

@@ -147,7 +147,7 @@ def get_test_post_id(request):
 
 @login_required
 def post_add_question_mc(request):
-	itemTemplate = loader.get_template('testpage/multichoice.html')
+	itemTemplate = loader.get_template('testpage/base_mc.html')
 	new_question = Question(qtype="mc",saveflag="false");
 	new_question.save()
 	maxid = new_question.id
@@ -162,7 +162,7 @@ def post_add_question_mc(request):
 
 @login_required
 def post_add_question_tr(request):
-	itemTemplate = loader.get_template('testpage/translate.html')
+	itemTemplate = loader.get_template('testpage/base_tr.html')
 	new_question = Question(qtype="tr",saveflag="false");
 	new_question.save()
 	maxid = new_question.id
@@ -190,7 +190,7 @@ def post_save_mc_question(request,id):
 		new_question.saveflag="true"
 		new_question.save()
 		flag = 1
-	itemTemplate = loader.get_template('testpage/multichoice.html')
+	itemTemplate = loader.get_template('testpage/base_mc.html')
 	item = itemTemplate.render({"id":id,"form":mcqform,"answerchoice":request.POST['optionsRadiosInline']}).replace('\n','').replace('\"','\'') #More escaping might be needed
 	return render(request, 'testpage/item.json', {"item":item,"id":id,"flag":flag}, content_type='application/json')
 
@@ -205,7 +205,7 @@ def post_save_tr_question(request,id):
 		new_question.saveflag="true"
 		new_question.save()
 		flag = 1
-	itemTemplate = loader.get_template('testpage/translate.html')
+	itemTemplate = loader.get_template('testpage/base_tr.html')
 	item = itemTemplate.render({"id":id,"form":trqform}).replace('\n','').replace('\"','\'') #More escaping might be needed
 	return render(request, 'testpage/item.json', {"item":item,"id":id,"flag":flag}, content_type='application/json')
 
