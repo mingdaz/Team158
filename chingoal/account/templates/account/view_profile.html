@@ -248,21 +248,22 @@
     		 <div class="row"> 
                 <div class="col-lg-6">
                     <ul class="timeline">
-                        <li>
-                            <div class="timeline-image">
-                                <img class="img-circle img-responsive" src="{% static "img/about/1.jpg"%}" alt="">
-                            </div>
-                            <div class="timeline-panel">
-                                <div class="timeline-heading">
-                                    <h4>{{ cur_user.title}}</h4>
-                                    <h4 class="subheading">{{ username }}</h4>
-                                </div>
-                                <div class="timeline-body">
-                                    <p class="text-muted">{{history.content}}</p>
-                                    <p class="text-muted">{{history.timestamp}}</p>
-                                </div>
-                            </div>
-                        </li>
+<!--                        <li>-->
+<!--                            <div class="timeline-image">-->
+<!--                                <img class="img-circle img-responsive" src="{% static "img/about/1.jpg"%}" alt="">-->
+<!--                            </div>-->
+<!--                            <div class="timeline-panel">-->
+<!--                                <div class="timeline-heading">-->
+<!--                                    <h4>{{ cur_user.title}}</h4>-->
+<!--                                    <h4 class="subheading">{{ username }}</h4>-->
+<!--                                </div>-->
+<!--                                <div class="timeline-body">-->
+<!--                                    <p class="text-muted">{{history.content}}</p>-->
+<!--                                    <p class="text-muted">{{history.timestamp}}</p>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </li>-->
+                    {% for history in historys %}
                         <li class="timeline-inverted">
                             <div class="timeline-image">
                                 <img class="img-circle img-responsive" src="{% static "img/about/2.jpg"%}" alt="">
@@ -278,6 +279,7 @@
                                 </div>
                             </div>
                         </li>
+                        {% endfor %}
                     </ul>
                 </div>
              </div>
