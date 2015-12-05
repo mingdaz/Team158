@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import PasswordResetForm
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponseNotFound
 
 from django.contrib.auth.decorators import login_required
 
@@ -57,6 +58,9 @@ def reset(request):
 
 
 def register(request,flag):
+
+    if flag!='0' and flag!='1':
+        return HttpResponseNotFound('<h1>No Page Here</h1>')
     context = {}
     for key in request.POST:
         print key + ":" + request.POST[key]
@@ -197,6 +201,8 @@ def edit_profile(request):
 
 @login_required
 def view_profile(request, uname):
+    if not User.objects.filter(username__exact = uname):
+        return HttpResponseNotFound('<h1>No User</h1>')
     context = {}
     if request.user.newmsg.filter(isReply=True).count() > 10:
         request.user.newmsg.filter(isReply=True).delete()
