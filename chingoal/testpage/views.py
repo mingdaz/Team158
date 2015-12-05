@@ -554,7 +554,7 @@ def get_learn_json(request, currLevel, currLesson, currChapter):
 def write_history(request, currLevel, currLesson):
 	user = request.user
 	text = 'Finished Level ' + str(currLevel) + ' Lesson ' + str(currLesson)
-	history = History(user = user, content = text, type = 'learn')
+	history = History.objects.create(user = user, content = text, type = 'learn')
 	history.save()
 	return render(request, 'testpage/empty.json', {}, content_type='application/json')
 
