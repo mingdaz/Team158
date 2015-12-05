@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^discussion_reply/get_postreply/(?P<post_id>\d+)/(?P<max_reply_id>\d+)$', 'discussion.views.get_postreply', name = 'get_postreply'),
     url(r'^discussion_reply/delete_post/(?P<post_id>\d+)$', 'discussion.views.delete_post', name = 'delete_post'),
     url(r'^discussion_reply/delete_reply/(?P<reply_id>\d+)$', 'discussion.views.delete_reply', name  = 'delete_reply'),
+    url(r'^get-user-photo/(?P<user_id>\d+)$', 'discussion.views.get_user_photo', name = 'get_user_photo'),
     # url(r'^discussion_reply/get_postreply$', 'discussion.views.get_postreply', name = 'get_postreply'),
     # url(r'discussion_reply/get_postreply?'),
     url(r'^chat$','discussion.views.index',name ='chat'),
