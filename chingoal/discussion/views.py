@@ -76,7 +76,7 @@ def discussion_reply(request, post_id):
         if len(learnerSet) > 0:
             post_user = learnerSet[0]
         else:
-            teacher = Teacher.objects.get(user = userTemp)
+            teacher = Teacher.objects.get(user = post.author)
             post_user = teacher
 
         replies = Reply.objects.filter(reply_to__id = post_id)
