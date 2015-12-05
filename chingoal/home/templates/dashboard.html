@@ -127,27 +127,27 @@
                     {% if flag == 0 %}
                     <h3>Achievement</h3>
                     <i class="fa fa-star fa-2x text-muted" style="color:#fed136;"></i>
-                    {% if current_level > 0 %}
+                    {% if cur_user.current_level > 0 %}
                     <i class="fa fa-star fa-2x text-muted" style="color:#fed136;"></i>
                     {% else %}
                     <i class="fa fa-star fa-2x text-muted"></i>
                     {% endif %}
-                    {% if current_level > 1 %}
+                    {% if cur_user.current_level > 1 %}
                     <i class="fa fa-star fa-2x text-muted" style="color:#F78706;"></i>
                     {% else %}
                     <i class="fa fa-star fa-2x text-muted"></i>
                     {% endif %}
-                    {% if current_level > 2 %}
+                    {% if cur_user.current_level > 2 %}
                     <i class="fa fa-star fa-2x text-muted" style="color:#F78706;"></i>
                     {% else %}
                     <i class="fa fa-star fa-2x text-muted"></i>
                     {% endif %}
-                    {% if current_level > 3 %}
+                    {% if cur_user.current_level > 3 %}
                     <i class="fa fa-star fa-2x text-muted" style="color:#F26002;"></i>
                     {% else %}
                     <i class="fa fa-star fa-2x text-muted"></i>
                     {% endif %}
-                    {% if current_level > 4 %}
+                    {% if cur_user.current_level > 4 %}
                     <i class="fa fa-star fa-2x text-muted" style="color:red;"></i>
                     {% else %}
                     <i class="fa fa-star fa-2x text-muted"></i>
