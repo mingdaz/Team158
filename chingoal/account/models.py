@@ -32,7 +32,7 @@ class History(models.Model):
     user = models.ForeignKey(User, related_name="history")
     timestamp = models.DateTimeField(auto_now_add=True)
     content = models.CharField(max_length = 100)
-    type = models.CharField(max_length=20)
+    kind = models.CharField(max_length=20)
     def __unicode__(self):
         return self.content
 
