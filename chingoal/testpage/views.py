@@ -388,7 +388,7 @@ def next_questions(request):
 	else:
 		itemTemplate = loader.get_template('testpage/test-mc.html')
 
-	item = itemTemplate.render({"item":question,"form":form,"finish":finish}).replace('\n','').replace('\"','\'') #More escaping might be needed
+	item = itemTemplate.render({"item":question,"form":form,"finish":finish,"level":currentlevel}).replace('\n','').replace('\"','\'') #More escaping might be needed
 	return render(request, 'testpage/testcontent.json', {"item":item,"id":qid,"flag":flag,"qnum":qnum,"max":length}, content_type='application/json')
 
 @login_required
