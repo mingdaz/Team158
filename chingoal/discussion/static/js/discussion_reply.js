@@ -18,27 +18,6 @@ function populateList() {
 }
 
 
-// function new_reply_clicked(e) {
-//     e.preventDefault();
-//     var dt = new Date();
-//     var date_str = dt.toLocaleDateString();
-//     var time_str = dt.toLocaleTimeString('en-US', { hour12: false });
-//     var post_time = date_str + ' ' + time_str;
-
-//     var reply_text = $('#replyText')
-
-//     $.post('post_reply', {'reply_text': reply_text})
-//         .done(function(data) {
-//             var replyDiv = $('#replyDiv');
-//             var reply_html = $(data.reply.html);
-//             replyDiv.append(reply_html);
-//             console.log('Photo url ' + data.user_photo_url);
-//             $('#reply_user_profile_img').attr('src', data.user_photo_url);
-//     });
-
-//     $('#myModal').modal('hide');
-// }
-
 
 function new_post_clicked(e) {
     e.preventDefault();
