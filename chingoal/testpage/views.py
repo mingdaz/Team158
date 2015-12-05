@@ -579,3 +579,15 @@ def get_learn_audio(request, currLevel, currLesson):
 
 	context['learning_material'] = learning_material
 	return render(request, 'testpage/learn_audio.html', context)
+
+
+@login_required
+def upgrade_lesson(request):
+	usernameTemp = request.user.username
+	cur_user = User.objects.get(username = usernameTemp)
+	learner = Learner.objects.get(user = cur_user)
+
+	learner.current_lesson += 1
+	learner.save()
+	return render(request, 'testpage/empty.json', {}, content_type='application/json')
+

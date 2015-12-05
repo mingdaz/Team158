@@ -40,6 +40,7 @@ urlpatterns = [
     # url(r'^write-history/(?P<currLevel>[0-9]*)/(?P<currLesson>[0-9]*)$', 'testpage.views.write_history', name = 'writehistory'),
     url(r'^write-history$', 'testpage.views.write_history', name = 'writehistory'),
     url(r'^get-learn-audio/(?P<currLevel>[0-9]*)/(?P<currLesson>[0-9]*)$', 'testpage.views.get_learn_audio', name = 'getlearnaudio'),
+    url(r'^upgrade-lesson$', 'testpage.views.upgrade_lesson', name = 'upgradelesson'),
 
     # This is for uploading text learn
     url(r'^upload-text-learn$','testpage.views.upload_text_learn',name='uploadtextlearn'),

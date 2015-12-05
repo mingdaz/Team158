@@ -60,6 +60,10 @@ function generateLearn(currLevel, currLesson, currChapter) {
                                 .done(function() {
                                     console.log('History saved');
                                 });
+                            $.get('/testpage/upgrade-lesson')
+                                .done(function() {
+                                    console.log('Update lesson');
+                                });
                         }
                     });                                        
                     $.holdReady(false);
