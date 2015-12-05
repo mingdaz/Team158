@@ -230,6 +230,10 @@ def deleteVideoRoom(request,rid):
 
 @login_required
 def room(request, room_id):
+    if not room_id.isdigit():
+        return HttpResponse('<h1>No room</h1>')
+    if not ChatRoom.objects.filter(id=room_id):
+        return HttpResponse('<h1>No room</h1>')
     user = request.user
     ishout_client.register_group(
         user.id,
