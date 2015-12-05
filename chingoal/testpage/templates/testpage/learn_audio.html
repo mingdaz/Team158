@@ -91,12 +91,12 @@
                             <div class="col-lg-8">
                                 <p>
                                     <strong>Learning Progress</strong>
-                                    <span class="pull-right text-muted">40% Complete</span>
+                                    <span class="pull-right text-muted" id="progress-text"></span>
                                 </p>
                                 <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="40"
-                                            aria-valuemin="0" aria-valuemax="100" style="width:40%">
-                                        <span class="sr-only">70% Complete</span>
+                                    <div id="progress-bar" class="progress-bar" role="progressbar" aria-valuenow="40"
+                                            aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                                        <span class="sr-only" id="progress-span"></span>
                                     </div>
                                 </div>
                             </div>
@@ -108,7 +108,7 @@
                         
                     </div>
                     <div class="panel-body">
-                        <h4>Please Listen to following audio and repeat</h4>
+                        <h4>Please Listen to following audio of <em>{{learning_material.text}}</em> and repeat</h4>
                         <div class="row">       
                             <div class="col-lg-1"></div>                     
                             <div class="col-lg-1">
@@ -116,30 +116,11 @@
                                 <p><i class="fa fa-play fa-lg" id="playButton"></i></p>
                                 
                             </div>
-                            <!-- <div class="col-lg-2">
-                                
-                            </div>
-
-                            <div class="col-lg-2">
-                                
-                            </div> -->
                             <div class="col-lg-10">
                                 <canvas id="wave_learn" style="width:400px;height:150px;background-color:#fcf8e3"></canvas>
                             </div>
                         </div>                        
-                        <h5>Please record anytime when you are ready.</h5>
-                        
-                        <!-- <div class="row">
-                            <div class="col-lg-2">
-                                <i class="fa fa-microphone" id="startButton"></i>
-                            </div>
-                            <div class="col-lg-2">
-                                <i class="fa fa-floppy"></i>
-                            </div>
-                            <div class="col-lg-2">
-                                <i class="fa fa-play-circle" id="restart_record_button"></i>
-                            </div>                      
-                        </div> -->
+                        <h5>Please record anytime when you are ready.</h5>                        
                         <div class="row">
                             <div class="col-lg-1"></div>
                             <div class="col-lg-1">
@@ -157,8 +138,7 @@
                             <div class="col-lg-1">
                                 <br><br><br>                                
                                 <p><i id="playUserAudioButton" class="fa fa-play fa-lg"></i></p>
-                                <br>
-                            
+                                <br>                            
                             </div>
                             <div class="col-lg-8">
                                 <canvas id="wave_user" style="width:400px;height:150px;background-color:#fcf8e3"></canvas>
@@ -200,10 +180,16 @@
                 </div>
             </div>
         </div>
+
+        <div hidden id="hidden_username">{{cur_user.user.username}}</div>
+        <div hidden id="hidden_user_level">{{cur_user.current_level}}</div>
+        <div hidden id="hidden_user_lesson">{{cur_user.current_lesson}}</div>
+        <div hidden id="hidden_curr_level">{{learning_material.level}}</div>
+        <div hidden id="hidden_curr_lesson">{{learning_material.lesson}}</div>
+        <div hidden id="hidden_answer">{{learning_material.answer}}</div>
+        <div hidden id="hidden_curr_chapter">{{learning_material.chapter}}</div>
         
     </section>
-
-
     <footer>
         <div class="container">
             <div class="row">
@@ -280,6 +266,6 @@
 
     <script src="{% static 'js/learn_audio.js' %}" type="text/javascript"></script>
 
-    <script src="{% static 'js/wavesurfer.js' %}" type="text/javascript"></script>
+    <!-- // <script src="{% static 'js/wavesurfer.js' %}" type="text/javascript"></script> -->
 
 {% endblock %}

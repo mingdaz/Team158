@@ -1,7 +1,8 @@
 
 
 // user file format
-// userupload_{% current_level %}_{% current_lesson %}_{% current_chapter %}_{% user attempt %}
+// audio_{% current_level %}_{% current_lesson %}_{% current_chapter %}
+// userupload_username_{% current_level %}_{% current_lesson %}_{% current_chapter %}_{% user attempt %}
 
 
 // variables
@@ -111,10 +112,13 @@ function uploadUserAudio() {
     console.log('Saving to s3...');
 
     // TODO change file name and url for matching user level and lesson
-
+    var currLevel = $('#hidden_curr_level').html();
+    var currLesson = $('#hidden_curr_lesson').html();
+    var username = $('#hidden_username').html();
+    var fileName = 'audio/userupload_' + username + '_' + currLevel + '_' + currLesson + '.wav'
 
     var formData = new FormData();
-    formData.append('key', 'audio/userupload.wav');
+    formData.append('key', fileName);
     formData.append('AWSAccessKeyId', 'AKIAI5ZDLT2RNFUJ4KMQ');
     formData.append('acl', 'public-read');
     formData.append('policy', 'CnsiZXhwaXJhdGlvbiI6ICIyMDE2LTAxLTAxVDAwOjAwOjAwWiIsImNvbmRpdGlvbnMiOiBbeyJidWNrZXQiOiAiY2hpbmdvYWwifSwgWyJzdGFydHMtd2l0aCIsICIka2V5IiwgImF1ZGlvLyJdLHsiYWNsIjogInB1YmxpYy1yZWFkIn0sWyJzdGFydHMtd2l0aCIsICIkQ29udGVudC1UeXBlIiwgIiJdLFsiY29udGVudC1sZW5ndGgtcmFuZ2UiLCAwLCAxMDQ4NTc2MDBdXX0=');
@@ -123,7 +127,7 @@ function uploadUserAudio() {
     formData.append('file', blob);
 
     $.ajax({
-        url: 'http://s3.amazonaws.com/chingoal',
+        url: 'https://s3.amazonaws.com/chingoal',
         type: "POST",
         data: formData,
         cache: false,

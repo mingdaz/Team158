@@ -19,33 +19,30 @@ app.get('/', function(req, res) {
 });
 
 SkyRTC.rtc.on('new_connect', function(socket) {
-	console.log('创建新连接');
+	console.log('Create new connection');
 });
 
 SkyRTC.rtc.on('remove_peer', function(socketId) {
-	console.log(socketId + "用户离开");
+	console.log(socketId + "user leaves");
 });
 
 SkyRTC.rtc.on('new_peer', function(socket, room) {
-	console.log("新用户" + socket.id + "加入房间" + room);
+	console.log("new user " + socket.id + "enter " + room);
 });
 
-SkyRTC.rtc.on('socket_message', function(socket, msg) {
-	console.log("接收到来自" + socket.id + "的新消息：" + msg);
-});
 
 SkyRTC.rtc.on('ice_candidate', function(socket, ice_candidate) {
-	console.log("接收到来自" + socket.id + "的ICE Candidate");
+	console.log("receive user " + socket.id + " ICE Candidate");
 });
 
 SkyRTC.rtc.on('offer', function(socket, offer) {
-	console.log("接收到来自" + socket.id + "的Offer");
+	console.log("receive user " + socket.id + "Offer");
 });
 
 SkyRTC.rtc.on('answer', function(socket, answer) {
-	console.log("接收到来自" + socket.id + "的Answer");
+	console.log("receive user " + socket.id + "Answer");
 });
 
 SkyRTC.rtc.on('error', function(error) {
-	console.log("发生错误：" + error.message);
+	console.log("error: " + error.message);
 });

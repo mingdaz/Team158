@@ -34,9 +34,18 @@ urlpatterns = [
     url(r'^next-questions$','testpage.views.next_questions',name ='nextquestions' ),
     url(r'^question-result$','testpage.views.question_result',name ='questionresult'),
     url(r'^audio$','testpage.views.learn_audio',name ='audio'),
+
+    url(r'^get-learn-photo/(?P<currLevel>[0-9]*)/(?P<currLesson>[0-9]*)/(?P<currChapter>[0-9]*)/(?P<choice>[abc])$', 'testpage.views.get_learn_photo', name='getlearnphoto'),
+    url(r'^get-learn-json/(?P<currLevel>[0-9]*)/(?P<currLesson>[0-9]*)/(?P<currChapter>[0-9]*)$', 'testpage.views.get_learn_json', name = 'getlearnjson'),
+    url(r'^write-history/(?P<currLevel>[0-9]*)/(?P<currLesson>[0-9]*)$', 'testpage.views.write_history', name = 'writehistory'),
+    url(r'^get-learn-audio/(?P<currLevel>[0-9]*)/(?P<currLesson>[0-9]*)$', 'testpage.views.get_learn_audio', name = 'getlearnaudio'),
+
+    # This is for uploading text learn
     url(r'^upload-text-learn$','testpage.views.upload_text_learn',name='uploadtextlearn'),
     url(r'^upload-audio-learn$','testpage.views.upload_audio_learn',name='uploadaudiolearn'),
 
     # This is for presentation
     url(r'^learn-audio$','testpage.views.learn_audio', name = 'learnaudio'),
+
+    
 ]
