@@ -40,6 +40,7 @@ def get_test(request,level):
 	cur_user = User.objects.get(username__exact = context['username'])
 	learner = Learner.objects.get(user = cur_user)
 	context['cur_user'] = learner
+	context['level'] = level
 	return render(request, 'testpage/test.html', context)
 
 @login_required
@@ -49,6 +50,7 @@ def get_learn(request,level,lesson):
 	cur_user = User.objects.get(username__exact = context['username'])
 	learner = Learner.objects.get(user = cur_user)
 	context['cur_user'] = learner
+	context['testoutlevel'] = level 
 
 	learn_matrial = Learn.objects.get(level = level, lesson = lesson, chapter = 1)
 
@@ -76,11 +78,11 @@ def get_result(request):
 	curquestion = curtest.question.all()
 
 	score = int(len(curquestion.filter(correctness='True'))*100/len(curquestion))
+	level = request.POST['level']
 	if(score>60):
 		learner.user_vm += 10
-		level = learner.current_level
 		print "greater then 60"
-		if(level<5):
+		if(level<5 and learner.current_level == level):
 			learner.current_level = level + 1
 			learner.current_lesson = 1
 			print "level less than 5"
@@ -319,16 +321,16 @@ def next_questions(request):
 	form.is_valid()
 	qid = int(form.cleaned_data['qid'])
 	qnum = int(form.cleaned_data['qnum'])
-
+	currentlevel = int(form.cleaned_data['level'])
 	# print correctness
 	flag = 1
 	finish = 0
 	if qid==-1:
 		qnum = 0
 		learner = Learner.objects.get(user__exact = request.user)
-		numtest = len(Test.objects.filter(level = learner.current_level,postflag='true'))
+		numtest = len(Test.objects.filter(level = currentlevel,postflag='true'))
 		testindex = random.randint(0,numtest-1)
-		newtest = Test.objects.filter(level = learner.current_level)[testindex]
+		newtest = Test.objects.filter(level = currentlevel)[testindex]
 		qid = newtest.id
 		question = newtest.question.all()[0]
 		length = len(newtest.question.all())
