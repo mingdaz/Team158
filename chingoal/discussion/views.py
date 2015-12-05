@@ -72,7 +72,13 @@ def discussion_reply(request, post_id):
         return HttpResponse("This post ID does not exist!")
     else:
         post = Post.objects.get(id__exact = post_id)
-        post_user = post.author
+        learnerSet = Learner.objects.filter(user = post.author)
+        if len(learnerSet) > 0:
+            post_user = learnerSet[0]
+        else:
+            teacher = Teacher.objects.get(user = userTemp)
+            post_user = teacher
+
         replies = Reply.objects.filter(reply_to__id = post_id)
         max_reply_id = replies.aggregate(Max('id'))['id__max'] or 0
         user_temp = Learner.objects.filter(user = request.user)
