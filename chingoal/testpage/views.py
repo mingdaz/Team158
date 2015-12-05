@@ -317,11 +317,13 @@ def test_set_level(request,test_id):
 def next_questions(request):
 	# print request.POST
 
+	currentlevel = int(request.POST['level'])
+
 	form = TestFrom(request.POST)
 	form.is_valid()
 	qid = int(form.cleaned_data['qid'])
 	qnum = int(form.cleaned_data['qnum'])
-	currentlevel = int(form.cleaned_data['level'])
+	
 	# print correctness
 	flag = 1
 	finish = 0
