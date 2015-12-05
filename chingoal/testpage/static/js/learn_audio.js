@@ -1,6 +1,7 @@
 
 // user file format
-// userupload_{% current_level %}_{% current_lesson %}_{% current_chapter %}_{% user attempt %}
+// audio_{% current_level %}_{% current_lesson %}
+// userupload_{% current_level %}_{% current_lesson %}_{% user attempt %}
 
 
 var audioContext = null;
@@ -63,9 +64,11 @@ function drawLearnAudio(audioUrl) {
 
 $(document).ready(function () {
 
-    // TODO change src url
+    var currLevel = $('#hidden_curr_level').html();
+    var currLesson = $('#hidden_curr_lesson').html();
+    var fileName = 'audio_' + currLevel + '_' + currLesson + '.wav';
 
-    var audioUrl = "https://s3.amazonaws.com/chingoal/audio/test.mp3";    
+    var audioUrl = "https://s3.amazonaws.com/chingoal/audio/" + fileName;
 
     audio = new Audio();
     audio.src = audioUrl;
@@ -79,13 +82,14 @@ $(document).ready(function () {
         $('#playButton').addClass('fa-play');
     });
 
-    // TODO change src url
+    var username = $('#hidden_username').html();
+    
+    var fileNameUser = 'audio/userupload_' + username + '_' + currLevel + '_' + currLesson + '.wav'
 
-    var userAudioUrl = "https://s3.amazonaws.com/chingoal/audio/userupload.wav";
+    var userAudioUrl = "https://s3.amazonaws.com/chingoal/" + fileNameUser;
     
     userAudio = new Audio();
     userAudio.src = userAudioUrl;
-
     
 
     $('#playUserAudioButton').on('click', playUserAudioClicked);
