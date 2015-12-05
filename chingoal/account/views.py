@@ -13,7 +13,7 @@ from django.contrib.auth.views import password_reset, password_reset_confirm,pas
 import json
 import hashlib, random
 from django.contrib import messages
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from models import *
 from forms import *
@@ -56,17 +56,24 @@ def reset(request):
             post_reset_redirect=reverse('reset'))
 
 
-def register(request):
+def register(request,flag):
     context = {}
     for key in request.POST:
         print key + ":" + request.POST[key]
+    if flag == '1':
+        context['register_form'] = RegistrationForm()
+        context['hint'] = 'The Activation link is invalid, please double check it' 
+        context['judge'] = '1'
+        context['parameter']='0'
+        return render(request, 'account/register.html', context)
     if request.method == 'GET':
         context['register_form'] = RegistrationForm()
+        context['judge']='0'
+        context['parameter']='0'
         return render(request, 'account/register.html', context)
     
     register_form = RegistrationForm(request.POST)
     context['register_form'] = register_form
-    print context
     if not register_form.is_valid():
         return render(request, 'account/register.html', context)
     register_form.save()
@@ -88,12 +95,37 @@ def register(request):
         new_teacher = Teacher.objects.create(user=new_user,activation_key=activation_key)
         new_teacher.save()
     email_subject = 'Account confirmation'
-    email_body = "Hey %s, thanks for signing up. To activate your account, click this link within \
-            48hours http://54.164.42.224//account/confirm/%s" % (register_form.cleaned_data['username'], activation_key)
+    email_body = "Hey %s, thanks for signing up. To activate your account, click this link\
+                http://chingoal.us//account/confirm/%s" % (register_form.cleaned_data['username'], activation_key)
             
     send_mail(email_subject, email_body, '15637test@gmail.com', [register_form.cleaned_data['email']], fail_silently=False)
     messages.add_message(request, messages.INFO, 'A confirmation email has been sent to your email address.')
-    return redirect(reverse('register'))
+    context['parameter']='0'
+    return render(request, 'account/register.html', context)
+
+def login_user(request):
+    username = password = ''
+    context = {}
+    if request.POST:
+        username = request.POST['username']
+        password = request.POST['password']
+        
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return HttpResponseRedirect('/home')
+            else:
+                context = {}
+                context['error'] = "User is not activated"
+                context['parameter']='0'
+                return render(request,'account/login.html',context)
+        context={}
+        context['error'] = "Wrong username or password"
+        context['parameter']='0'
+        return render(request,'account/login.html',context)
+    context['parameter']='0'
+    return render(request,'account/login.html',context)
 
 def fb_login(request):
     name = request.POST['username'].replace(" ","")
@@ -176,10 +208,34 @@ def view_profile(request, uname):
     context['username'] = uname
     context['uid'] = cur_user.id
     context['cur_username'] = request.user.username
+
     context['cur_uid'] = request.user.id
     context['newmsgs'] = request.user.newmsg.all().order_by('-timestamp')
     context['msgcount'] = request.user.newmsg.all().count()
-    
+
+    if History.objects.filter(user__exact = cur_user):
+        context['historys'] = History.objects.filter(user__exact = cur_user).order_by('-timestamp')
+        last1hour = datetime.today() - timedelta(hours = 1)
+        last2hour = datetime.today() - timedelta(hours = 2)
+        last3hour = datetime.today() - timedelta(hours = 3)
+        last4hour = datetime.today() - timedelta(hours = 4)
+        last5hour = datetime.today() - timedelta(hours = 5)
+        last6hour = datetime.today() - timedelta(hours = 6)
+        count1 = History.objects.filter(user__exact = cur_user, type='learn',timestamp__gt=last1hour).count()
+        count2 = History.objects.filter(user__exact = cur_user, type='learn',timestamp__gt=last2hour, timestamp__lt=last1hour).count()
+        count3 = History.objects.filter(user__exact = cur_user, type='learn',timestamp__gt=last3hour, timestamp__lt=last2hour).count()
+        count4 = History.objects.filter(user__exact = cur_user, type='learn',timestamp__gt=last4hour, timestamp__lt=last3hour).count()
+        count5 = History.objects.filter(user__exact = cur_user, type='learn',timestamp__gt=last5hour, timestamp__lt=last4hour).count()
+        count6 = History.objects.filter(user__exact = cur_user, type='learn',timestamp__gt=last6hour, timestamp__lt=last5hour).count()
+        points = {}
+        points['1']=105-8*count1
+        points['2']=105-8*count2
+        points['3']=105-8*count3
+        points['4']=105-8*count4
+        points['5']=105-8*count5
+        points['6']=105-8*count6
+        context['points'] = points
+
     if Learner.objects.filter(user__exact = request.user):
         
         request_user_learner = Learner.objects.get(user__exact = request.user)
@@ -204,17 +260,6 @@ def view_profile(request, uname):
         follow_users = cur_user_learner.follows.all()
         context['cur_user'] = cur_user_learner
         context['isLearner'] = 'yes'
-#        if follow_users.objects.filter(user__in = Learner.objects.all()):
-#            follow_users_learner = follow_users.objects.filter(user__in = Learner.objects.all())
-#            followers_learner = Learner.objects.filter(user__in=follow_users_learner.learner_user.follows.all())
-#        
-#        if follow_users.objects.filter(user__in = Teacher.objects.all()):
-#            follow_users_teacher = follow_users.objects.filter(user__in = Teacher.objects.all())
-#            followers_teacher = Teacher.objects.filter(user__in=follow_users_learner.teacher.follows.all())
-#        
-#        followers = [followers_learner, followers_teacher]
-#        context['followers'] = followers
-
     else:
         cur_user_teacher = Teacher.objects.get(user__exact = cur_user)
         follow_users = cur_user_teacher.follows.all()
@@ -325,9 +370,11 @@ def register_confirm(request, activation_key):
     # check if there is UserProfile which matches the activation key (if not then display 404)
     if Teacher.objects.filter(activation_key=activation_key):
         new_user = Teacher.objects.get(activation_key__exact=activation_key)
-    else:
+    elif Learner.objects.filter(activation_key=activation_key):
         new_user = Learner.objects.get(activation_key__exact=activation_key)
-
+    else:
+        flag = '1'
+        return register(request,flag)
     #if the key hasn't expired save user and set him as active and render some template to confirm activation
     user = new_user.user
     user.is_active = True

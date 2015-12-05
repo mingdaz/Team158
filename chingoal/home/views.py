@@ -18,6 +18,7 @@ from account.forms import *
 def homepage(request):
     context = {}
     context['username'] = request.user.username
+    context['parameter']='0'
     return render(request, 'home.html', context)
 
 @login_required

@@ -194,7 +194,7 @@
   	<span></span>
   	<span></span> 
   </div>
-    <svg width="315px" height="107px" viewBox="0 0 315 107" version="1.1">
+    <svg width="300px" height="107px" viewBox="0 0 300 107" version="1.1">
       <defs>
           <linearGradient x1="0%" y1="100%" x2="100%" y2="100%" id="linearGradient-1">
               <stop stop-color="#BA0003" offset="0%"></stop>
@@ -204,7 +204,7 @@
           </linearGradient>
       </defs>
       <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
-          <path d="M2,90 L30,60 L60,40 L90,80 L120,50 L150,100 L180,80" id="Path-1" stroke="url(#linearGradient-1)" stroke-width="4" sketch:type="MSShapeGroup" class="path"></path>
+          <path d="M2,{{points.1}} L40,{{points.2}} L80,{{points.3}} L120,{{points.4}} L160,{{points.5}} L200,{{points.6}}" id="Path-1" stroke="url(#linearGradient-1)" stroke-width="4" sketch:type="MSShapeGroup" class="path"></path>
       </g>
   </svg>
 </div>
@@ -248,24 +248,25 @@
     		 <div class="row"> 
                 <div class="col-lg-6">
                     <ul class="timeline">
-                        <li>
-                            <div class="timeline-image">
-                                <img class="img-circle img-responsive" src="{% static "img/about/1.jpg"%}" alt="">
-                            </div>
-                            <div class="timeline-panel">
-                                <div class="timeline-heading">
-                                    <h4>{{ cur_user.title}}</h4>
-                                    <h4 class="subheading">{{ username }}</h4>
-                                </div>
-                                <div class="timeline-body">
-                                    <p class="text-muted">{{history.content}}</p>
-                                    <p class="text-muted">{{history.timestamp}}</p>
-                                </div>
-                            </div>
-                        </li>
+<!--                        <li>-->
+<!--                            <div class="timeline-image">-->
+<!--                                <img class="img-circle img-responsive" src="{% static "img/about/1.jpg"%}" alt="">-->
+<!--                            </div>-->
+<!--                            <div class="timeline-panel">-->
+<!--                                <div class="timeline-heading">-->
+<!--                                    <h4>{{ cur_user.title}}</h4>-->
+<!--                                    <h4 class="subheading">{{ username }}</h4>-->
+<!--                                </div>-->
+<!--                                <div class="timeline-body">-->
+<!--                                    <p class="text-muted">{{history.content}}</p>-->
+<!--                                    <p class="text-muted">{{history.timestamp}}</p>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </li>-->
+                    {% for history in historys %}
                         <li class="timeline-inverted">
                             <div class="timeline-image">
-                                <img class="img-circle img-responsive" src="{% static "img/about/2.jpg"%}" alt="">
+                                <img class="img-circle img-responsive" src="{{cur_user.photo.url}}" alt="">
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
@@ -278,6 +279,7 @@
                                 </div>
                             </div>
                         </li>
+                        {% endfor %}
                     </ul>
                 </div>
              </div>
