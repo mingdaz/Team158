@@ -104,9 +104,9 @@
 			</ul>
 		</div>
 	</div>
-			<textarea id="msg" name="text" style="border: 1px solid #000000;resize: none;margin-top: 20px;margin-left:185px;width: 550px;height: 80px;"></textarea>
-			<button type="submit" class="btn btn-primary btn-sm" onclick="sendmsg({{roomObj.id}}, '{{user.username}}')">Send</button>
-            <button id="btn-expression" class="btn btn-primary btn-sm">Add expression</button>
+			<textarea id="msg" name="text" style="border: 1px solid #000000;resize: none;margin-top: 20px;margin-left:185px;width: 600px;height: 80px;"></textarea>
+			<button type="submit" class="btn btn-primary btn-sm bt3" onclick="sendmsg({{roomObj.id}}, '{{user.username}}')">Send</button>
+            <button id="btn-expression" class="btn btn-primary btn-sm bt3">Add expression</button>
             <div id="expression-box" style="display:none;margin-left:200px;">
             <img src="{% static 'img/smile.jpg' %}" style="width: 32px;height: 32px;" alt="no=image" onclick="sendimage('smile')" >
             <img src="{% static 'img/sad.jpg' %}" style="width: 32px;height: 32px;" alt="no=image" onclick="sendimage('sad')" >
@@ -115,7 +115,6 @@
             <img src="{% static 'img/dead.jpg' %}" style="width: 32px;height: 32px;" alt="no=image" onclick="sendimage('dead')" >
             <img src="{% static 'img/angry.jpg' %}" style="width: 32px;height: 32px;" alt="no=image" onclick="sendimage('angry')" >
             </div>
-
 	</section>
 {% endblock %} 
 {% block model-define %}
