@@ -1,5 +1,6 @@
 {
 	"max-entry":{{max_entry}}, 
+	"flag":{{flag}},
 	"items":[
 	{% for item in items %}
 		{ "id":{{item.id}}, "html":"{{item.html|safe}}" }
