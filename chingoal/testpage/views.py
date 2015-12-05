@@ -553,10 +553,12 @@ def get_learn_json(request, currLevel, currLesson, currChapter):
 		# return render(request, 'testpage/learn_audio.html', context)
 
 @login_required
-def write_history(request, currLevel, currLesson):
+def write_history(request):
 	user = request.user
+	currLevel = request.POST['currLevel']
+	currLesson = request.POST['currLesson']
 	text = 'Finished Level ' + str(currLevel) + ' Lesson ' + str(currLesson)
-	history = History.objects.create(user = user, content = text, type = 'learn')
+	history = History.objects.create(user = user, content = text, kind = 'learn')
 	history.save()
 	return render(request, 'testpage/empty.json', {}, content_type='application/json')
 
