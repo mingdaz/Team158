@@ -39,3 +39,9 @@
     left:340px;
     top:-70px;
 }
+.table {
+    width: 80%;
+    max-width: 80%;
+    margin-left: 130px;
+    margin-top: 20px;
+}
