@@ -21,8 +21,12 @@ PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '1iwo)ymjks)sxp(0esky1q61#)n)9fh-tt&kz=z45*w1mxd96^'
-
+#SECRET_KEY = '1iwo)ymjks)sxp(0esky1q61#)n)9fh-tt&kz=z45*w1mxd96^'
+with open('/etc/secret.txt','r') as file:
+	data = []
+	for line in file:
+		data.append(line.strip())
+SECRET_KEY = data[0]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -123,7 +127,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'chingoal',
         'USER': 'user',
-        'PASSWORD': '12345',
+       # 'PASSWORD': '12345',
+	'PASSWORD':data[1],
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -158,7 +163,8 @@ STATIC_ROOT = PROJECT_PATH + '/static/'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = '15637test@gmail.com'
-EMAIL_HOST_PASSWORD = '123$%^7890'
+#EMAIL_HOST_PASSWORD = '123$%^7890'
+EMAIL_HOST_PASSWORD =data[2]
 EMAIL_PORT = 587
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'user_photo')
