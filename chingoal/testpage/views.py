@@ -78,11 +78,12 @@ def get_result(request):
 	curquestion = curtest.question.all()
 
 	score = int(len(curquestion.filter(correctness='True'))*100/len(curquestion))
-	level = request.POST['level']
+	level = int(request.POST['level'])
 	if(score>60):
-		learner.user_vm += 10
+		# learner.user_vm += 10
 		print "greater then 60"
-		if(level<5 and learner.current_level == level):
+		if level<5 and learner.current_level == level:
+			learner.user_vm += 10
 			learner.current_level = level + 1
 			learner.current_lesson = 1
 			print "level less than 5"
@@ -317,11 +318,13 @@ def test_set_level(request,test_id):
 def next_questions(request):
 	# print request.POST
 
+	currentlevel = int(request.POST['level'])
+
 	form = TestFrom(request.POST)
 	form.is_valid()
 	qid = int(form.cleaned_data['qid'])
 	qnum = int(form.cleaned_data['qnum'])
-	currentlevel = int(form.cleaned_data['level'])
+	
 	# print correctness
 	flag = 1
 	finish = 0
@@ -386,7 +389,7 @@ def next_questions(request):
 	else:
 		itemTemplate = loader.get_template('testpage/test-mc.html')
 
-	item = itemTemplate.render({"item":question,"form":form,"finish":finish}).replace('\n','').replace('\"','\'') #More escaping might be needed
+	item = itemTemplate.render({"item":question,"form":form,"finish":finish,"level":currentlevel}).replace('\n','').replace('\"','\'') #More escaping might be needed
 	return render(request, 'testpage/testcontent.json', {"item":item,"id":qid,"flag":flag,"qnum":qnum,"max":length}, content_type='application/json')
 
 @login_required
