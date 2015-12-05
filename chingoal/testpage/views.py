@@ -25,6 +25,8 @@ from models import *
 
 import urllib2
 
+from mimetypes import guess_type
+
 @login_required
 def homepage(request):
 	context = {}
@@ -47,16 +49,18 @@ def get_learn(request,level,lesson):
 	learner = Learner.objects.get(user = cur_user)
 	context['cur_user'] = learner
 
-	# learn_matrial = Learn.objects.filter(level__exact = level, lesson__exact = lesson)	
-	# ltype = learn_matrial.ltype
-	# if ltype == 'text':
-	# 	return render(request, 'testpage/learn.html', context)
-	# else:
-	# 	return render(request, 'testpage/learn_audio.html', context)
+	learn_matrial = Learn.objects.get(level = level, lesson = lesson, chapter = 1)
 
-	print learner.current_level
+	ltype = learn_matrial.ltype
+	if ltype == 'text':
+		context['learning_material'] = learn_matrial
+		return render(request, 'testpage/learn.html', context)
+	else:
+		return render(request, 'testpage/learn_audio.html', context)
 
-	return render(request, 'testpage/learn.html', context)
+	# print learner.current_level
+
+	# return render(request, 'testpage/learn.html', context)
 
 @login_required
 def get_result(request):
@@ -394,7 +398,7 @@ def upload_audio_learn(request):
 
 	return render(request, 'testpage/upload_text_learn.html', {})
 
-
+@login_required
 def learn_audio(request):
 	context = {}
 	context['username'] = request.user.username
@@ -402,8 +406,65 @@ def learn_audio(request):
 	learner = Learner.objects.get(user = cur_user)
 	context['cur_user'] = learner
 
-	
+	return render(request, 'testpage/learn_audio.html', context)
 
+
+@login_required
+def get_learn_photo(request, currLevel, currLesson, currChapter, choice):
+	learning_material = Learn.objects.get(level = currLevel, lesson = currLesson, chapter = currChapter)
+
+	if (choice == 'a'):
+		learn_image = learning_material.image1
+	elif (choice == 'b'):
+		learn_image = learning_material.image2
+	else:
+		learn_image = learning_material.image3
+
+	if not learn_image:
+		raise Http404
+
+	content_type = guess_type(learn_image.name)
+	return HttpResponse(learn_image, content_type = content_type)
+
+@login_required
+def get_learn_json(request, currLevel, currLesson, currChapter):
+	context = {}
+	context['username'] = request.user.username
+	cur_user = User.objects.get(username__exact = context['username'])
+	learner = Learner.objects.get(user = cur_user)
+	context['cur_user'] = learner	
+
+	learning_material = Learn.objects.get(level = currLevel, lesson = currLesson, chapter = currChapter)
+
+	context['learning_material'] = learning_material
+	if (learning_material.ltype == 'audio'):
+		# return render(request, 'testpage/learn_audio.html', context)
+		return render(request, 'testpage/audio.json', context, content_type='application/json')
+	else:
+		return render(request, 'testpage/text.json', context, content_type='application/json')
+		# return render(request, 'testpage/learn_audio.html', context)
+
+@login_required
+def write_history(request, currLevel, currLesson):
+	user = request.user
+	text = 'Finished Level ' + str(currLevel) + ' Lesson ' + str(currLesson)
+	history = History(user = user, content = text)
+	history.save()
+	return render(request, 'testpage/empty.json', {}, content_type='application/json')
+
+
+# TODO might not needed
+@login_required
+def get_learn_audio(request, currLevel, currLesson):
+	context = {}
+	context['username'] = request.user.username
+	cur_user = User.objects.get(username__exact = context['username'])
+	learner = Learner.objects.get(user = cur_user)
+	context['cur_user'] = learner
+
+	learning_material = Learn.objects.get(level = currLevel, lesson = currLesson, chapter = 5)
+
+	context['learning_material'] = learning_material
 
 	return render(request, 'testpage/learn_audio.html', context)
 
