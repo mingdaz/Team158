@@ -83,25 +83,27 @@ function postedit()
 function postdelete()
 {
     var testid = $("#testid").val();
-    var flag=0
     $.ajax({
             type: 'POST',
             url: '/testpage/test-deleteposttest/'+testid,
             success: function (data) {
+              var flag=0
+    
               flag = data.flag
+              if(flag==1){
+                var list = $("#question");
+                var tmp = list.parent();
+                list.remove();
+                tmp.parent().find(".btn").prop('disabled', true);  
+                tmp.html("Delete test success!")
+              }
             },
             error: function(data) {
                 alert("Something went wrong!");
             }
         });
 
-    if(flag==1){
-      var list = $("#question");
-      var tmp = list.parent();
-      list.remove();
-      tmp.parent().find(".btn").prop('disabled', true);  
-      tmp.html("Create test success!")
-    }
+    
 }
 
    // url(r'^test-editposttest/(?P<test_id>[0-9]*)$','testpage.views.test_editposttest',name='testeditposttest'),
@@ -322,7 +324,8 @@ $(document).ready(function () {
         xhr.setRequestHeader("X-CSRFToken", csrftoken);
     }
   });
-  if($("#postedit")){
+  var bb = $("#postedit").length;
+  if(bb){
     $('select').prop('disabled',true);
   }
   populateList();
