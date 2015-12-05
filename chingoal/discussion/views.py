@@ -68,33 +68,25 @@ def discussion_home(request):
 
 @login_required
 def discussion_reply(request, post_id):
-    if not post_id.isdigit():
-        return HttpResponse("This id type does not match!")
     if not Post.objects.filter(id__exact = post_id):
         return HttpResponse("This post ID does not exist!")
-    try:
-        post = Post.objects.get(id__exact = post_id)
-    except Post.DoesNotExist:
-        # context['errors'] = ['This post does not exist']
-        return HttpResponse("This post does not exist!")
-    # if Post.objects.filter(id__exact = post_id):
-    #     post = Post.objects.get(id = post_id)
-    post_user = post.author
-    replies = Reply.objects.filter(reply_to__id = post_id)
-    max_reply_id = replies.aggregate(Max('id'))['id__max'] or 0
-
-    user_temp = Learner.objects.filter(user = request.user)
-    is_learner = len(user_temp)
-    if is_learner == 1:
-        cur_user = user_temp[0]
-        flag = 0
     else:
-        flag = 1
-        cur_user = Teacher.objects.get(user = request.user)
-
-    return render(request, 'discussion/discussion_reply.html', \
-        {'post': post, 'replies' : replies, 'post_user': post_user, 'max_reply_id' : max_reply_id,\
-            'username' : request.user.username, 'cur_user' : cur_user,'flag':flag})
+        post = Post.objects.get(id__exact = post_id)
+        post_user = post.author
+        replies = Reply.objects.filter(reply_to__id = post_id)
+        max_reply_id = replies.aggregate(Max('id'))['id__max'] or 0
+        user_temp = Learner.objects.filter(user = request.user)
+        is_learner = len(user_temp)
+        if is_learner == 1:
+            cur_user = user_temp[0]
+            flag = 0
+        else:
+            flag = 1
+            cur_user = Teacher.objects.get(user = request.user)
+        # print 'hello'
+        return render(request, 'discussion/discussion_reply.html', \
+            {'post': post, 'replies' : replies, 'post_user': post_user, 'max_reply_id' : max_reply_id,\
+                'username' : request.user.username, 'cur_user' : cur_user,'flag':flag})
 
 
 @login_required
