@@ -29,7 +29,7 @@ def post_question(request):
 @login_required
 # @transaction.atomic
 def reply_question(request):
-    return render(request, 'discussion/discussion_reply.html', {})
+    return render(request, 'discussion/discussion_reply.html', context)
 
 
 @login_required
@@ -68,21 +68,25 @@ def discussion_home(request):
 
 @login_required
 def discussion_reply(request, post_id):
-    post = Post.objects.get(id = post_id)
-    post_user = post.author
-    replies = Reply.objects.filter(reply_to__id = post_id)
-    max_reply_id = replies.aggregate(Max('id'))['id__max'] or 0
-
-    user_temp = Learner.objects.filter(user = request.user)
-    is_learner = len(user_temp)
-    if is_learner == 1:
-        cur_user = user_temp[0]
+    if not Post.objects.filter(id__exact = post_id):
+        return HttpResponse("This post ID does not exist!")
     else:
-        cur_user = Teacher.objects.get(user = request.user)
-
-    return render(request, 'discussion/discussion_reply.html', \
-        {'post': post, 'replies' : replies, 'post_user': post_user, 'max_reply_id' : max_reply_id,\
-            'username' : request.user.username, 'cur_user' : cur_user})
+        post = Post.objects.get(id__exact = post_id)
+        post_user = post.author
+        replies = Reply.objects.filter(reply_to__id = post_id)
+        max_reply_id = replies.aggregate(Max('id'))['id__max'] or 0
+        user_temp = Learner.objects.filter(user = request.user)
+        is_learner = len(user_temp)
+        if is_learner == 1:
+            cur_user = user_temp[0]
+            flag = 0
+        else:
+            flag = 1
+            cur_user = Teacher.objects.get(user = request.user)
+        # print 'hello'
+        return render(request, 'discussion/discussion_reply.html', \
+            {'post': post, 'replies' : replies, 'post_user': post_user, 'max_reply_id' : max_reply_id,\
+                'username' : request.user.username, 'cur_user' : cur_user,'flag':flag})
 
 
 @login_required
@@ -221,17 +225,16 @@ def newVideoRoom(request):
 def deleteVideoRoom(request,rid):
     if len(VideoRoom.objects.filter(id = rid))>0:
         roomObj = VideoRoom.objects.get(id__exact= rid)
-        # ishout_client.broadcast_group(
-        #     rid,
-        #     'deletechannel',
-        #     data = {'roomname':roomObj.roomname}
-        # )
         roomObj.delete()
     return redirect("/discussion/video")
 
 
 @login_required
 def room(request, room_id):
+    if not room_id.isdigit():
+        return HttpResponse('<h1>No room</h1>')
+    if not ChatRoom.objects.filter(id=room_id):
+        return HttpResponse('<h1>No room</h1>')
     user = request.user
     ishout_client.register_group(
         user.id,

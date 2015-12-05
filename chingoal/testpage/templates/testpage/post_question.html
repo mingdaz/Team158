@@ -47,7 +47,7 @@
                     
                     <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                             <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
                         <li><a href="{% url 'viewProfile' username %}"><i class="fa fa-user fa-fw"></i> User Profile</a>
@@ -115,15 +115,35 @@ Question <p class="question-num" style="display:inline">{{question.id}}</p> (Mul
                         </div>
                         <div class="panel-footer">
                             <div class="row">
-                                <div class="col-lg-4">
-                                <button id="question-mc" type="button" class="btn btn-primary btn-lg btn-block">Add Multiple Choice</button>
+
+                                <div class="col-lg-3">
+                                {% if saveflag != "true" %}
+                                <button id="question-mc" type="button" class="btn btn-primary btn-lg btn-block">+Multiple Choice</button>
+                                {% else %}
+                                <button id="question-mc" type="button" class="btn btn-primary btn-lg btn-block" disabled="true">+Multiple Choice</button>
+                                {% endif %}
                                 </div>
-                                <div class="col-lg-4">
-                                <button id="question-tr" type="button" class="btn btn-success btn-lg btn-block">Add Word Translate</button>
+
+                                <div class="col-lg-3">
+                                {% if saveflag != "true" %}
+                                <button id="question-tr" type="button" class="btn btn-success btn-lg btn-block">+Word Translate</button>
+                                {% else %}
+                                <button id="question-tr" type="button" class="btn btn-success btn-lg btn-block" disabled="true">+Word Translate</button>
+                                {% endif %}
                                 </div>
-                                <div class="col-lg-4">
+
+                                <div class="col-lg-3">
+                                {% if saveflag != "true" %}
                                 <button id="posttest" type="button" class="btn btn-info btn-lg btn-block">Post</button>
+                                {% else %}
+                                <button id="postedit" type="button" class="btn btn-info btn-lg btn-block">Edit</button>
+                                {% endif %}
                                 </div>
+
+                                <div class="col-lg-3">
+                                <button id="deletetest" type="button" class="btn btn-danger btn-lg btn-block">Delete</button>
+                                </div>
+
                             </div>
                             
                         </div>

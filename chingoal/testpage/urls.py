@@ -44,6 +44,11 @@ urlpatterns = [
     url(r'^upload-text-learn$','testpage.views.upload_text_learn',name='uploadtextlearn'),
     url(r'^upload-audio-learn$','testpage.views.upload_audio_learn',name='uploadaudiolearn'),
 
+    url(r'^test-reviewpost/(?P<test_id>[0-9]*)$','testpage.views.test_reviewpost',name='testreviewpost'),
+    url(r'^test-editposttest/(?P<test_id>[0-9]*)$','testpage.views.test_editposttest',name='testeditposttest'),
+    url(r'^test-deleteposttest/(?P<test_id>[0-9]*)$','testpage.views.test_deleteposttest',name='testdeleteposttest'),
+
+    url(r'^test-collection$','testpage.views.test_collection',name='testcollection'),
     # This is for presentation
     url(r'^learn-audio$','testpage.views.learn_audio', name = 'learnaudio'),
 

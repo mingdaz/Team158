@@ -116,7 +116,7 @@ class TestAnswer(models.Model):
 class UploadTextLearnForm(forms.ModelForm):
     class Meta:
         model = Learn
-        exclude = ('audio', 'ltype', 'lock')
+        exclude = ('lock',)
         widgets = {'image1' : forms.FileInput(),
                 'image2' : forms.FileInput(),
                 'image3' : forms.FileInput(),}

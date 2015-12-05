@@ -10,6 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
+{% block ishout %}
     {% load drealtimetags %}
 {% ishout_js %}
 <script type="text/javascript">
@@ -105,6 +106,7 @@
         return "";
     }
 </script>
+{% endblock %}
     {% block title-content %}
     <title>Chingoal_Dashboard</title>
     {% endblock %}
