@@ -46,7 +46,7 @@ def discussion_home(request):
     context={}
     i = len(posts)
     for post in posts:
-        number_replies = len(Reply.objects.filter(reply_to = post))
+        number_replies = len(Reply.objects.filter(reply_to = post).order_by('post_time'))
         post_replies.append({'post':post, 'number_replies' : number_replies, 'list_id' : i})
         i -= 1
     if Learner.objects.filter(user = request.user):
