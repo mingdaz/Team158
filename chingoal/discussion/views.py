@@ -19,6 +19,7 @@ from drealtime import iShoutClient
 ishout_client = iShoutClient()
 from datetime import datetime
 from pytz import timezone
+from mimetypes import guess_type
 
 @login_required
 # @transaction.atomic
@@ -162,6 +163,19 @@ def get_postreply(request, post_id, max_reply_id):
 
 
 @login_required
+def get_user_photo(request, user_id):
+    learnerSet = Learner.objects.filter(user__id = user_id)
+    if len(learnerSet) > 0:
+        retUser = learnerSet[0]
+    else:
+        retUser = Teacher.objects.get(user__id = user_id)
+    
+    if not retUser.photo:
+        raise Http404 
+    content_type = guess_type(retUser.photo.name)
+    return HttpResponse(retUser.photo, content_type = content_type)
+
+@login_required
 # @transaction.atomic
 def delete_post(request, post_id):
     postTemp = Post.objects.get(id = post_id)
@@ -179,6 +193,7 @@ def delete_reply(request, reply_id):
     post_id = replyTemp.reply_to.id
     replyTemp.delete()
     return render(request, 'discussion/reply.json', {}, content_type = 'application/json')
+
 
 @login_required
 def index(request):
