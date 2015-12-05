@@ -188,15 +188,23 @@ def delete_post(request, post_id):
 
 @login_required
 # @transaction.atomic
-def delete_reply(request, reply_id):
+def delete_reply(request, reply_id):    
     replySet = Reply.objects.filter(id = reply_id)
-    if len(replySet) > 0:
+    if len(replySet) > 0:        
         replyTemp = replySet[0]
+
+        learnerSet = Learner.objects.filter(user = replyTemp.author)
+        if len(learnerSet) > 0:
+            retUser = learnerSet[0]
+        else:
+            retUser = Teacher.objects.get(user = replyTemp.author)
+
         post_id = replyTemp.reply_to.id
         replyTemp.delete()
-        return render(request, 'discussion/reply.json', {}, content_type = 'application/json')
+
+        return render(request, 'discussion/empty.json', {'flag': 1}, content_type = 'application/json')
     else:
-        return render(request, 'discussion/reply.json', {}, content_type = 'application/json')
+        return render(request, 'discussion/empty.json', {'flag' : 0}, content_type = 'application/json')
     
 
 

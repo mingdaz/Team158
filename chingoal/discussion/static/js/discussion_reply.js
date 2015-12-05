@@ -83,17 +83,27 @@ function new_reply_clicked(e) {
 }
 
 
-function delete_reply_clicked(e) {
-    var bigDiv = $(e.target).parent().parent();
+function delete_reply_clicked() {
+    var bigDiv = $(event.target).parent().parent().parent();
     console.log(bigDiv);
-    var first = $(bigDiv).find('#hidden_reply_id')
+    var first = bigDiv.find('#hidden_reply_id')
     console.log(first);
     var reply_id = $(first).html();
     console.log(reply_id);
-    $.post('delete_reply/' + reply_id)
-        .done(function(data) {
-            $(bigDiv).remove();            
-        });    
+    $.ajax ({
+        type:"POST",
+        url:"delete_reply/" + reply_id,
+        success: function(data) {
+            bigDiv.remove(); 
+        },
+        error: function(data) {
+            console.log('Error deleteing reply');
+        }
+        });
+    // $.post('delete_reply/' + reply_id)
+    //     .done(function(data) {
+                       
+    //     });    
 }
 
 
@@ -102,7 +112,7 @@ $(document).ready(function() {
 
     populateReply();
     $('#replyBtn').on('click', new_reply_clicked);
-    $('#replyDiv').on('click', '.delete-reply-btn', delete_reply_clicked)
+    $('#replyDiv').on('click', '.fa', delete_reply_clicked)
 
     window.setInterval(populateReply, 30000);
 

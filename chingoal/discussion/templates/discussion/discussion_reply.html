@@ -138,8 +138,9 @@
                 </div>
                 <div class="col-lg-1">
                     {% if reply.author.username == cur_user.user.username %}
-                    <button class="pull-right btn btn-warning delete-reply-btn"><a href="{% url 'delete_reply' reply.id %}">
-                                <i class="fa fa-times"></i></a></button>
+                    <!-- <button class="pull-right btn btn-warning delete-reply-btn"><a href="{% url 'delete_reply' reply.id %}">
+                                <i class="fa fa-times"></i></a></button> -->
+                    <button class="pull-right btn btn-warning delete-reply-btn"><i class="fa fa-times"></i></button>                                
                     {% endif %}
                 </div>
             </div>
