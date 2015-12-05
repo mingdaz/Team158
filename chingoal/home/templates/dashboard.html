@@ -127,27 +127,27 @@
                     {% if flag == 0 %}
                     <h3>Achievement</h3>
                     <i class="fa fa-star fa-2x text-muted" style="color:#fed136;"></i>
-                    {% if current_level > 0 %}
+                    {% if cur_user.current_level > 0 %}
                     <i class="fa fa-star fa-2x text-muted" style="color:#fed136;"></i>
                     {% else %}
                     <i class="fa fa-star fa-2x text-muted"></i>
                     {% endif %}
-                    {% if current_level > 1 %}
+                    {% if cur_user.current_level > 1 %}
                     <i class="fa fa-star fa-2x text-muted" style="color:#F78706;"></i>
                     {% else %}
                     <i class="fa fa-star fa-2x text-muted"></i>
                     {% endif %}
-                    {% if current_level > 2 %}
+                    {% if cur_user.current_level > 2 %}
                     <i class="fa fa-star fa-2x text-muted" style="color:#F78706;"></i>
                     {% else %}
                     <i class="fa fa-star fa-2x text-muted"></i>
                     {% endif %}
-                    {% if current_level > 3 %}
+                    {% if cur_user.current_level > 3 %}
                     <i class="fa fa-star fa-2x text-muted" style="color:#F26002;"></i>
                     {% else %}
                     <i class="fa fa-star fa-2x text-muted"></i>
                     {% endif %}
-                    {% if current_level > 4 %}
+                    {% if cur_user.current_level > 4 %}
                     <i class="fa fa-star fa-2x text-muted" style="color:red;"></i>
                     {% else %}
                     <i class="fa fa-star fa-2x text-muted"></i>
@@ -179,7 +179,7 @@
                                 </a>
                         <div class="portfolio-caption">
                             <h4>Level 1</h4>
-                            <p class="text-muted">Level1 Introduction</p>
+                            <p class="text-muted"></p>
                         </div>
                         </div>
                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -202,7 +202,7 @@
                                 </a>
                         <div class="portfolio-caption">
                             <h4>Level 2</h4>
-                            <p class="text-muted">Level2 Introduction</p>
+                            <p class="text-muted"></p>
                         </div>
                         </div>
                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -225,7 +225,7 @@
                                 </a>
                         <div class="portfolio-caption">
                             <h4>Level 3</h4>
-                            <p class="text-muted">Level3 Introduction</p>
+                            <p class="text-muted"></p>
                         </div>
                         </div>
                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -248,7 +248,7 @@
                                 </a>
                         <div class="portfolio-caption">
                             <h4>Level 4</h4>
-                            <p class="text-muted">Website Design</p>
+                            <p class="text-muted"></p>
                         </div>
                         </div>
                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -272,7 +272,7 @@
                                     </a>
                             <div class="portfolio-caption">
                                 <h4>Level 5</h4>
-                                <p class="text-muted">Website Design</p>
+                                <p class="text-muted"></p>
                             </div>
                             </div>
                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -295,7 +295,7 @@
                                 </a>
                         <div class="portfolio-caption">
                             <h4>Level 6</h4>
-                            <p class="text-muted">Website Design</p>
+                            <p class="text-muted"></p>
                         </div>
                         </div>
             </div>
@@ -369,7 +369,7 @@
                                                 </a>
                                         <div class="portfolio-caption">
                                             <h4>Lesson 1</h4>
-                                            <p class="text-muted">Lesson1 Introduction</p>
+                                            <p class="text-muted"></p>
                                         </div>
                                         </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -392,7 +392,7 @@
                                                 </a>
                                         <div class="portfolio-caption">
                                             <h4>Lesson 2</h4>
-                                            <p class="text-muted">Lesson2 Introduction</p>
+                                            <p class="text-muted"></p>
                                         </div>
                                         </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -415,7 +415,7 @@
                                                 </a>
                                         <div class="portfolio-caption">
                                             <h4>Lesson 3</h4>
-                                            <p class="text-muted">Lesson3 Introduction</p>
+                                            <p class="text-muted"></p>
                                         </div>
                                         </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -438,7 +438,7 @@
                                                 </a>
                                         <div class="portfolio-caption">
                                             <h4>Lesson 4</h4>
-                                            <p class="text-muted">Website Design</p>
+                                            <p class="text-muted"></p>
                                         </div>
                                         </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -462,7 +462,7 @@
                                                     </a>
                                             <div class="portfolio-caption">
                                                 <h4>Lesson 5</h4>
-                                                <p class="text-muted">Website Design</p>
+                                                <p class="text-muted"></p>
                                             </div>
                                             </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -513,7 +513,7 @@
                                                 </a>
                                         <div class="portfolio-caption">
                                             <h4>Lesson 1</h4>
-                                            <p class="text-muted">Lesson1 Introduction</p>
+                                            <p class="text-muted"></p>
                                         </div>
                                         </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -536,7 +536,7 @@
                                                 </a>
                                         <div class="portfolio-caption">
                                             <h4>Lesson 2</h4>
-                                            <p class="text-muted">Lesson2 Introduction</p>
+                                            <p class="text-muted"></p>
                                         </div>
                                         </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -559,7 +559,7 @@
                                                 </a>
                                         <div class="portfolio-caption">
                                             <h4>Lesson 3</h4>
-                                            <p class="text-muted">Lesson3 Introduction</p>
+                                            <p class="text-muted"></p>
                                         </div>
                                         </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -582,7 +582,7 @@
                                                 </a>
                                         <div class="portfolio-caption">
                                             <h4>Lesson 4</h4>
-                                            <p class="text-muted">Website Design</p>
+                                            <p class="text-muted"></p>
                                         </div>
                                         </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -606,7 +606,7 @@
                                                     </a>
                                             <div class="portfolio-caption">
                                                 <h4>Lesson 5</h4>
-                                                <p class="text-muted">Website Design</p>
+                                                <p class="text-muted"></p>
                                             </div>
                                             </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -657,7 +657,7 @@
                                                 </a>
                                         <div class="portfolio-caption">
                                             <h4>Lesson 1</h4>
-                                            <p class="text-muted">Lesson1 Introduction</p>
+                                            <p class="text-muted"></p>
                                         </div>
                                         </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -680,7 +680,7 @@
                                                 </a>
                                         <div class="portfolio-caption">
                                             <h4>Lesson 2</h4>
-                                            <p class="text-muted">Lesson2 Introduction</p>
+                                            <p class="text-muted"></p>
                                         </div>
                                         </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -703,7 +703,7 @@
                                                 </a>
                                         <div class="portfolio-caption">
                                             <h4>Lesson 3</h4>
-                                            <p class="text-muted">Lesson3 Introduction</p>
+                                            <p class="text-muted"></p>
                                         </div>
                                         </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -726,7 +726,7 @@
                                                 </a>
                                         <div class="portfolio-caption">
                                             <h4>Lesson 4</h4>
-                                            <p class="text-muted">Website Design</p>
+                                            <p class="text-muted"></p>
                                         </div>
                                         </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -750,7 +750,7 @@
                                                     </a>
                                             <div class="portfolio-caption">
                                                 <h4>Lesson 5</h4>
-                                                <p class="text-muted">Website Design</p>
+                                                <p class="text-muted"></p>
                                             </div>
                                             </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -801,7 +801,7 @@
                                                 </a>
                                         <div class="portfolio-caption">
                                             <h4>Lesson 1</h4>
-                                            <p class="text-muted">Lesson1 Introduction</p>
+                                            <p class="text-muted"></p>
                                         </div>
                                         </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -824,7 +824,7 @@
                                                 </a>
                                         <div class="portfolio-caption">
                                             <h4>Lesson 2</h4>
-                                            <p class="text-muted">Lesson2 Introduction</p>
+                                            <p class="text-muted"></p>
                                         </div>
                                         </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -847,7 +847,7 @@
                                                 </a>
                                         <div class="portfolio-caption">
                                             <h4>Lesson 3</h4>
-                                            <p class="text-muted">Lesson3 Introduction</p>
+                                            <p class="text-muted"></p>
                                         </div>
                                         </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -870,7 +870,7 @@
                                                 </a>
                                         <div class="portfolio-caption">
                                             <h4>Lesson 4</h4>
-                                            <p class="text-muted">Website Design</p>
+                                            <p class="text-muted"></p>
                                         </div>
                                         </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -894,7 +894,7 @@
                                                     </a>
                                             <div class="portfolio-caption">
                                                 <h4>Lesson 5</h4>
-                                                <p class="text-muted">Website Design</p>
+                                                <p class="text-muted"></p>
                                             </div>
                                             </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -946,7 +946,7 @@
                                                 </a>
                                         <div class="portfolio-caption">
                                             <h4>Lesson 1</h4>
-                                            <p class="text-muted">Lesson1 Introduction</p>
+                                            <p class="text-muted"></p>
                                         </div>
                                         </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -969,7 +969,7 @@
                                                 </a>
                                         <div class="portfolio-caption">
                                             <h4>Lesson 2</h4>
-                                            <p class="text-muted">Lesson2 Introduction</p>
+                                            <p class="text-muted"></p>
                                         </div>
                                         </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -992,7 +992,7 @@
                                                 </a>
                                         <div class="portfolio-caption">
                                             <h4>Lesson 3</h4>
-                                            <p class="text-muted">Lesson3 Introduction</p>
+                                            <p class="text-muted"></p>
                                         </div>
                                         </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -1015,7 +1015,7 @@
                                                 </a>
                                         <div class="portfolio-caption">
                                             <h4>Lesson 4</h4>
-                                            <p class="text-muted">Website Design</p>
+                                            <p class="text-muted"></p>
                                         </div>
                                         </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -1039,7 +1039,7 @@
                                                     </a>
                                             <div class="portfolio-caption">
                                                 <h4>Lesson 5</h4>
-                                                <p class="text-muted">Website Design</p>
+                                                <p class="text-muted"></p>
                                             </div>
                                             </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -1090,7 +1090,7 @@
                                                 </a>
                                         <div class="portfolio-caption">
                                             <h4>Lesson 1</h4>
-                                            <p class="text-muted">Lesson1 Introduction</p>
+                                            <p class="text-muted"></p>
                                         </div>
                                         </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -1113,7 +1113,7 @@
                                                 </a>
                                         <div class="portfolio-caption">
                                             <h4>Lesson 2</h4>
-                                            <p class="text-muted">Lesson2 Introduction</p>
+                                            <p class="text-muted"></p>
                                         </div>
                                         </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -1136,7 +1136,7 @@
                                                 </a>
                                         <div class="portfolio-caption">
                                             <h4>Lesson 3</h4>
-                                            <p class="text-muted">Lesson3 Introduction</p>
+                                            <p class="text-muted"></p>
                                         </div>
                                         </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -1159,7 +1159,7 @@
                                                 </a>
                                         <div class="portfolio-caption">
                                             <h4>Lesson 4</h4>
-                                            <p class="text-muted">Website Design</p>
+                                            <p class="text-muted"></p>
                                         </div>
                                         </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -1183,7 +1183,7 @@
                                                     </a>
                                             <div class="portfolio-caption">
                                                 <h4>Lesson 5</h4>
-                                                <p class="text-muted">Website Design</p>
+                                                <p class="text-muted"></p>
                                             </div>
                                             </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">

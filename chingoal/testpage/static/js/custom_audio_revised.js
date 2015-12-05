@@ -23,21 +23,11 @@ var outputString;
 var canvasHeight, canvasWidth;
 var visualizerContext = null;
 
-var blob;
+var blob = null;
 
+var audio = null;
+var userAudio = null;
 
-if (!navigator.getUserMedia)
-    navigator.getUserMedia = navigator.getUserMedia || 
-                navigator.webkitGetUserMedia ||
-                navigator.mozGetUserMedia || 
-                navigator.msGetUserMedia;
-
-navigator.getUserMedia(
-    {audio:true}, 
-    success, 
-    function(e) {
-        alert('Error capturing audio.');
-    });
 
 function initRecoding() {
     // set recording flag
@@ -141,36 +131,36 @@ function uploadUserAudio() {
 
 
 function interleave(leftChannel, rightChannel){
-  var length = leftChannel.length + rightChannel.length;
-  var result = new Float32Array(length);
-
-  var inputIndex = 0;
-
-  for (var index = 0; index < length; ){
-    result[index++] = leftChannel[inputIndex];
-    result[index++] = rightChannel[inputIndex];
-    inputIndex++;
-  }
-  return result;
+    var length = leftChannel.length + rightChannel.length;
+    var result = new Float32Array(length);
+    
+    var inputIndex = 0;
+    
+    for (var index = 0; index < length; ){
+        result[index++] = leftChannel[inputIndex];
+        result[index++] = rightChannel[inputIndex];
+        inputIndex++;
+    }
+    return result;
 }
 
 function mergeBuffers(channelBuffer, recordingLength){
-  var result = new Float32Array(recordingLength);
-  var offset = 0;
-  var lng = channelBuffer.length;
-  for (var i = 0; i < lng; i++){
-    var buffer = channelBuffer[i];
-    result.set(buffer, offset);
-    offset += buffer.length;
-  }
-  return result;
+    var result = new Float32Array(recordingLength);
+    var offset = 0;
+    var lng = channelBuffer.length;
+    for (var i = 0; i < lng; i++){
+        var buffer = channelBuffer[i];
+        result.set(buffer, offset);
+        offset += buffer.length;
+    }
+    return result;
 }
 
 function writeUTFBytes(view, offset, string){ 
-  var lng = string.length;
-  for (var i = 0; i < lng; i++){
-    view.setUint8(offset + i, string.charCodeAt(i));
-  }
+    var lng = string.length;
+    for (var i = 0; i < lng; i++){
+        view.setUint8(offset + i, string.charCodeAt(i));
+    }
 }
 
 
@@ -214,8 +204,8 @@ function updateVisualizer(time) {
 
 function success(e){
     // creates the audio context
-    audioContext = window.AudioContext || window.webkitAudioContext;
-    context = new audioContext();
+    // audioContext = window.AudioContext || window.webkitAudioContext;
+    // context = new audioContext();
 
     // we query the context sample rate (varies depending on platforms)
     sampleRate = context.sampleRate;
@@ -258,7 +248,90 @@ function success(e){
     updateVisualizer();
 }
 
+
+
+function playButtonClicked() {    
+    if (audio.paused) {
+        audio.play();
+        $('#playButton').removeClass('fa-play');
+        $('#playButton').addClass('fa-pause');
+    } else {
+        audio.pause();
+        $('#playButton').removeClass('fa-pause');
+        $('#playButton').addClass('fa-play');
+    }
+
+}
+
+function playUserAudioClicked() {
+
+    // var username = $('#hidden_username').html();
+    
+    // var fileNameUser = 'audio/userupload_' + username + '_' + currLevel + '_' + currLesson + '.wav'
+
+    // var userAudioUrl = "https://s3.amazonaws.com/chingoal/" + fileNameUser;
+    if (blob != null) {
+        var blobUrl = window.URL.createObjectURL(blob)
+    }
+    
+    userAudio = new Audio();
+    userAudio.src = blobUrl;
+
+    if (userAudio.paused) {
+        userAudio.play();
+        $('#playUserAudioButton').removeClass('fa-play');
+        $('#playUserAudioButton').addClass('fa-pause');        
+    } else {
+        userAudio.pause();
+        $('#playUserAudioButton').removeClass('fa-pause');
+        $('#playUserAudioButton').addClass('fa-play');
+    }
+
+    $(userAudio).on('ended', function() {
+        $('#playUserAudioButton').removeClass('fa-pause');
+        $('#playUserAudioButton').addClass('fa-play');
+    })
+}
+
+function drawLearnAudio(audioUrl) {
+    // audioContext = window.AudioContext || window.webkitAudioContext;
+    // context = new audioContext();
+
+    var xmlReq = new XMLHttpRequest();
+    var learnBuffers = [];
+    xmlReq.open("GET", audioUrl, true);
+    xmlReq.responseType = "arraybuffer";
+    xmlReq.onreadystatechange = function() {        
+        context.decodeAudioData(xmlReq.response, function (buffer) {
+            drawBuffer(
+                $('#wave_learn').get(0).width, 
+                $('#wave_learn').get(0).height, 
+                $('#wave_learn').get(0).getContext('2d'), 
+                buffer.getChannelData(0));
+        });
+    };
+    xmlReq.send();
+
+}
+
 $(document).ready(function() {
+
+    audioContext = window.AudioContext || window.webkitAudioContext;
+    context = new audioContext();
+
+    if (!navigator.getUserMedia)
+        navigator.getUserMedia = navigator.getUserMedia || 
+                navigator.webkitGetUserMedia ||
+                navigator.mozGetUserMedia || 
+                navigator.msGetUserMedia;
+
+    navigator.getUserMedia(
+        {audio:true}, 
+        success, 
+        function(e) {
+            alert('Error capturing audio.');
+        });
+
     $('#startButton').on('click', function() {
         if (recording) {
             recording = false;
@@ -274,7 +347,30 @@ $(document).ready(function() {
     })
 
     // $('#uploadUserAudioButton').on('click', uploadUserAudio);
+    var currLevel = $('#hidden_curr_level').html();
+    var currLesson = $('#hidden_curr_lesson').html();
+    var fileName = 'audio_' + currLevel + '_' + currLesson + '.wav';
 
+    var audioUrl = "https://s3.amazonaws.com/chingoal/audio/" + fileName;
+
+    audio = new Audio();
+    audio.src = audioUrl;
+
+    drawLearnAudio(audioUrl);
+
+    $('#playButton').on('click', playButtonClicked);
+    
+    $(audio).on('ended', function() {
+        $('#playButton').removeClass('fa-pause');
+        $('#playButton').addClass('fa-play');
+    });
+
+    $('#playUserAudioButton').on('click', playUserAudioClicked);
+
+    // $(userAudio).on('ended', function() {
+    //     $('#playUserAudioButton').removeClass('fa-pause');
+    //     $('#playUserAudioButton').addClass('fa-play');
+    // })
     
 
 })
