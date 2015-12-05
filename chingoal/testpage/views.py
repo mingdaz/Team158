@@ -78,11 +78,12 @@ def get_result(request):
 	curquestion = curtest.question.all()
 
 	score = int(len(curquestion.filter(correctness='True'))*100/len(curquestion))
-	level = request.POST['level']
+	level = int(request.POST['level'])
 	if(score>60):
-		learner.user_vm += 10
+		# learner.user_vm += 10
 		print "greater then 60"
 		if level<5 and learner.current_level == level:
+			learner.user_vm += 10
 			learner.current_level = level + 1
 			learner.current_lesson = 1
 			print "level less than 5"
@@ -555,10 +556,12 @@ def get_learn_json(request, currLevel, currLesson, currChapter):
 		# return render(request, 'testpage/learn_audio.html', context)
 
 @login_required
-def write_history(request, currLevel, currLesson):
+def write_history(request):
 	user = request.user
+	currLevel = request.POST['currLevel']
+	currLesson = request.POST['currLesson']
 	text = 'Finished Level ' + str(currLevel) + ' Lesson ' + str(currLesson)
-	history = History.objects.create(user = user, content = text, type = 'learn')
+	history = History.objects.create(user = user, content = text, kind = 'learn')
 	history.save()
 	return render(request, 'testpage/empty.json', {}, content_type='application/json')
 

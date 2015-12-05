@@ -43,15 +43,23 @@ function generateLearn(currLevel, currLesson, currChapter) {
             } else {
                 $.holdReady(true);
                 $.getScript('/static/js/visualizeWave.js', function() {});
-                $.getScript('/static/js/custom_audio_revised.js', function() {
-                    $('#checkBtn').html('Take Test!');
+                $.getScript('/static/js/custom_audio_revised.js', function(e) {
+                    $('#checkBtn').html('Finish lesson!');
                     $('#checkBtn').unbind('click');
                     $('#checkBtn').on('click', function(e){
-                        e.preventDefault();                    
-                        if (userLevel <= currLevel) {
+                        e.preventDefault();
+                        if (userLevel <= currLevel && currLesson == 5) {
                             window.location.replace('/testpage/get-test/' + currLevel);
                         } else {
                             window.location.replace('/testpage');
+                        }
+                        var currChapter = $('#hidden_curr_chapter').html();
+                        console.log('current chapter is ' + currChapter);
+                        if (currChapter == 5) {
+                            $.post('/testpage/write-history', {'currLevel': currLevel, 'currLesson':currLesson})
+                                .done(function() {
+                                    console.log('History saved');
+                                });
                         }
                     });                                        
                     $.holdReady(false);
@@ -79,27 +87,16 @@ function checkClicked() {
             $('.modal-body').css('background-color', '#ebccd1');
         }
     }
+    
 }
 
 function nextClicked(currLevel, currLesson) {
     var currChapter = $('#hidden_curr_chapter').html();
+    
     if (currChapter < 5) {
         generateLearn(currLevel, currLesson, ++currChapter);
         $('#hidden_curr_chapter').html(currChapter);
-    // } else if (currChapter == 4) {
-        // window.location.replace('/testpage/get-learn-audio/' + currLevel + '/' + currLesson);
-    } else {        
-        $.post('/testpage/write-history', {'currLevel':currLevel, 'currLesson':currLesson}).done();
-        if (userLevel < currLevel) {
-            //!!!!
-            // $.get('/testpage').done();
-        } else {
-            //!!!!
-            // $.get('/testpage/get-test/' + currLevel).done();
-        }
-        
-
-    }    
+    }  
     
 }
 
@@ -134,6 +131,27 @@ $(document).ready(function(){
         if($(button).hasClass('no-modal')) {
             e.preventDefault();
         }  
+    });
+
+    function getCookie(name) {  
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
     });
 
 });

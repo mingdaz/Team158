@@ -227,12 +227,12 @@ def view_profile(request, uname):
         last4hour = datetime.today() - timedelta(hours = 4)
         last5hour = datetime.today() - timedelta(hours = 5)
         last6hour = datetime.today() - timedelta(hours = 6)
-        count1 = History.objects.filter(user__exact = cur_user, type='learn',timestamp__gt=last1hour).count()
-        count2 = History.objects.filter(user__exact = cur_user, type='learn',timestamp__gt=last2hour, timestamp__lt=last1hour).count()
-        count3 = History.objects.filter(user__exact = cur_user, type='learn',timestamp__gt=last3hour, timestamp__lt=last2hour).count()
-        count4 = History.objects.filter(user__exact = cur_user, type='learn',timestamp__gt=last4hour, timestamp__lt=last3hour).count()
-        count5 = History.objects.filter(user__exact = cur_user, type='learn',timestamp__gt=last5hour, timestamp__lt=last4hour).count()
-        count6 = History.objects.filter(user__exact = cur_user, type='learn',timestamp__gt=last6hour, timestamp__lt=last5hour).count()
+        count1 = History.objects.filter(user__exact = cur_user, kind='learn',timestamp__gt=last1hour).count()
+        count2 = History.objects.filter(user__exact = cur_user, kind='learn',timestamp__gt=last2hour, timestamp__lt=last1hour).count()
+        count3 = History.objects.filter(user__exact = cur_user, kind='learn',timestamp__gt=last3hour, timestamp__lt=last2hour).count()
+        count4 = History.objects.filter(user__exact = cur_user, kind='learn',timestamp__gt=last4hour, timestamp__lt=last3hour).count()
+        count5 = History.objects.filter(user__exact = cur_user, kind='learn',timestamp__gt=last5hour, timestamp__lt=last4hour).count()
+        count6 = History.objects.filter(user__exact = cur_user, kind='learn',timestamp__gt=last6hour, timestamp__lt=last5hour).count()
         points = {}
         points['1']=105-8*count1
         points['2']=105-8*count2
