@@ -129,16 +129,18 @@
                     </div>
                     <div class="col-lg-2">
                         <a href="{% url 'viewProfile' reply.author.username %}">
-                        <img src="{{cur_user.photo.url}}" class="img-responsive img-circle" 
-                            alt="reply_user_profile_image" id="reply_user_profile_img">
+                        <!-- <img src="{{cur_user.photo.url}}" class="img-responsive img-circle" 
+                            alt="reply_user_profile_image" id="reply_user_profile_img"> -->
                         </a>
                     </div>
                     <div class="col-lg-7 text-center">
                         {{reply.text}}
                     </div>
                     <div class="col-lg-1">
+                        {% if reply.author.username == cur_user.user.username %}
                         <button class="pull-right btn btn-warning delete-reply-btn"><a href="{% url 'delete_reply' reply.id %}">
                                     <i class="fa fa-times"></i></a></button>
+                        {% endif %}
                     </div>
                 </div>
 
