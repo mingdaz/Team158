@@ -189,10 +189,15 @@ def delete_post(request, post_id):
 @login_required
 # @transaction.atomic
 def delete_reply(request, reply_id):
-    replyTemp = Reply.objects.get(id = reply_id)
-    post_id = replyTemp.reply_to.id
-    replyTemp.delete()
-    return render(request, 'discussion/reply.json', {}, content_type = 'application/json')
+    replySet = Reply.objects.filter(id = reply_id)
+    if len(replySet) > 0:
+        replyTemp = replySet[0]
+        post_id = replyTemp.reply_to.id
+        replyTemp.delete()
+        return render(request, 'discussion/reply.json', {}, content_type = 'application/json')
+    else:
+        return render(request, 'discussion/reply.json', {}, content_type = 'application/json')
+    
 
 
 @login_required
