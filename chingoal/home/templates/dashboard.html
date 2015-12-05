@@ -276,7 +276,7 @@
                             </div>
                             </div>
                 <div class="col-md-4 col-sm-6 portfolio-item">
-                    {% if cur_user.current_level >= 5 %}
+                    {% if cur_user.unlock > 0 %}
                     <a href="#portfolioModal6" class="portfolio-link" data-toggle="modal">
                         <div class="portfolio-hover">
                             <div class="portfolio-hover-content">
@@ -1071,7 +1071,7 @@
                             <!-- Project Details Go Here -->
                             <div class="row">
                                 <div class="col-md-4 col-sm-6 portfolio-item">
-                                    {% if cur_user.current_level > 5 or cur_user.current_lesson >= 1 %}
+                                    {% if cur_user.unlock >= 1 %}
                                     <a href="{% url 'getlearn' 5 1 %}" class="portfolio-link" data-toggle="modal">
                                         <div class="portfolio-hover">
                                             <div class="portfolio-hover-content">
@@ -1094,7 +1094,7 @@
                                         </div>
                                         </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
-                                    {% if cur_user.current_level > 5 or cur_user.current_lesson >= 2 %}
+                                    {% if cur_user.unlock >= 2 %}
                                     <a href="{% url 'getlearn' 5 2 %}" class="portfolio-link" data-toggle="modal">
                                         <div class="portfolio-hover">
                                             <div class="portfolio-hover-content">
@@ -1117,7 +1117,7 @@
                                         </div>
                                         </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
-                                    {% if cur_user.current_level > 5 or cur_user.current_lesson >= 3 %}
+                                    {% if cur_user.unlock >= 3 %}
                                     <a href="{% url 'getlearn' 5 3 %}" class="portfolio-link" data-toggle="modal">
                                         <div class="portfolio-hover">
                                             <div class="portfolio-hover-content">
@@ -1140,7 +1140,7 @@
                                         </div>
                                         </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
-                                    {% if cur_user.current_level > 5 or cur_user.current_lesson >= 4 %}
+                                    {% if cur_user.unlock >= 4 %}
                                     <a href="{% url 'getlearn' 5 4 %}" class="portfolio-link" data-toggle="modal">
                                         <div class="portfolio-hover">
                                             <div class="portfolio-hover-content">
@@ -1164,7 +1164,7 @@
                                         </div>
                                 <div class="col-md-4 col-sm-6 portfolio-item">
                                     <a href="" class="portfolio-link" data-toggle="modal">
-                                        {% if cur_user.current_level > 5 or cur_user.current_lesson >= 5 %}
+                                        {% if cur_user.unlock >= 5 %}
                                         <a href="{% url 'getlearn' 5 5 %}" class="portfolio-link" data-toggle="modal">
                                             <div class="portfolio-hover">
                                                 <div class="portfolio-hover-content">
