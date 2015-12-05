@@ -120,10 +120,19 @@ def post_post(request):
 @login_required
 # @transaction.atomic
 def post_reply(request):
+    usernameTemp = request.user.username
+    userTemp = User.objects.get(username = usernameTemp)
+    learnerSet = Learner.objects.filter(user = userTemp)
+    if len(learnerSet) > 0:
+        retUser = learnerSet[0]
+    else:
+        teacher = Teacher.objects.get(user = userTemp)
+        retUser = teacher
+
     form = ReplyForm(request.POST)
     if not form.is_valid():
         print 'form not valid!'
-        return render(request, 'discussion/reply.json', content_type='application/json')
+        return render(request, 'discussion/reply.json', {}, content_type='application/json')
 
     to_post = Post.objects.get(id=form.cleaned_data['post_id'])
 
@@ -133,7 +142,7 @@ def post_reply(request):
         author = request.user)
     new_reply.save()
     
-    return render(request, 'discussion/reply.json', {'reply': new_reply}, content_type='application/json')
+    return render(request, 'discussion/reply.json', {'reply': new_reply, 'user': retUser}, content_type='application/json')
 
 
 @login_required
