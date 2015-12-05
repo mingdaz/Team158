@@ -84,16 +84,15 @@ function new_reply_clicked(e) {
 
 
 function delete_reply_clicked(e) {
-    
-    var reply_id = $('#hidden_reply_id').html();
+    var bigDiv = $(e.target).parent().parent();
+    console.log(bigDiv);
+    var first = $(bigDiv).find('#hidden_reply_id')
+    console.log(first);
+    var reply_id = $(first).html();
     console.log(reply_id);
     $.post('delete_reply/' + reply_id)
         .done(function(data) {
-            console.log('delete_reply view done. removing element from document....');
-            var divTemp = $('#hidden_reply_id').parent().parent();
-            console.log(divTemp);
-            divTemp.remove();
-            console.log('All done!');
+            $(bigDiv).remove();            
         });    
 }
 
