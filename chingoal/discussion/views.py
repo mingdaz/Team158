@@ -29,7 +29,7 @@ def post_question(request):
 @login_required
 # @transaction.atomic
 def reply_question(request):
-    return render(request, 'discussion/discussion_reply.html', {})
+    return render(request, 'discussion/discussion_reply.html', context)
 
 
 @login_required
@@ -78,12 +78,14 @@ def discussion_reply(request, post_id):
         is_learner = len(user_temp)
         if is_learner == 1:
             cur_user = user_temp[0]
+            flag = 0
         else:
+            flag = 1
             cur_user = Teacher.objects.get(user = request.user)
 
         return render(request, 'discussion/discussion_reply.html', \
             {'post': post, 'replies' : replies, 'post_user': post_user, 'max_reply_id' : max_reply_id,\
-                'username' : request.user.username, 'cur_user' : cur_user})
+                'username' : request.user.username, 'cur_user' : cur_user,'flag':flag})
     else:
         return HttpResponse("This id does not exist!")
 
