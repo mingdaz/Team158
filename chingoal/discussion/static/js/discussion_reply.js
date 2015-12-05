@@ -72,10 +72,10 @@ function new_reply_clicked(e) {
         .done(function(data) {
             var replyDiv = $('#replyDiv');
             var replyHtml = $(data.html);
-            
-            photo_url = data.user_photo_url;
-            $(replyHtml).find('#reply_user_profile_img').attr('src', photo_url);
             replyDiv.append(replyHtml);
+            // photo_url = data.user_photo_url;
+            // $(replyHtml).find('#reply_user_profile_img').attr('src', photo_url);
+            
         });
     
 
@@ -105,7 +105,7 @@ $(document).ready(function() {
     $('#replyBtn').on('click', new_reply_clicked);
     $('#replyDiv').on('click', '.delete-reply-btn', delete_reply_clicked)
 
-    // window.setInterval(populateReply, 30000);
+    window.setInterval(populateReply, 30000);
 
     function getCookie(name) {  
         var cookieValue = null;
