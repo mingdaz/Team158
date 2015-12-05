@@ -25,7 +25,7 @@ def buy_title(request, title, cost):
     learner.title = title
     learner.user_vm = money - int(cost)
     learner.save()
-    new_history = History.objects.create(user=request.user,content='Buy a new title '+title,type='title')
+    new_history = History.objects.create(user=request.user,content='Buy a new title '+title,kind='title')
     new_history.save()
     return redirect('/store')
 
