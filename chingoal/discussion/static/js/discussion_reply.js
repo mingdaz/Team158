@@ -18,24 +18,26 @@ function populateList() {
 }
 
 
-function new_reply_clicked(e) {
-    e.preventDefault();
-    var dt = new Date();
-    var date_str = dt.toLocaleDateString();
-    var time_str = dt.toLocaleTimeString('en-US', { hour12: false });
-    var post_time = date_str + ' ' + time_str;
+// function new_reply_clicked(e) {
+//     e.preventDefault();
+//     var dt = new Date();
+//     var date_str = dt.toLocaleDateString();
+//     var time_str = dt.toLocaleTimeString('en-US', { hour12: false });
+//     var post_time = date_str + ' ' + time_str;
 
-    var reply_text = $('#replyText')
+//     var reply_text = $('#replyText')
 
-    $.post('post_reply', {'reply_text': reply_text})
-        .done(function(data) {
-            var replyDiv = $('#replyDiv');
-            var reply_html = $(data.reply.html);
-            replyDiv.append(reply_html);
-    });
+//     $.post('post_reply', {'reply_text': reply_text})
+//         .done(function(data) {
+//             var replyDiv = $('#replyDiv');
+//             var reply_html = $(data.reply.html);
+//             replyDiv.append(reply_html);
+//             console.log('Photo url ' + data.user_photo_url);
+//             $('#reply_user_profile_img').attr('src', data.user_photo_url);
+//     });
 
-    $('#myModal').modal('hide');
-}
+//     $('#myModal').modal('hide');
+// }
 
 
 function new_post_clicked(e) {
@@ -85,12 +87,18 @@ function new_reply_clicked(e) {
     var reply_text = $('#replyText').val();
     var post_id = $('#hidden_post_id').html();
 
+    var photo_url = ''
+
     $.post('post_reply', {'text' : reply_text, 'post_time' : post_time, 'post_id' : post_id})
         .done(function(data) {
             var replyDiv = $('#replyDiv');
-            var replyHtml = data.html;
+            var replyHtml = $(data.html);
+            
+            photo_url = data.user_photo_url;
+            $(replyHtml).find('#reply_user_profile_img').attr('src', photo_url);
             replyDiv.append(replyHtml);
-        })
+        });
+    
 
     $('#myModal').modal('hide');
 }
