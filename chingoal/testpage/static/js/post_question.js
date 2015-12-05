@@ -32,6 +32,10 @@ function populateList() {
               item = data.items[i];
               var new_item = $(item.html);
               new_item.data("item-id", item.id);
+              if(data.flag){
+                new_item.find('.btn').prop('disabled', true);
+                new_item.find('input').prop('disabled', true);
+              }
               new_item.find('.save-btn').click(btnsave);
               new_item.find('.delete-btn').click(btndelete);
               new_item.find('.edit-btn').click(btnedit);
@@ -41,6 +45,67 @@ function populateList() {
       });
 }
 
+function postedit()
+{
+    var testid = $("#testid").val();
+    var flag=0
+    $.ajax({
+            type: 'POST',
+            url: '/testpage/test-editposttest/'+testid,
+            success: function (data) {
+              flag = data.flag
+                if(flag==1){
+                  $('input').prop('disabled', false);
+                  $('select').prop('disabled',false);
+                  $(".edit-btn").prop('disabled', false);
+                  $(".delete-btn").prop('disabled', false);
+                  $("#question-mc").prop('disabled', false);
+                  $("#question-tr").prop('disabled', false);
+
+                  var btn = $('#postedit');
+                  btn.attr("id","posttest");
+                  btn.unbind("click",postedit);
+                  btn.click(postmytest);
+                  btn.html("Post");
+
+                }
+            },
+            error: function(data) {
+                alert("Something went wrong!");
+            }
+        });
+
+
+
+}
+
+
+function postdelete()
+{
+    var testid = $("#testid").val();
+    var flag=0
+    $.ajax({
+            type: 'POST',
+            url: '/testpage/test-deleteposttest/'+testid,
+            success: function (data) {
+              flag = data.flag
+            },
+            error: function(data) {
+                alert("Something went wrong!");
+            }
+        });
+
+    if(flag==1){
+      var list = $("#question");
+      var tmp = list.parent();
+      list.remove();
+      tmp.parent().find(".btn").prop('disabled', true);  
+      tmp.html("Create test success!")
+    }
+}
+
+   // url(r'^test-editposttest/(?P<test_id>[0-9]*)$','testpage.views.test_editposttest',name='testeditposttest'),
+   //  url(r'^test-deleteposttest/(?P<test_id>[0-9]*)$','testpage.views.test_deleteposttest',name='testdeleteposttest'),
 
 function postmytest(){
     var list = $("#question");
@@ -60,6 +125,7 @@ function postmytest(){
     $.ajax({
             type: "POST",
             url: "/testpage/test-level/"+testid,
+             data: $("#levelform").serialize(),
             success: function (data) {                
             },
             error: function(data) {
@@ -215,12 +281,39 @@ function btndelete()
     
 }
 
+function btnedit()
+{
+    var id = $(event.target).parent().parent().parent().parent().data("item-id");
+    var btn = $(event.target);
+    var frm = $(event.target).parent().parent().parent();
+    btn.removeClass( "edit-btn" );
+    btn.addClass( "save-btn" );
+    btn.addClass( "btn-info" );
+    btn.removeClass( "btn-warning" );
+    btn.html("Save");
+    btn.unbind("click",btnedit);
+    btn.click(btnsave);
+    frm.find("input").prop('disabled', false);
+    $.ajax({
+            type: 'POST',
+            url: '/testpage/test-edit-question/'+id,
+            success: function (data) {
+              update();
+            },
+            error: function(data) {
+                alert("Something went wrong!");
+            }
+        });
+}
+
 $(document).ready(function () {  
   // $("#question").data("max-entry",0);
 
   $("#question-mc").click(getMultipleChoice);
   $("#question-tr").click(getTranslate);
   $("#posttest").click(postmytest);
+  $("#postedit").click(postedit);
+  $("#deletetest").click(postdelete);
 
   var csrftoken = getCookie('csrftoken');
   $(".needcsrf").val(csrftoken);
@@ -229,7 +322,9 @@ $(document).ready(function () {
         xhr.setRequestHeader("X-CSRFToken", csrftoken);
     }
   });
-
+  if($("#postedit")){
+    $('select').prop('disabled',true);
+  }
   populateList();
 
 });

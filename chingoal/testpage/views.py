@@ -70,8 +70,19 @@ def get_result(request):
 	context['tid'] = request.POST['qid']
 	curtest = TestAnswer.objects.get(tid=request.POST['qid'],username=request.user.username)
 	curquestion = curtest.question.all()
-	context['questionanswer'] = curquestion
 
+	score = int(len(curquestion.filter(correctness='True'))*100/len(curquestion))
+	if(score>60):
+		learner.user_vm += 10
+		level = learner.current_level
+		print "greater then 60"
+		if(level<5):
+			learner.current_level = level + 1
+			learner.current_lesson = 1
+			print "level less than 5"
+	learner.save()
+	context['questionanswer'] = curquestion
+	context['score'] = score
 	return render(request, 'testpage/test-feedback.html', context)
 
 @login_required
@@ -95,7 +106,6 @@ def question_result(request):
 	item = itemTemplate.render({"item":question}).replace('\n','').replace('\"','\'') #More escaping might be needed
 	return render(request, 'testpage/testcontent.json', {"item":item,"id":qid,"flag":0,"qnum":0,"max":1}, content_type='application/json')
 
-
 @login_required
 def test_create(request):
 	context = {}
@@ -115,6 +125,55 @@ def test_create(request):
 	return render(request, 'testpage/post_question.html', context)
 
 @login_required
+def test_collection(request):
+	context = {}
+	context['username'] = request.user.username
+	context['flag'] = 1
+
+	cur_teacher = Teacher.objects.get(user=request.user)
+	tests = Test.objects.filter(teacher=cur_teacher)
+	context['tests'] = tests
+	return render(request, 'testpage/teachertestdash.html', context)
+
+@login_required
+def test_reviewpost(request,test_id):
+	context = {}
+	context['username'] = request.user.username
+	context['flag'] = 1
+	form = TestLevelForm()
+
+	cur_teacher = Teacher.objects.get(user=request.user)
+
+	allposttest = Test.objects.filter(teacher=cur_teacher,id=test_id)
+	if len(allposttest)==0:
+		print "didn't find"
+		# newtest = Test(postflag="false",teacher=cur_teacher)
+		# newtest.save()
+		# context['testid'] = newtest.id
+	else:
+		print "find"
+	form.fields["test_level"].initial = allposttest[0].level 
+	context['chooselevel'] = form  
+	context['testid'] = allposttest[0].id
+	context['saveflag'] = allposttest[0].postflag
+	return render(request, 'testpage/post_question.html', context)
+
+@login_required
+def test_editposttest(request,test_id):
+	x = Test.objects.get(id=test_id)
+	x.postflag="false"
+	x.save()
+	return render(request, 'testpage/item.json', {"item":"","id":0,"flag":1}, content_type='application/json')
+
+
+@login_required
+def test_deleteposttest(request,test_id):
+	x = Test.objects.get(id=test_id)
+	y = x.question.all().delete()
+	x.delete()
+	return render(request, 'testpage/item.json', {"item":"","id":0,"flag":1}, content_type='application/json')
+
+@login_required
 def test_unpost_question(request,id):
 	# mc
 	x = Question.objects.get(id=id)
@@ -130,8 +189,9 @@ def test_unpost_question(request,id):
 @login_required
 def get_items(request,id):
 	max_globalentry = 1;
-	items = Test.objects.get(id=id).question.all()
-	context = {"max_entry":max_globalentry, "items":items}
+	ctest = Test.objects.get(id=id)
+	items = ctest.question.all()
+	context = {"max_entry":max_globalentry, "flag":ctest.postflag ,"items":items}
 	return render(request, 'testpage/items.json', context, content_type='application/json')
 
 
@@ -242,7 +302,7 @@ def test_set_level(request,test_id):
 		x.level = form.cleaned_data['test_level']
 		x.save()
 		flag = 1
-		print "valid"
+		print "valid" + x.level
 	else:
 		flag = 0
 	return render(request, 'testpage/item.json', {"item":"","id":0,"flag":flag}, content_type='application/json')
@@ -262,7 +322,7 @@ def next_questions(request):
 	if qid==-1:
 		qnum = 0
 		learner = Learner.objects.get(user__exact = request.user)
-		numtest = len(Test.objects.filter(level = learner.current_level))
+		numtest = len(Test.objects.filter(level = learner.current_level,postflag='true'))
 		testindex = random.randint(0,numtest-1)
 		newtest = Test.objects.filter(level = learner.current_level)[testindex]
 		qid = newtest.id
