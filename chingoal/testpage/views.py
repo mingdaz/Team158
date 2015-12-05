@@ -102,24 +102,73 @@ def test_create(request):
 	context['username'] = request.user.username
 	context['flag'] = 1
 	context['chooselevel'] = TestLevelForm()
+
+	cur_teacher = Teacher.objects.get(user=request.user)
+
+	unposttest = Test.objects.filter(teacher=cur_teacher,postflag='false')
+	if len(unposttest)==0:
+		newtest = Test(postflag="false",teacher=cur_teacher)
+		newtest.save()
+		context['testid'] = newtest.id
+	else:
+		context['testid'] = unposttest[0].id
 	return render(request, 'testpage/post_question.html', context)
 
 @login_required
+def test_unpost_question(request,id):
+	# mc
+	x = Question.objects.get(id=id)
+	
+	if x.qtype=="mc":
+		itemTemplate = loader.get_template('testpage/unpost_mc.html')
+		item = itemTemplate.render({"id":id,"form":MCQFrom()}).replace('\n','').replace('\"','\'') #More escaping might be needed
+	else:
+		itemTemplate = loader.get_template('testpage/unpost_tr.html')	
+		item = itemTemplate.render({"id":id,"form":TRQFrom()}).replace('\n','').replace('\"','\'') #More escaping might be needed
+	return render(request, 'testpage/item.json', {"item":item,"id":id,"flag":1}, content_type='application/json')
+
+@login_required
+def get_items(request,id):
+	max_globalentry = 1;
+	items = Test.objects.get(id=id).question.all()
+	context = {"max_entry":max_globalentry, "items":items}
+	return render(request, 'testpage/items.json', context, content_type='application/json')
+
+
+@login_required
+def get_test_post_id(request):
+	newtest = Test.objects.create()
+	newtest.save()
+	id = newtest.id
+	print id
+	return render(request, 'testpage/item.json', {"item":"","id":id,"flag":1}, content_type='application/json')
+
+@login_required
 def post_add_question_mc(request):
-	itemTemplate = loader.get_template('testpage/multichoice.html')
-	new_question = Question(qtype="mc");
+	itemTemplate = loader.get_template('testpage/base_mc.html')
+	new_question = Question(qtype="mc",saveflag="false");
 	new_question.save()
 	maxid = new_question.id
-	print maxid
+	
+	test_id = request.POST['testid']
+	print "post_add_question_mc:"+test_id
+	x = Test.objects.get(id=test_id)
+	x.question.add(new_question)
+	
 	item = itemTemplate.render({"id":maxid,"form":MCQFrom()}).replace('\n','').replace('\"','\'') #More escaping might be needed
 	return render(request, 'testpage/item.json', {"item":item,"id":maxid,"flag":1}, content_type='application/json')
 
 @login_required
 def post_add_question_tr(request):
-	itemTemplate = loader.get_template('testpage/translate.html')
-	new_question = Question(qtype="tr");
+	itemTemplate = loader.get_template('testpage/base_tr.html')
+	new_question = Question(qtype="tr",saveflag="false");
 	new_question.save()
 	maxid = new_question.id
+
+	test_id = request.POST['testid']
+	x = Test.objects.get(id=test_id)
+	x.question.add(new_question)
+	
 	item = itemTemplate.render({"id":maxid,"form":TRQFrom()}).replace('\n','').replace('\"','\'') #More escaping might be needed
 	return render(request, 'testpage/item.json', {"item":item,"id":maxid,"flag":1}, content_type='application/json')
 
@@ -136,9 +185,10 @@ def post_save_mc_question(request,id):
 		new_question.d=mcqform.cleaned_data['d']
 		new_question.answer=request.POST['optionsRadiosInline']
 		new_question.explanation=mcqform.cleaned_data['explanation']
+		new_question.saveflag="true"
 		new_question.save()
 		flag = 1
-	itemTemplate = loader.get_template('testpage/multichoice.html')
+	itemTemplate = loader.get_template('testpage/base_mc.html')
 	item = itemTemplate.render({"id":id,"form":mcqform,"answerchoice":request.POST['optionsRadiosInline']}).replace('\n','').replace('\"','\'') #More escaping might be needed
 	return render(request, 'testpage/item.json', {"item":item,"id":id,"flag":flag}, content_type='application/json')
 
@@ -150,17 +200,21 @@ def post_save_tr_question(request,id):
 		new_question = Question.objects.get(id=id)
 		new_question.question=trqform.cleaned_data['question']
 		new_question.answer=trqform.cleaned_data['explanation']
+		new_question.saveflag="true"
 		new_question.save()
 		flag = 1
-	itemTemplate = loader.get_template('testpage/translate.html')
+	itemTemplate = loader.get_template('testpage/base_tr.html')
 	item = itemTemplate.render({"id":id,"form":trqform}).replace('\n','').replace('\"','\'') #More escaping might be needed
 	return render(request, 'testpage/item.json', {"item":item,"id":id,"flag":flag}, content_type='application/json')
 
 @login_required
-def test_edit_question(request):
+def test_edit_question(request,id):
 	context = {}
-	context['username'] = request.user.username
-	return render(request, 'testpage/post_question.html', context)
+	new_question = Question.objects.get(id=id)
+	new_question.saveflag="false"
+	new_question.save()
+	return render(request, 'testpage/item.json', {"item":"","id":id,"flag":1}, content_type='application/json')
+
 
 @login_required
 def test_delete_question(request,id):
@@ -171,24 +225,14 @@ def test_delete_question(request,id):
 		x = None
 	return render(request, 'testpage/item.json', {"item":"","id":id,"flag":1}, content_type='application/json')
 
-@login_required
-def get_test_post_id(request):
-	newtest = Test.objects.create()
-	newtest.save()
-	id = newtest.id
-	print id
-	return render(request, 'testpage/item.json', {"item":"","id":id,"flag":1}, content_type='application/json')
+
 
 @login_required
-def test_post(request,test_id,question_id):
-	try:
-		x = Test.objects.get(id=test_id)
-		y = Question.objects.get(id=question_id)
-		x.question.add(y)
-		flag = 1
-	except Question.DoesNotExist:
-		flag=0
-	return render(request, 'testpage/item.json', {"item":"","id":0,"flag":flag}, content_type='application/json')
+def test_post(request,test_id):
+	x = Test.objects.get(id=test_id)
+	x.postflag="true"
+	x.save()
+	return render(request, 'testpage/item.json', {"item":"","id":0,"flag":1}, content_type='application/json')
 
 @login_required
 def test_set_level(request,test_id):
