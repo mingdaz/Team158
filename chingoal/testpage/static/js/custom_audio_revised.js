@@ -123,7 +123,7 @@ function uploadUserAudio() {
     formData.append('file', blob);
 
     $.ajax({
-        url: 'http://s3.amazonaws.com/chingoal',
+        url: 'https://s3.amazonaws.com/chingoal',
         type: "POST",
         data: formData,
         cache: false,
