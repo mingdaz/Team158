@@ -82,7 +82,7 @@ def get_result(request):
 	if(score>60):
 		learner.user_vm += 10
 		print "greater then 60"
-		if(level<5 and learner.current_level == level):
+		if level<5 and learner.current_level == level:
 			learner.current_level = level + 1
 			learner.current_lesson = 1
 			print "level less than 5"
