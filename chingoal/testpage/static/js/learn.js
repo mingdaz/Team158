@@ -43,9 +43,7 @@ function generateLearn(currLevel, currLesson, currChapter) {
             } else {
                 $.holdReady(true);
                 $.getScript('/static/js/visualizeWave.js', function() {});
-                $.getScript('/static/js/custom_audio_revised.js', function() {});
-                $.getScript('/static/js/learn_audio.js', function() {
-                    console.log($('#checkBtn'));
+                $.getScript('/static/js/custom_audio_revised.js', function() {
                     $('#checkBtn').html('Take Test!');
                     $('#checkBtn').unbind('click');
                     $('#checkBtn').on('click', function(e){
@@ -58,7 +56,6 @@ function generateLearn(currLevel, currLesson, currChapter) {
                     });                                        
                     $.holdReady(false);
                     $('#learn_name').html($('#hidden_text').html());
-                    console.log('In learn js username is ' + $('#hidden_username').html());
                 });
             }
         });
