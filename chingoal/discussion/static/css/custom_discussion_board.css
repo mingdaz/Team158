@@ -39,3 +39,20 @@
     left:340px;
     top:-70px;
 }
+.bt3{
+    position:relative;
+    top:-40px;
+    left:20px;
+    margin-right: 10px;
+.table {
+    width: 80%;
+    max-width: 80%;
+    margin-left: 130px;
+    margin-top: 20px;
+}
+.text-center {
+    height:120px;
+}
+.col-lg-2{
+    height:100px;
+}

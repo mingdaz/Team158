@@ -88,12 +88,12 @@
     </nav>
 
 	<section id="portfolio" class="bg-light-gray">
-		<h2 style="margin-left:70px;">{{ username }},welcome to video rooms!</h2>
+		<h2 style="margin-left:130px;">{{ username }},welcome to video rooms!</h2>
         {% if error %}
         <p>{{error}}</p>
         {% endif %}
         <form role="form" action="/discussion/videoRoom/" method="post">
-        <div style="margin-left:70px;">
+        <div style="margin-left:130px;">
             <input type="text" name="roomname" spellcheck="false">
             <input type="submit" value="Create a new room">
         </div>

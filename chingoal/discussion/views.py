@@ -29,7 +29,7 @@ def post_question(request):
 @login_required
 # @transaction.atomic
 def reply_question(request):
-    return render(request, 'discussion/discussion_reply.html', {})
+    return render(request, 'discussion/discussion_reply.html', context)
 
 
 @login_required
@@ -68,21 +68,26 @@ def discussion_home(request):
 
 @login_required
 def discussion_reply(request, post_id):
-    post = Post.objects.get(id = post_id)
-    post_user = post.author
-    replies = Reply.objects.filter(reply_to__id = post_id)
-    max_reply_id = replies.aggregate(Max('id'))['id__max'] or 0
+    if Post.objects.filter(id__exact = post_id):
+        post = Post.objects.get(id = post_id)
+        post_user = post.author
+        replies = Reply.objects.filter(reply_to__id = post_id)
+        max_reply_id = replies.aggregate(Max('id'))['id__max'] or 0
 
-    user_temp = Learner.objects.filter(user = request.user)
-    is_learner = len(user_temp)
-    if is_learner == 1:
-        cur_user = user_temp[0]
+        user_temp = Learner.objects.filter(user = request.user)
+        is_learner = len(user_temp)
+        if is_learner == 1:
+            cur_user = user_temp[0]
+            flag = 0
+        else:
+            flag = 1
+            cur_user = Teacher.objects.get(user = request.user)
+
+        return render(request, 'discussion/discussion_reply.html', \
+            {'post': post, 'replies' : replies, 'post_user': post_user, 'max_reply_id' : max_reply_id,\
+                'username' : request.user.username, 'cur_user' : cur_user,'flag':flag})
     else:
-        cur_user = Teacher.objects.get(user = request.user)
-
-    return render(request, 'discussion/discussion_reply.html', \
-        {'post': post, 'replies' : replies, 'post_user': post_user, 'max_reply_id' : max_reply_id,\
-            'username' : request.user.username, 'cur_user' : cur_user})
+        return HttpResponse("This id does not exist!")
 
 
 @login_required

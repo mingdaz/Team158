@@ -39,9 +39,15 @@
                     <li>
                         <a class="page-scroll" href="{% url 'discussion_home' %}">Discussion</a>
                     </li>
+                    {% if flag == 1 %}
+                    <li>
+                        <a href="{% url 'testcreate' %}">Create Test</a>
+                    </li>
+                    {% else %}
                     <li>
                         <a class="page-scroll" href="{% url 'store' %}">Store</a>
                     </li>
+                    {% endif %}
 
                     <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">

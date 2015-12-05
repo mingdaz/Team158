@@ -6,8 +6,6 @@ from forms import TRQFrom,MCQFrom
 from django import forms
 from models import *
 
-
-
 class Question(models.Model):
 	level = models.IntegerField(default=0)
 	qtype = models.CharField(max_length=200)
@@ -75,17 +73,30 @@ class Learn(models.Model):
 	lock = models.IntegerField(default = 1)
 	level = models.IntegerField(default = 0)
 	lesson = models.IntegerField(default = 1)
-	lnum = models.IntegerField(default = 0)
+	chapter = models.IntegerField(default = 1)
 	ltype = models.CharField(max_length=10)
 	# Two types: text or audio
 	text = models.CharField(max_length=200)
+	answer = models.CharField(max_length=200, blank = True)
 	a = models.CharField(max_length=200, blank = True)
 	b = models.CharField(max_length=200, blank = True)
 	c = models.CharField(max_length=200, blank = True)
 	image1 = models.ImageField(blank = True)
 	image2 = models.ImageField(blank = True)
 	image3 = models.ImageField(blank = True)
-	audio = models.FileField(blank = True)
+	# audio = models.FileField(blank = True)
+
+	@property
+	def text_html(self):
+		postTemplate = loader.get_template('testpage/learn_text_base.html')
+		context = Context({'learning_material' : self})
+		return postTemplate.render(context).replace('\n','').replace('"', '&quot;')
+
+	@property
+	def audio_html(self):
+		postTemplate = loader.get_template('testpage/learn_audio_base.html')
+		context = Context({'learning_material' : self})
+		return postTemplate.render(context).replace('\n','').replace('"', '&quot;')
 
 	def __unicode__(self):
 		return self.level + ' ' + self.lesson + ' ' + self.lid
@@ -105,7 +116,7 @@ class TestAnswer(models.Model):
 class UploadTextLearnForm(forms.ModelForm):
     class Meta:
         model = Learn
-        exclude = ('audio', 'ltype', 'lock')
+        exclude = ('lock',)
         widgets = {'image1' : forms.FileInput(),
                 'image2' : forms.FileInput(),
                 'image3' : forms.FileInput(),}
